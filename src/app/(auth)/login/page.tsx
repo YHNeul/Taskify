@@ -15,12 +15,7 @@ import Input from '@/components/common/Input/Input';
 import Button from '@/components/common/Button';
 import AlertModal from '@/components/modal/AlertModal';
 import { setToken } from '@/lib/auth';
-
-// 팀 ID
-const TEAM_ID = '22-2';
-
-// BASE URL
-const BASE_URL = 'https://sp-taskify-api.vercel.app';
+import { API_BASE_URL } from '@/constants/api';
 
 // 이메일 정규식
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -92,7 +87,7 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`${BASE_URL}/${TEAM_ID}/auth/login`, {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -15,8 +15,9 @@ import type {
   CardsResponse,
   MembersResponse,
 } from '@/types/dashboard';
+import { API_BASE_URL } from '@/constants/api';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const BASE_URL = API_BASE_URL;
 
 /** Authorization 헤더 포함 기본 헤더 빌더 (서버 환경용) */
 const getHeaders = () => ({

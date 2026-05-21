@@ -17,12 +17,7 @@ import { Input } from '@/components/common/Input';
 import Button from '@/components/common/Button';
 import Checkbox from '@/components/common/Checkbox';
 import AlertModal from '@/components/modal/AlertModal';
-
-// 팀 ID
-const TEAM_ID = '22-2';
-
-// 백엔드 서버 주소
-const BASE_URL = 'https://sp-taskify-api.vercel.app';
+import { API_BASE_URL } from '@/constants/api';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -193,7 +188,7 @@ export default function SignupPage() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`${BASE_URL}/${TEAM_ID}/users`, {
+      const res = await fetch(`${API_BASE_URL}/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
