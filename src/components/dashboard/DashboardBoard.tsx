@@ -13,15 +13,15 @@ import {
   updateColumn,
   deleteColumn,
 } from '@/api/dashboard';
-import Column from './Column';
-import TaskCard from './TaskCard';
+import Column from '@/components/dashboard/Column';
+import TaskCard from '@/components/dashboard/TaskCard';
 import Button from '@/components/common/Button';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import Cards from '@/components/modal/Cards/Cards';
 import CreateCard from '@/components/modal/Cards/CreateCard';
 import FormModal from '@/components/modal/FormModal';
 import ConfirmModal from '@/components/modal/ConfirmModal';
-import DashboardBoardSkeleton from './BoardSkeleton';
+import DashboardBoardSkeleton from '@/components/dashboard/BoardSkeleton';
 import { useBoardDnd, type ColumnCardState } from '@/hooks/useBoardDnd';
 import { applySavedOrder } from '@/utils/cardOrder';
 

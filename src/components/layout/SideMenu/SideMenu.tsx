@@ -31,8 +31,8 @@ import { getDashboards } from '@/api/dashboard';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import type { Dashboard } from '@/types/dashboard';
 import DashboardCreateModal from '@/components/modal/DashboardCreateModal';
-import SortableDashboardItem from './SortableDashboardItem';
-import SideMenuSkeleton from './SideMenuSkeleton';
+import SortableDashboardItem from '@/components/layout/SideMenu/SortableDashboardItem';
+import SideMenuSkeleton from '@/components/layout/SideMenu/SideMenuSkeleton';
 import { useSidebarResize } from '@/hooks/useSidebarResize';
 
 const PAGE_SIZE = 15;

@@ -33,7 +33,7 @@ import {
  * - `layout` — 너비 기반으로 계산된 레이아웃 타입. `null`이면 CSS 클래스 기반 반응형.
  * - `handleResizeStart` — 리사이즈 핸들의 `onPointerDown`에 연결할 이벤트 핸들러.
  */
-export function useSidebarResize() {
+export const useSidebarResize = () => {
   const [sidebarWidth, setSidebarWidth] = useState<number | null>(null);
 
   /** rAF 외부에서 최신 너비를 읽기 위한 ref (setSidebarWidth의 비동기성 우회) */
@@ -122,4 +122,4 @@ export function useSidebarResize() {
   }, []);
 
   return { sidebarWidth, layout, handleResizeStart };
-}
+};

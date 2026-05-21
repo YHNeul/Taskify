@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
 /* TODO: [하늘] 이 아래로 Tailwind로 해결되지 않는 글로벌 스타일만 적어둘 것 */
 

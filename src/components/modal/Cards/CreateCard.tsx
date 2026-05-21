@@ -23,7 +23,7 @@ import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
 import { createCard, getMembers, uploadCardImage } from '@/api/dashboard';
 import { formatDateTime } from '@/utils/formatDate';
 import TagChip from '@/components/common/Chip/TagChip';
-import AlertModal from '../AlertModal';
+import AlertModal from '@/components/modal/AlertModal';
 import Skeleton from '@/components/common/Skeleton/Skeleton';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/constants/queryKeys';

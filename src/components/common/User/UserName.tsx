@@ -11,7 +11,7 @@
  */
 
 import { ProfileOwner } from '@/types/user';
-import UserProfileImage from './UserProfileImage';
+import UserProfileImage from '@/components/common/User/UserProfileImage';
 
 interface Props {
   profile: ProfileOwner;

@@ -1,13 +1,13 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import FormModal from './FormModal';
+import FormModal from '@/components/modal/FormModal';
 import { useMemo, useState } from 'react';
-import ColorChip, { COLORS } from '../common/Chip/ColorChip';
+import ColorChip, { COLORS } from '@/components/common/Chip/ColorChip';
 import api from '@/api/axios';
 import { Dashboard } from '@/types/dashboard';
 import { validateDashboardName } from '@/utils/validate';
-import ModalOverlay from '../common/ModalBase/ModalOverlay';
+import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface DashboardCreateModalProps {

@@ -1,9 +1,9 @@
 'use client';
 
 import { Dashboard } from '@/types/dashboard';
-import Button from '../common/Button';
-import ArrowRightIcon from '../common/Icon/ArrowRightIcon';
-import CrownIcon from '../common/Icon/CrownIcon';
+import Button from '@/components/common/Button';
+import ArrowRightIcon from '@/components/common/Icon/ArrowRightIcon';
+import CrownIcon from '@/components/common/Icon/CrownIcon';
 import { useRouter } from 'next/navigation';
 
 interface DashboardCardProps {

@@ -6,7 +6,7 @@
 import { Dashboard } from '@/types/dashboard';
 import { useEffect } from 'react';
 
-export function useDashboardFormSync({
+export const useDashboardFormSync = ({
   dashboard,
   title,
   setTitle,
@@ -18,7 +18,7 @@ export function useDashboardFormSync({
   setTitle: (t: string) => void;
   selectedColor: string;
   setSelectedColor: (c: string) => void;
-}) {
+}) => {
   useEffect(() => {
     if (!dashboard) return;
     if (title !== dashboard.title) {
@@ -28,4 +28,4 @@ export function useDashboardFormSync({
       setSelectedColor(dashboard.color);
     }
   }, [dashboard?.id]);
-}
+};

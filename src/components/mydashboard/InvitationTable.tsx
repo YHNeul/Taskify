@@ -1,7 +1,7 @@
 import { Invitation } from '@/types/dashboard';
-import ConfirmButton from '../common/ConfirmButton';
-import SearchIcon from '../common/Icon/SearchIcon';
-import { Input } from '../common/Input';
+import ConfirmButton from '@/components/common/ConfirmButton';
+import SearchIcon from '@/components/common/Icon/SearchIcon';
+import { Input } from '@/components/common/Input';
 import { RefObject, useMemo, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { respondToInvitation } from '@/api/dashboard';

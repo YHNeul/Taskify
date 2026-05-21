@@ -4,7 +4,7 @@
  * @author 하늘
  */
 
-import api from './axios';
+import api from '@/api/axios';
 import type {
   Dashboard,
   DashboardsResponse,

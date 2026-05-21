@@ -3,6 +3,6 @@
  * @description input을 컴포넌트 외부 내보내기용 인덱스 파일
  */
 
-export { default as Input } from './Input';
-export { default as Textarea } from './Textarea';
-export { default } from './Input';
+export { default as Input } from '@/components/common/Input/Input';
+export { default as Textarea } from '@/components/common/Input/Textarea';
+export { default } from '@/components/common/Input/Input';

@@ -9,9 +9,9 @@
 'use client';
 
 import { useState } from 'react';
-import StatusChip from '../Chip/StatusChip';
-import ArrowDropDownIcon from '../Icon/ArrowDropDownIcon';
-import DropdownList from './DropdownList';
+import StatusChip from '@/components/common/Chip/StatusChip';
+import ArrowDropDownIcon from '@/components/common/Icon/ArrowDropDownIcon';
+import DropdownList from '@/components/common/Dropdown/DropdownList';
 import { Column } from '@/types/dashboard';
 
 interface Props {

@@ -8,7 +8,7 @@ import { Column } from '@/types/dashboard';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 
-export default function useCardData(cardId: number, dashboardId: number) {
+export const useCardData = (cardId: number, dashboardId: number) => {
   const queryClient = useQueryClient();
   const [columns, setColumns] = useState<Column[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -70,4 +70,4 @@ export default function useCardData(cardId: number, dashboardId: number) {
     handleDeleteCard,
     handleEditSuccess,
   };
-}
+};
