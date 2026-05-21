@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 개발 확인용 preview 페이지 (로컬 전용)
+src/app/preview/
+
+# 로컬 전용 파일
+src/actions/
+public/images/landing 2/
