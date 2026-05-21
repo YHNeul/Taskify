@@ -1,15 +1,11 @@
 'use client';
 
 import { useParams, useRouter, usePathname } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import CrownIcon from '@/components/common/Icon/CrownIcon';
 import SettingIcon from '@/components/common/Icon/SettingIcon';
 import AddBoxIcon from '@/components/common/Icon/AddBoxIcon';
-import { getDashboard, getMembers } from '@/api/dashboard';
-import { getMe } from '@/api/auth';
-import { QUERY_KEYS } from '@/constants/queryKeys';
 import { useDashboardStore } from '@/store/useDashboardStore';
 import { CHIP_COLORS } from '@/components/common/User/UserProfileImage';
 import Skeleton from '@/components/common/Skeleton/Skeleton';
@@ -17,6 +13,9 @@ import FormModal from '@/components/modal/FormModal';
 import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
 import MemberAvatars from '@/components/layout/Header/MemberAvatars';
 import { useInviteMember } from '@/hooks/useInviteMember';
+import { useMeQuery } from '@/hooks/useMeQuery';
+import { useDashboardMembersQuery } from '@/hooks/useDashboardMembersQuery';
+import { useDashboardQuery } from '@/hooks/useDashboardQuery';
 
 const MAX_VISIBLE_DESKTOP = 4;
 const MAX_VISIBLE_COMPACT = 2;
@@ -39,22 +38,16 @@ export default function Header() {
   const dashboardId = params?.id ? Number(params.id) : null;
   const effectiveDashboardId = dashboardId ?? activeDashboardId;
 
-  const { data: dashboard, isLoading: isDashboardLoading } = useQuery({
-    queryKey: QUERY_KEYS.dashboard(effectiveDashboardId!),
-    queryFn: () => getDashboard(effectiveDashboardId!),
-    enabled: !!effectiveDashboardId,
-  });
+  const { data: dashboard, isLoading: isDashboardLoading } = useDashboardQuery(
+    effectiveDashboardId ?? 0,
+  );
 
-  const { data: membersData, isLoading: isMembersLoading } = useQuery({
-    queryKey: QUERY_KEYS.members(effectiveDashboardId!),
-    queryFn: () => getMembers(effectiveDashboardId!),
-    enabled: !!effectiveDashboardId,
-  });
+  const { data: membersData, isLoading: isMembersLoading } =
+    useDashboardMembersQuery({
+      dashboardId: effectiveDashboardId ?? 0,
+    });
 
-  const { data: me, isLoading: isMeLoading } = useQuery({
-    queryKey: QUERY_KEYS.me(),
-    queryFn: getMe,
-  });
+  const { data: me, isLoading: isMeLoading } = useMeQuery();
 
   useEffect(() => {
     const update = () =>

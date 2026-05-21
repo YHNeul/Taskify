@@ -15,15 +15,26 @@ export const QUERY_KEYS = {
   // 대시보드
   dashboard: (dashboardId: number) => ['dashboard', dashboardId] as const,
   dashboards: () => ['dashboards'] as const,
+  dashboardsPage: (page: number, size: number) =>
+    ['dashboards', page, size] as const,
+  dashboardsInfinite: (size: number) => ['dashboards', 'infinite', size] as const,
+  myInvitations: (size: number) => ['myInvitations', size] as const,
+  card: (cardId: number) => ['card', cardId] as const,
 
   // 칼럼
   columns: (dashboardId: number) => ['columns', dashboardId] as const,
+  columnCards: (dashboardId: number) => ['columns', dashboardId, 'cards'] as const,
 
   // 카드 (칼럼별, 무한스크롤)
   cards: (columnId: number) => ['cards', columnId] as const,
 
   // 멤버
   members: (dashboardId: number) => ['members', dashboardId] as const,
+  membersPage: (dashboardId: number, page: number, size: number) =>
+    ['members', dashboardId, page, size] as const,
+  invitationsBase: (dashboardId: number) => ['invitations', dashboardId] as const,
+  invitations: (dashboardId: number, page: number) =>
+    ['invitations', dashboardId, page] as const,
 
   // 내 정보
   me: () => ['me'] as const,

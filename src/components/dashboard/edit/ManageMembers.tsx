@@ -5,13 +5,14 @@ import Pagination from '@/components/common/Pagination';
 import { ConfirmModal } from '@/components/modal';
 import { Member } from '@/types/dashboard';
 import Image from 'next/image';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
-import { deleteMember, getMembers } from '@/api/dashboard';
+import { deleteMember } from '@/api/dashboard';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import { getMe } from '@/api/auth';
 import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
 import { usePaginationSync } from '@/hooks/usePaginationSync';
+import { useDashboardMembersQuery } from '@/hooks/useDashboardMembersQuery';
+import { useMeQuery } from '@/hooks/useMeQuery';
 
 const ITEM_PER_PAGE = 4;
 
@@ -25,26 +26,25 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
   const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
   const queryClient = useQueryClient();
 
-  const dashboardMembers = useQuery({
-    queryKey: ['dashboardMembers', dashboardId, currentPage],
-    queryFn: () => getMembers(Number(dashboardId), currentPage, ITEM_PER_PAGE),
-    enabled: !!dashboardId,
+  const dashboardMembers = useDashboardMembersQuery({
+    dashboardId: Number(dashboardId),
+    page: currentPage,
+    size: ITEM_PER_PAGE,
   });
 
   const deleteMutation = useMutation({
     mutationFn: (memberId: number) => deleteMember(memberId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['dashboardMembers'] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.members(Number(dashboardId)),
+      });
     },
     onError: () => {
       alert('멤버 삭제에 실패했습니다.');
     },
   });
 
-  const { data: me } = useQuery({
-    queryKey: QUERY_KEYS.me(),
-    queryFn: getMe,
-  });
+  const { data: me } = useMeQuery();
 
   const members: Member[] = dashboardMembers.data?.members ?? [];
   const totalCount = dashboardMembers.data?.totalCount ?? 0;

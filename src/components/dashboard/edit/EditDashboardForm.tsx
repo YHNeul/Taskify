@@ -1,13 +1,15 @@
 'use client';
 
-import { getDashboard, updateDashboard } from '@/api/dashboard';
+import { updateDashboard } from '@/api/dashboard';
 import Button from '@/components/common/Button';
 import ColorChip from '@/components/common/Chip/ColorChip';
 import { Input } from '@/components/common/Input';
+import { QUERY_KEYS } from '@/constants/queryKeys';
 import { useDashboardFormSync } from '@/hooks/useDashboardFormSync';
+import { useDashboardQuery } from '@/hooks/useDashboardQuery';
 import { Dashboard } from '@/types/dashboard';
 import { validateDashboardName } from '@/utils/validate';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 interface EditDashboardFormProps {
@@ -18,22 +20,21 @@ export default function EditDashboardForm({
   dashboardId,
 }: EditDashboardFormProps) {
   const queryClient = useQueryClient();
+  const dashboardIdNumber = Number(dashboardId);
 
   /** 초기값 세팅 */
-  const { data: dashboard, isLoading } = useQuery({
-    queryKey: ['dashboard', dashboardId],
-    queryFn: () => getDashboard(Number(dashboardId)),
-    enabled: !!dashboardId,
-  });
+  const { data: dashboard, isLoading } = useDashboardQuery(dashboardIdNumber);
 
   /** 대시보드 제목, 색상 수정 */
   const mutation = useMutation({
     mutationFn: (body: Pick<Dashboard, 'title' | 'color'>) =>
-      updateDashboard(Number(dashboardId), body),
+      updateDashboard(dashboardIdNumber, body),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['dashboard', dashboardId] });
-      queryClient.invalidateQueries({ queryKey: ['dashboards'] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.dashboard(dashboardIdNumber),
+      });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.dashboards() });
     },
     onError: () => {
       alert('수정에 실패했습니다. 다시 시도해주세요.');

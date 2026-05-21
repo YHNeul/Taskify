@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getDashboards } from '@/api/dashboard';
 import { Dashboard } from '@/types/dashboard';
 
 import Button from '@/components/common/Button';
@@ -11,6 +9,7 @@ import DashboardCard from '@/components/mydashboard/DashboardCard';
 import Pagination from '@/components/common/Pagination';
 import DashboardCreateModal from '@/components/modal/DashboardCreateModal';
 import Skeleton from '@/components/common/Skeleton/Skeleton';
+import { useDashboardsPageQuery } from '@/hooks/useDashboardsPageQuery';
 
 const DASHBOARD_LIMIT = 6;
 
@@ -18,10 +17,9 @@ export default function DashboardList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, isPending } = useQuery({
-    queryKey: ['dashboards', currentPage],
-    queryFn: () => getDashboards(currentPage, DASHBOARD_LIMIT),
-    placeholderData: (previousData) => previousData,
+  const { data, isPending } = useDashboardsPageQuery({
+    page: currentPage,
+    size: DASHBOARD_LIMIT,
   });
 
   const isFirstPage = currentPage === 1;
@@ -65,7 +63,7 @@ export default function DashboardList() {
           <Button
             variant="secondary"
             size="add_board"
-            className="!w-full"
+            className="w-full!"
             onClick={openModal}
           >
             <span className="text-gray-700">새로운 대시보드</span>

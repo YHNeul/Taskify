@@ -13,8 +13,7 @@ import { Comments } from '@/types/dashboard';
 import { updateComments } from '@/api/dashboard';
 import { formatDateTime } from '@/utils/formatDate';
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getMe } from '@/api/auth';
+import { useMeQuery } from '@/hooks/useMeQuery';
 
 interface Props {
   comment: Comments;
@@ -23,10 +22,7 @@ interface Props {
 
 export default function ReplyItem({ comment, onDeleteClick }: Props) {
   /** 댓글 작성 id 비교 */
-  const { data: me } = useQuery({
-    queryKey: ['me'],
-    queryFn: () => getMe(), // 현재 유저 조회 API
-  });
+  const { data: me } = useMeQuery();
 
   const isAuthor = me?.id === comment.author.id;
 
