@@ -1,22 +1,16 @@
 'use client';
 
-import { getMyInvitations } from '@/api/dashboard';
 import EmptyInvitation from '@/components/mydashboard/EmptyInvitation';
 import InvitationTable from '@/components/mydashboard/InvitationTable';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 import Skeleton from '@/components/common/Skeleton/Skeleton';
+import { useMyInvitationsInfiniteQuery } from '@/hooks/useMyInvitationsInfiniteQuery';
 
 export default function InvitationList() {
   const observerRef = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending } =
-    useInfiniteQuery({
-      queryKey: ['myInvitations'],
-      queryFn: ({ pageParam }) => getMyInvitations(10, pageParam),
-      initialPageParam: null as number | null,
-      getNextPageParam: (lastPage) => lastPage.cursorId ?? null,
-    });
+    useMyInvitationsInfiniteQuery({ size: 10 });
 
   const invitations = data?.pages.flatMap((page) => page.invitations) || [];
 

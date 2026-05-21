@@ -10,30 +10,27 @@ import { Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
 import AlertModal from '@/components/modal/AlertModal';
 import Input from '@/components/common/Input/Input';
 import Button from '@/components/common/Button';
 import {
-  getMyInfo,
   updateMyInfo,
   uploadProfileImage,
   changePassword,
 } from '@/api/user';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { clearToken, getToken } from '@/lib/auth';
+import { useMyInfoQuery } from '@/hooks/useMyInfoQuery';
 
 export default function MyPageContent() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const queryClient = useQueryClient();
 
-  const { data: myInfo, isLoading } = useQuery({
-    queryKey: QUERY_KEYS.me(),
-    queryFn: getMyInfo,
-  });
+  const { data: myInfo, isLoading } = useMyInfoQuery();
 
   const initialEmail = myInfo?.email ?? '';
   const initialNickname = myInfo?.nickname ?? '';
@@ -258,7 +255,7 @@ export default function MyPageContent() {
           />
         </svg>
 
-        <span className="text-md-medium md:text-lg-medium mt-[1px] text-gray-700">
+        <span className="text-md-medium md:text-lg-medium mt-px text-gray-700">
           돌아가기
         </span>
       </button>

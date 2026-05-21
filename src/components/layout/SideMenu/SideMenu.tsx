@@ -3,11 +3,7 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  useQuery,
-  useInfiniteQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   DndContext,
   closestCenter,
@@ -27,13 +23,14 @@ import Pagination from '@/components/common/Pagination/Pagination';
 import Logo from '@/components/common/Logo';
 import Skeleton from '@/components/common/Skeleton/Skeleton';
 import { cn } from '@/lib/utils';
-import { getDashboards } from '@/api/dashboard';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import type { Dashboard } from '@/types/dashboard';
 import DashboardCreateModal from '@/components/modal/DashboardCreateModal';
 import SortableDashboardItem from '@/components/layout/SideMenu/SortableDashboardItem';
 import SideMenuSkeleton from '@/components/layout/SideMenu/SideMenuSkeleton';
 import { useSidebarResize } from '@/hooks/useSidebarResize';
+import { useDashboardsPageQuery } from '@/hooks/useDashboardsPageQuery';
+import { useDashboardsInfiniteQuery } from '@/hooks/useDashboardsInfiniteQuery';
 
 const PAGE_SIZE = 15;
 
@@ -84,11 +81,10 @@ const SideMenu = () => {
     }),
   );
 
-  const { data, isLoading } = useQuery({
-    queryKey: [...QUERY_KEYS.dashboards(), page],
-    queryFn: () => getDashboards(page, PAGE_SIZE),
+  const { data, isLoading } = useDashboardsPageQuery({
+    page,
+    size: PAGE_SIZE,
     enabled: !isMobileLayout,
-    staleTime: 0,
   });
 
   const {
@@ -97,14 +93,8 @@ const SideMenu = () => {
     hasNextPage,
     isFetchingNextPage,
     isLoading: isInfiniteLoading,
-  } = useInfiniteQuery({
-    queryKey: [...QUERY_KEYS.dashboards(), 'infinite'],
-    queryFn: ({ pageParam }) => getDashboards(pageParam as number, PAGE_SIZE),
-    getNextPageParam: (lastPage, pages) => {
-      const total = Math.ceil(lastPage.totalCount / PAGE_SIZE);
-      return pages.length < total ? pages.length + 1 : undefined;
-    },
-    initialPageParam: 1,
+  } = useDashboardsInfiniteQuery({
+    size: PAGE_SIZE,
     enabled: isMobileLayout,
   });
 

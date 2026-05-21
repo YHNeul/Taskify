@@ -2,7 +2,6 @@
 
 import {
   deleteInvitation,
-  getInvitations,
   inviteMember,
 } from '@/api/dashboard';
 import Button from '@/components/common/Button';
@@ -11,7 +10,9 @@ import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
 import Pagination from '@/components/common/Pagination';
 import FormModal from '@/components/modal/FormModal';
 import { ConfirmModal } from '@/components/modal';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@/constants/queryKeys';
+import { useDashboardInvitationsQuery } from '@/hooks/useDashboardInvitationsQuery';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -36,17 +37,19 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['invitations', dashboardId, currentPage],
-    queryFn: () => getInvitations(dashboardId, currentPage, EMAIL_PER_PAGE),
-    enabled: !!dashboardId,
+  const { data, isLoading, isError } = useDashboardInvitationsQuery({
+    dashboardId,
+    page: currentPage,
+    size: EMAIL_PER_PAGE,
   });
 
   const deleteMutation = useMutation({
     mutationFn: (invitationId: number) =>
       deleteInvitation(dashboardId, invitationId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['invitations', dashboardId] });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.invitationsBase(dashboardId),
+      });
       setSelectedInviterEmail(null);
     },
     onError: () => {
@@ -60,7 +63,7 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
       inviteMember(dashboardId, inviteeEmail),
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ['invitations', dashboardId],
+        queryKey: QUERY_KEYS.invitationsBase(dashboardId),
       });
       setCurrentPage(1);
       closeInviteModal();
@@ -190,7 +193,7 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
             variant="primary"
             onClick={() => setIsInviteModalOpen(true)}
             className="absolute right-[16px] top-[72px]
-            px-[0px] w-[86px] h-[26px] justify-center text-white text-xs-medium gap-[6px] 
+            px-0 w-[86px] h-[26px] justify-center text-white text-xs-medium gap-[6px]
             md:static md:w-[105px] md:h-[32px] md:text-md-medium md:gap-[8px]"
           >
             <AddBoxIcon className="w-[14px] h-[14px] md:w-[16px] md:h-[16px] brightness-0 invert" />
@@ -202,10 +205,10 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
       <table className="table-fixed mt-[18px] w-full text-lg-regular text-gray-500 md:mt-[27px]">
         <thead>
           <tr className="text-left text-gray-400 text-md-regular md:text-lg-regular">
-            <th className="w-[60%] pl-[20px] pb-[24px] font-normal md:pl-[28px] md:pb-[1px] md:w-[70%]">
+            <th className="w-[60%] pl-[20px] pb-[24px] font-normal md:pl-[28px] md:pb-px md:w-[70%]">
               이메일
             </th>
-            <th className="w-[40%] pr-[20px] pb-[24px] md:pr-[28px] md:pb-[1px] md:w-[30%]"></th>
+            <th className="w-[40%] pr-[20px] pb-[24px] md:pr-[28px] md:pb-px md:w-[30%]"></th>
           </tr>
         </thead>
         <tbody>

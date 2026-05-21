@@ -1,13 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { useDashboardStore } from '@/store/useDashboardStore';
 import type { Column as ColumnType, Card } from '@/types/dashboard';
 import {
-  getDashboard,
-  getColumns,
   getCards,
   createColumn,
   updateColumn,
@@ -24,6 +22,9 @@ import ConfirmModal from '@/components/modal/ConfirmModal';
 import DashboardBoardSkeleton from '@/components/dashboard/BoardSkeleton';
 import { useBoardDnd, type ColumnCardState } from '@/hooks/useBoardDnd';
 import { applySavedOrder } from '@/utils/cardOrder';
+import { useDashboardQuery } from '@/hooks/useDashboardQuery';
+import { useDashboardColumnsQuery } from '@/hooks/useDashboardColumnsQuery';
+import { useDashboardColumnCardsQuery } from '@/hooks/useDashboardColumnCardsQuery';
 
 interface DashboardBoardProps {
   dashboardId: number;
@@ -61,35 +62,17 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     setActiveDashboardId(dashboardId);
   }, [dashboardId, setActiveDashboardId]);
 
-  const { data: dashboard, isLoading: isDashboardLoading } = useQuery({
-    queryKey: QUERY_KEYS.dashboard(dashboardId),
-    queryFn: () => getDashboard(dashboardId),
-  });
+  const { data: dashboard, isLoading: isDashboardLoading } =
+    useDashboardQuery(dashboardId);
 
-  const { data: columnsData, isLoading: isColumnsLoading } = useQuery({
-    queryKey: QUERY_KEYS.columns(dashboardId),
-    queryFn: () => getColumns(dashboardId),
-    select: (data) => data,
-  });
+  const { data: columnsData, isLoading: isColumnsLoading } =
+    useDashboardColumnsQuery(dashboardId);
 
-  const { data: columnCardsData } = useQuery({
-    queryKey: [...QUERY_KEYS.columns(dashboardId), 'cards'],
-    queryFn: async () => {
-      const cols = columnsData?.data ?? [];
-      const results = await Promise.all(
-        cols.map((col) => getCards(col.id, 10)),
-      );
-      const map: Record<number, ColumnCardState> = {};
-      cols.forEach((col, i) => {
-        map[col.id] = {
-          cards: results[i].cards,
-          totalCount: results[i].totalCount,
-          cursorId: results[i].cursorId,
-        };
-      });
-      return map;
-    },
-    enabled: !!columnsData?.data?.length,
+  const columns = columnsData?.data ?? [];
+  const { data: columnCardsData } = useDashboardColumnCardsQuery({
+    dashboardId,
+    columns,
+    size: 10,
   });
 
   useEffect(() => {
@@ -109,8 +92,6 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     handleDragOver,
     handleDragEnd,
   } = useBoardDnd({ columnCards, setColumnCards });
-
-  const columns = columnsData?.data ?? [];
 
   const handleLoadMore = useCallback(
     async (columnId: number, cursorId: number) => {

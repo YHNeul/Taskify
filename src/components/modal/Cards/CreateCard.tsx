@@ -17,16 +17,17 @@ import DropdownAssignee from '@/components/common/Dropdown/DropdownAssignee';
 import { Input, Textarea } from '@/components/common/Input';
 import ImageUploaderInput from '@/components/common/Input/ImageUploaderInput';
 import Button from '@/components/common/Button';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import DateInput from '@/components/common/Input/DateInput';
 import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
-import { createCard, getMembers, uploadCardImage } from '@/api/dashboard';
+import { createCard, uploadCardImage } from '@/api/dashboard';
 import { formatDateTime } from '@/utils/formatDate';
 import TagChip from '@/components/common/Chip/TagChip';
 import AlertModal from '@/components/modal/AlertModal';
 import Skeleton from '@/components/common/Skeleton/Skeleton';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/constants/queryKeys';
+import { useDashboardMembersQuery } from '@/hooks/useDashboardMembersQuery';
 
 interface CreateCardForm {
   title: string;
@@ -117,14 +118,20 @@ export default function CreateCard({
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // API 호출 에러 처리
 
   /** 멤버 목록 조회 */
-  const { data: membersData, isLoading: isMembersLoading } = useQuery({
-    queryKey: ['members', dashboardId],
-    queryFn: () => getMembers(dashboardId),
-    throwOnError: () => {
-      setErrorMessage('멤버 조회에 문제가 발생했습니다.');
-      return false;
-    },
+  const {
+    data: membersData,
+    isLoading: isMembersLoading,
+    isError: isMembersError,
+  } = useDashboardMembersQuery({
+    dashboardId,
   });
+
+  useEffect(() => {
+    if (isMembersError) {
+      setErrorMessage('멤버 조회에 문제가 발생했습니다.');
+    }
+  }, [isMembersError]);
+
   const members = membersData?.members ?? [];
 
   /** 카드 생성 */
@@ -192,7 +199,7 @@ export default function CreateCard({
       <ModalOverlay onClose={onModalClose}>
         <ModalBase className="px-4 mobile:px-[30px] max-h-[calc(100vh-160px)] overflow-y-auto w-[584px] h-auto rounded-2xl text-gray-700 p-8 flex flex-col gap-8">
           <header>
-            <h2 className="text-2xl-bold break-words">할 일 생성</h2>
+            <h2 className="text-2xl-bold wrap-break-word">할 일 생성</h2>
           </header>
 
           {/* 담당자 */}

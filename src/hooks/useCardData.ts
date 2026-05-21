@@ -2,33 +2,28 @@
  * @file 카드 조회 및 수정 커스텀 훅
  */
 
-import { deleteCard, getColumns, readCard } from '@/api/dashboard';
+import { deleteCard } from '@/api/dashboard';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import { Column } from '@/types/dashboard';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
+import { useCardQuery } from '@/hooks/useCardQuery';
+import { useDashboardColumnsQuery } from '@/hooks/useDashboardColumnsQuery';
 
 export const useCardData = (cardId: number, dashboardId: number) => {
   const queryClient = useQueryClient();
-  const [columns, setColumns] = useState<Column[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const {
-    data: card,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['card', cardId],
-    queryFn: () => readCard(cardId),
-  });
+  const { data: card, isLoading, isError } = useCardQuery(cardId);
+  const { data: columnsData, isError: isColumnsError } = useDashboardColumnsQuery(
+    card?.dashboardId ?? 0,
+  );
+  const columns = columnsData?.data ?? [];
 
-  /** 컬럼 조회 */
   useEffect(() => {
-    if (!card?.dashboardId) return;
-    getColumns(card.dashboardId)
-      .then((res) => setColumns(res.data))
-      .catch(() => setErrorMessage('컬럼 조회에 문제가 발생했습니다.'));
-  }, [card?.dashboardId]);
+    if (isColumnsError) {
+      setErrorMessage('컬럼 조회에 문제가 발생했습니다.');
+    }
+  }, [isColumnsError]);
 
   /** columnTitle 조회 */
   const columnTitle = useMemo(() => {
@@ -41,7 +36,7 @@ export const useCardData = (cardId: number, dashboardId: number) => {
     try {
       await deleteCard(cardId);
       queryClient.invalidateQueries({
-        queryKey: [...QUERY_KEYS.columns(dashboardId), 'cards'],
+        queryKey: QUERY_KEYS.columnCards(dashboardId),
       });
       onSuccess();
     } catch {
@@ -52,10 +47,10 @@ export const useCardData = (cardId: number, dashboardId: number) => {
   /** 수정 완료 핸들러 */
   const handleEditSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: [...QUERY_KEYS.columns(dashboardId), 'cards'],
+      queryKey: QUERY_KEYS.columnCards(dashboardId),
     });
     queryClient.invalidateQueries({
-      queryKey: ['card', cardId], // 카드 모달 업데이트
+      queryKey: QUERY_KEYS.card(cardId), // 카드 모달 업데이트
     });
   };
 
