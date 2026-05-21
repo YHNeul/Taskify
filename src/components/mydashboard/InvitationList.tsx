@@ -1,11 +1,11 @@
 'use client';
 
 import { getMyInvitations } from '@/api/dashboard';
-import EmptyInvitation from './EmptyInvitation';
-import InvitationTable from './InvitationTable';
+import EmptyInvitation from '@/components/mydashboard/EmptyInvitation';
+import InvitationTable from '@/components/mydashboard/InvitationTable';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
-import Skeleton from '../common/Skeleton/Skeleton';
+import Skeleton from '@/components/common/Skeleton/Skeleton';
 
 export default function InvitationList() {
   const observerRef = useRef<HTMLDivElement>(null);

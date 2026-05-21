@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import CalendarIcon from '../Icon/CalendarIcon';
+import CalendarIcon from '@/components/common/Icon/CalendarIcon';
 
 interface DateProps {
   fontStyle?: string;

@@ -52,7 +52,10 @@ interface UseBoardDndProps {
  * @param setColumnCards - 카드 상태 업데이트 함수
  * @returns `sensors`, `activeCard`, `handleDragStart`, `handleDragOver`, `handleDragEnd`
  */
-export function useBoardDnd({ columnCards, setColumnCards }: UseBoardDndProps) {
+export const useBoardDnd = ({
+  columnCards,
+  setColumnCards,
+}: UseBoardDndProps) => {
   /** DragOverlay 렌더링에 사용할 드래그 중인 카드 정보 */
   const [activeCard, setActiveCard] = useState<{
     card: Card;
@@ -275,4 +278,4 @@ export function useBoardDnd({ columnCards, setColumnCards }: UseBoardDndProps) {
     handleDragOver,
     handleDragEnd,
   };
-}
+};

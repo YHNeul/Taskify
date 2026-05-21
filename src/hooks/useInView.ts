@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
  * 요소가 뷰포트에 들어오면 isVisible = true 로 바뀌는 훅.
  * 한 번 보이면 다시 숨기지 않는다 (unobserve).
  */
-export function useInView(threshold = 0.15) {
+export const useInView = (threshold = 0.15) => {
   const ref = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -29,4 +29,4 @@ export function useInView(threshold = 0.15) {
   }, [threshold]);
 
   return { ref, isVisible };
-}
+};

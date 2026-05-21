@@ -24,25 +24,25 @@
  *
  */
 
-import StatusChip from '../../common/Chip/StatusChip';
-import TagChip from '../../common/Chip/TagChip';
-import KebabMenuIcon from '../../common/Icon/KebabMenuIcon';
-import DropdownMenu from '../../common/Dropdown/DropdownMenu';
+import StatusChip from '@/components/common/Chip/StatusChip';
+import TagChip from '@/components/common/Chip/TagChip';
+import KebabMenuIcon from '@/components/common/Icon/KebabMenuIcon';
+import DropdownMenu from '@/components/common/Dropdown/DropdownMenu';
 import { useEffect, useRef, useState } from 'react';
 import type { Card } from '@/types/dashboard';
-import AssigneeItem from './AssigneeItem';
-import ReplyItem from './ReplyItem';
+import AssigneeItem from '@/components/modal/Cards/AssigneeItem';
+import ReplyItem from '@/components/modal/Cards/ReplyItem';
 import Image from 'next/image';
 import ModalBase from '@/components/common/ModalBase';
-import EditCard from './EditCard';
+import EditCard from '@/components/modal/Cards/EditCard';
 import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
 import { useDropdownClose } from '@/hooks/useToggle';
-import CommentsForm from './CommentsForm';
-import AlertModal from '../AlertModal';
+import CommentsForm from '@/components/modal/Cards/CommentsForm';
+import AlertModal from '@/components/modal/AlertModal';
 import Button from '@/components/common/Button';
-import useComments from '@/hooks/useComments';
-import useCardData from '@/hooks/useCardData';
-import CardSkeleton from './CardSkeleton';
+import { useComments } from '@/hooks/useComments';
+import { useCardData } from '@/hooks/useCardData';
+import CardSkeleton from '@/components/modal/Cards/CardSkeleton';
 
 interface CardsProps {
   onModalClose: () => void;

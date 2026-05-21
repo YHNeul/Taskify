@@ -42,7 +42,7 @@ const SERVER_ERROR_MAP: Record<string, string> = {
  * - `handleEmailChange` — 이메일 입력 핸들러 (실시간 유효성 검사 포함)
  * - `handleConfirm` — 초대 버튼 클릭 핸들러
  */
-export function useInviteMember(effectiveDashboardId: number | null) {
+export const useInviteMember = (effectiveDashboardId: number | null) => {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState('');
@@ -127,4 +127,4 @@ export function useInviteMember(effectiveDashboardId: number | null) {
     handleEmailChange,
     handleConfirm,
   };
-}
+};

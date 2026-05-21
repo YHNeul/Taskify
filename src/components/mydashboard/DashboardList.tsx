@@ -6,11 +6,11 @@ import { getDashboards } from '@/api/dashboard';
 import { Dashboard } from '@/types/dashboard';
 
 import Button from '@/components/common/Button';
-import AddItemChip from '../common/Chip/AddItemChip';
-import DashboardCard from './DashboardCard';
-import Pagination from '../common/Pagination';
-import DashboardCreateModal from '../modal/DashboardCreateModal';
-import Skeleton from '../common/Skeleton/Skeleton';
+import AddItemChip from '@/components/common/Chip/AddItemChip';
+import DashboardCard from '@/components/mydashboard/DashboardCard';
+import Pagination from '@/components/common/Pagination';
+import DashboardCreateModal from '@/components/modal/DashboardCreateModal';
+import Skeleton from '@/components/common/Skeleton/Skeleton';
 
 const DASHBOARD_LIMIT = 6;
 

@@ -16,7 +16,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
-import ImageUploaderChip from '../Chip/ImageUploaderChip';
+import ImageUploaderChip from '@/components/common/Chip/ImageUploaderChip';
 import Image from 'next/image';
 // import heic2any from 'heic2any';
 

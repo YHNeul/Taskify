@@ -15,7 +15,7 @@ import { CHIP_COLORS } from '@/components/common/User/UserProfileImage';
 import Skeleton from '@/components/common/Skeleton/Skeleton';
 import FormModal from '@/components/modal/FormModal';
 import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
-import MemberAvatars from './MemberAvatars';
+import MemberAvatars from '@/components/layout/Header/MemberAvatars';
 import { useInviteMember } from '@/hooks/useInviteMember';
 
 const MAX_VISIBLE_DESKTOP = 4;

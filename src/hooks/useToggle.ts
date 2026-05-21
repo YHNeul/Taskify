@@ -5,7 +5,7 @@
  */
 import { useEffect, useRef } from 'react';
 
-export function useDropdownClose(onClose: () => void) {
+export const useDropdownClose = (onClose: () => void) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -20,4 +20,4 @@ export function useDropdownClose(onClose: () => void) {
   }, [onClose]);
 
   return ref;
-}
+};

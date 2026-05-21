@@ -9,7 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /** 한 번에 불러올 댓글 수 */
 const COMMENTS_SIZE = 10;
 
-export default function useComments(cardId: number) {
+export const useComments = (cardId: number) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // API 호출 에러 처리
   const [deletingCommentId, setDeletingCommentId] = useState<number | null>(
     null,
@@ -134,4 +134,4 @@ export default function useComments(cardId: number) {
     handleDeleteCommentConfirm,
     COMMENTS_SIZE,
   };
-}
+};

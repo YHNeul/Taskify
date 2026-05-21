@@ -1,6 +1,6 @@
 // 로그인, 회원가입 관련 API 함수 모음
 
-import api from './axios';
+import api from '@/api/axios';
 
 export interface Me {
   id: number;

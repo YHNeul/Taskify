@@ -12,7 +12,7 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import ModalOverlay from '../common/ModalBase/ModalOverlay';
+import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
 import AlertModal from '@/components/modal/AlertModal';
 import Input from '@/components/common/Input/Input';
 import Button from '@/components/common/Button';

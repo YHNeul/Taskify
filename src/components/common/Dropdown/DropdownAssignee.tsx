@@ -19,10 +19,10 @@
 
 'use client';
 import { useState } from 'react';
-import ArrowDropDownIcon from '../Icon/ArrowDropDownIcon';
-import UserName from '../User/UserName';
+import ArrowDropDownIcon from '@/components/common/Icon/ArrowDropDownIcon';
+import UserName from '@/components/common/User/UserName';
 import { Assignee, Member } from '@/types/dashboard';
-import DropdownList from './DropdownList';
+import DropdownList from '@/components/common/Dropdown/DropdownList';
 
 interface AssigneeProps {
   /** 드롭다운에 보여줄 전체 멤버 목록 */

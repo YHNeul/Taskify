@@ -25,7 +25,7 @@ import type { Card, Column as ColumnType } from '@/types/dashboard';
 import Button from '@/components/common/Button';
 import SettingIcon from '@/components/common/Icon/SettingIcon';
 import CountCardChip from '@/components/common/Chip/CountCardChip';
-import TaskCard from './TaskCard';
+import TaskCard from '@/components/dashboard/TaskCard';
 
 const COLUMN_COLORS = ['#760DDE', '#FFA500', '#76A5EA', '#7AC555', '#E876EA'];
 
