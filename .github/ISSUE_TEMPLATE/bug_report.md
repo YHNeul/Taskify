@@ -3,7 +3,7 @@ name: Bug report
 about: 버그 발견 및 수정
 title: "[\U0001F41B Fix] "
 labels: "\U0001F41B Bug"
-assignees: ''
+assignees: YHNeul
 
 ---
 
