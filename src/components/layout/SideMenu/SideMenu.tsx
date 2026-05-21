@@ -39,11 +39,17 @@ const PAGE_SIZE = 15;
 
 /** 페이지별 대시보드 순서를 로컬 ID 배열로 정렬 */
 function applyOrder(items: Dashboard[], ids: number[]): Dashboard[] {
+  const rankMap = new Map(ids.map((id, index) => [id, index]));
+
   return [...items].sort((a, b) => {
-    const ai = ids.indexOf(a.id);
-    const bi = ids.indexOf(b.id);
-    if (ai === -1) return -1;
-    if (bi === -1) return 1;
+    const ai = rankMap.get(a.id);
+    const bi = rankMap.get(b.id);
+
+    // 저장된 순서에 없는 항목은 기존 리스트 뒤로 유지한다.
+    if (ai === undefined && bi === undefined) return 0;
+    if (ai === undefined) return 1;
+    if (bi === undefined) return -1;
+
     return ai - bi;
   });
 }
@@ -118,7 +124,7 @@ const SideMenu = () => {
     return () => observer.disconnect();
   }, [isMobileLayout, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const dashboards = data?.dashboards ?? [];
+  const dashboards = useMemo(() => data?.dashboards ?? [], [data?.dashboards]);
   const totalCount = data?.totalCount ?? 0;
   const totalPages = Math.ceil(totalCount / PAGE_SIZE);
   const storageKey = `dashboard-order-page-${page}`;

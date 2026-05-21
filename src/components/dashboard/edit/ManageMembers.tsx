@@ -6,7 +6,7 @@ import { ConfirmModal } from '@/components/modal';
 import { Member } from '@/types/dashboard';
 import Image from 'next/image';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { deleteMember, getMembers } from '@/api/dashboard';
 import { QUERY_KEYS } from '@/constants/queryKeys';
 import { getMe } from '@/api/auth';
@@ -106,7 +106,7 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
                   font-normal text-left text-md-regular text-gray-700 
                   md:pl-[28px] md:py-[16px] md:gap-[12px] md:text-lg-regular"
                 >
-                  <div className="flex-shrink-0 relative w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full overflow-hidden">
+                  <div className="shrink-0 relative w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full overflow-hidden">
                     {item.profileImageUrl && !isImageError ? (
                       <Image
                         src={item.profileImageUrl}

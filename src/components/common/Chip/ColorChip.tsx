@@ -38,10 +38,10 @@ export default function ColorChip({
   // 색상 라벨 선택 상태 관리 (기본값: 첫 번째 라벨)
   const [selected, setSelected] = useState<string>(defaultColor);
 
-  /** 마운트 시 기본값 전달 */
+  /** 기본 색상 변경 시 부모 폼 상태 동기화 */
   useEffect(() => {
     onSelectedColor(defaultColor);
-  }, []);
+  }, [defaultColor, onSelectedColor]);
 
   const handleSelect = (hex: string) => {
     setSelected(hex);

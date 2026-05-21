@@ -43,7 +43,7 @@ export default function LandingFeatureGrid() {
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className="bg-gray-900 px-4 pt-[60px] pb-14 md:px-10 md:py-20 lg:px-[18.75vw]"
+      className="bg-gray-900 px-4 pt-[60px] pb-14 md:px-10 md:py-20"
     >
       <div className="mx-auto max-w-[1200px]">
         {/* 타이틀 — 섹션 진입 시 위로 올라오며 등장 */}

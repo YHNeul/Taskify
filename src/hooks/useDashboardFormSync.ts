@@ -8,24 +8,24 @@ import { useEffect } from 'react';
 
 export const useDashboardFormSync = ({
   dashboard,
-  title,
   setTitle,
-  selectedColor,
   setSelectedColor,
 }: {
   dashboard: Dashboard | null | undefined;
-  title: string;
   setTitle: (t: string) => void;
-  selectedColor: string;
   setSelectedColor: (c: string) => void;
 }) => {
   useEffect(() => {
     if (!dashboard) return;
-    if (title !== dashboard.title) {
-      setTitle(dashboard.title);
-    }
-    if (selectedColor !== dashboard.color) {
-      setSelectedColor(dashboard.color);
-    }
-  }, [dashboard?.id]);
+    // 서버에서 받은 대시보드 값이 바뀔 때만 폼 상태를 동기화한다.
+    setTitle(dashboard.title);
+    setSelectedColor(dashboard.color);
+  }, [
+    dashboard,
+    dashboard?.id,
+    dashboard?.title,
+    dashboard?.color,
+    setTitle,
+    setSelectedColor,
+  ]);
 };

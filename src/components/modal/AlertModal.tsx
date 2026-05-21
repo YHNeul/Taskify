@@ -33,7 +33,7 @@ export default function AlertModal({
   onConfirm,
 }: AlertModalProps) {
   return (
-    <ModalBase className="w-[368px] rounded-[16px] px-[64px] py-[40px]">
+    <ModalBase className="w-full max-w-[368px] rounded-[16px] px-4 py-6 sm:px-8 sm:py-8 md:px-[64px] md:py-[40px]">
       <p className="mb-[14px] text-center text-2lg-medium text-gray-700">
         {message}
       </p>
@@ -42,7 +42,7 @@ export default function AlertModal({
         variant="primary"
         size="modal_lg"
         onClick={onConfirm}
-        className="mx-auto w-[240px]"
+        className="mx-auto w-full max-w-[240px]"
       >
         {buttonText}
       </Button>

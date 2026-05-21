@@ -11,7 +11,6 @@ import type {
   ColumnsResponse,
   CardsResponse,
   MembersResponse,
-  Comments,
   CommentsResponse,
   GetInvitationsResponse,
   Invitation,
