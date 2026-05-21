@@ -77,7 +77,7 @@ export default function TaskCard({
             src={imageUrl}
             alt={title}
             fill
-            priority
+            priority={priority}
             className="object-cover"
             unoptimized
           />

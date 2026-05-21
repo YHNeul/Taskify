@@ -11,5 +11,5 @@ export const usePaginationSync = (
     if (totalPages > 0) {
       setCurrentPage((p) => Math.min(p, totalPages));
     }
-  }, [totalPages]);
+  }, [totalPages, setCurrentPage]);
 };

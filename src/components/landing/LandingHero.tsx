@@ -16,9 +16,9 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
   return (
     <section className="bg-gray-900">
       {/* 일러스트 — 페이지 로드 시 위에서 내려오며 등장 */}
-      <div className="px-[44px] pt-[42px] sm:px-[103px] sm:pt-[94px] lg:px-0 lg:pt-[94px]">
+      <div className="mx-auto w-full max-w-[1200px] px-[44px] pt-[42px] sm:px-[103px] sm:pt-[94px] lg:px-0 lg:pt-[94px]">
         <div
-          className="mx-auto w-full lg:max-w-[38vw]"
+          className="mx-auto w-full max-w-[720px]"
           style={{ animation: 'fadeInDown 0.8s ease-out both' }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- 히어로 전체 이미지 */}

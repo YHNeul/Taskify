@@ -48,9 +48,7 @@ export default function EditDashboardForm({
   /** 초기값 채우기 */
   useDashboardFormSync({
     dashboard,
-    title,
     setTitle,
-    selectedColor,
     setSelectedColor,
   });
 

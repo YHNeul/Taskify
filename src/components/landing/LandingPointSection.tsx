@@ -40,7 +40,7 @@ export default function LandingPointSection({
      */
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className="bg-gray-900 px-4 py-[30px] sm:px-10 sm:py-[45px] lg:px-[18.75vw]"
+      className="bg-gray-900 px-4 py-[30px] sm:px-10 sm:py-[45px]"
     >
       {/*
        * lg:h-[600px]: Figma 스펙 1200×600 카드
@@ -52,7 +52,7 @@ export default function LandingPointSection({
        * 1920px 기준: 1200 × 600 (= 2:1) ✓
        */}
       <div
-        className={`mx-auto flex max-w-[1200px] flex-col overflow-hidden rounded-2xl bg-gray-800 aspect-[1/2] sm:aspect-[664/972] md:aspect-auto lg:aspect-[2/1] ${
+        className={`mx-auto flex w-full max-w-[1200px] flex-col overflow-hidden rounded-2xl bg-gray-800 aspect-[1/2] sm:aspect-[664/972] md:aspect-auto lg:aspect-[2/1] ${
           imageFirst ? 'md:flex-row-reverse' : 'md:flex-row'
         }`}
       >
