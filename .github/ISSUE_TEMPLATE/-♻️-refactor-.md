@@ -1,7 +1,7 @@
 ---
-name: "[♻️ refactor] "
+name: "[♻️ Refactor]"
 about: 리팩토링 이슈 생성
-title: ''
+title: "[♻️ Refactor] "
 labels: "♻️ Refactor"
 assignees: YHNeul
 
