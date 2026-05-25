@@ -6,9 +6,9 @@
  * @author 하늘,승미
  */
 
-// import Header from '@/components/layout/Header';
-import SideMenu from '@/components/layout/SideMenu';
-import Header from '@/components/layout/Header';
+// import Header from '@/shared/components/layout/Header';
+import SideMenu from '@/shared/components/layout/SideMenu';
+import Header from '@/shared/components/layout/Header';
 
 export default function MainLayout({
   children,

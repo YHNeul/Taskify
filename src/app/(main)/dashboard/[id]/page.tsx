@@ -9,7 +9,7 @@
  * - 상호작용 로직(모달, 무한스크롤 등)은 DashboardBoard.tsx에서 처리합니다.
  */
 
-import DashboardBoard from '@/components/dashboard/DashboardBoard';
+import DashboardBoard from '@/shared/components/dashboard/DashboardBoard';
 
 interface PageProps {
   params: Promise<{ id: string }>;

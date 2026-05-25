@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { AUTH_COOKIE_KEY } from '@/constants/auth';
+import { AUTH_COOKIE_KEY } from '@/shared/constants/auth';
 
 const PROTECTED_PATHS = ['/mydashboard', '/mypage', '/dashboard'];
 const AUTH_PAGES = ['/login', '/signup'];
@@ -8,7 +8,7 @@ const AUTH_PAGES = ['/login', '/signup'];
 /**
  * 인증 쿠키 유무에 따라 주요 라우트 접근 제어
  * 비인증 사용자의 보호 라우트 접근은 로그인으로 보냄,
- * 인증 사용자의 인증 페이지 접근은 대시보드로 보냄.ㅎ
+ * 인증 사용자의 인증 페이지 접근은 대시보드로 보냄.
  * @param request 현재 Next.js 요청 객체
  * @returns 요청 통과 또는 리다이렉트를 위한 NextResponse
  */

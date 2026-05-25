@@ -7,7 +7,7 @@
  * - 데이터 조회 및 상호작용은 클라이언트 컴포넌트에서 처리합니다.
  */
 
-import MyPageContent from '@/components/mypage/MyPageContent';
+import MyPageContent from '@/shared/components/mypage/MyPageContent';
 
 export default function MyPage() {
   return <MyPageContent />;

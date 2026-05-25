@@ -5,10 +5,10 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-import AlertModal from '@/components/modal/AlertModal';
-import ConfirmModal from '@/components/modal/ConfirmModal';
-import FormModal from '@/components/modal/FormModal';
-import { inviteMember } from '@/api/dashboard';
+import AlertModal from '@/shared/components/modal/AlertModal';
+import ConfirmModal from '@/shared/components/modal/ConfirmModal';
+import FormModal from '@/shared/components/modal/FormModal';
+import { inviteMember } from '@/shared/apis/dashboard';
 
 type ModalType =
   | 'none'
