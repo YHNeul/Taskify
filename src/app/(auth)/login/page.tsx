@@ -14,8 +14,6 @@ import { Eye, EyeOff } from 'lucide-react';
 import Input from '@/components/common/Input/Input';
 import Button from '@/components/common/Button';
 import AlertModal from '@/components/modal/AlertModal';
-import { setToken } from '@/lib/auth';
-import { API_BASE_URL } from '@/constants/api';
 
 // 이메일 정규식
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -87,7 +85,7 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/auth/login`, {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -97,7 +95,7 @@ export default function LoginPage() {
 
       const rawText = await res.text();
 
-      let data: { accessToken?: string; message?: string } | null = null;
+      let data: { message?: string } | null = null;
 
       try {
         data = rawText ? JSON.parse(rawText) : null;
@@ -105,13 +103,12 @@ export default function LoginPage() {
         data = null;
       }
 
-      if (!res.ok || !data?.accessToken) {
+      if (!res.ok) {
         setAlertMessage(data?.message || '비밀번호가 일치하지 않습니다.');
         setIsAlertOpen(true);
         return;
       }
 
-      setToken(data.accessToken);
       router.push('/mydashboard');
     } catch {
       setAlertMessage('서버 오류가 발생했습니다.');
