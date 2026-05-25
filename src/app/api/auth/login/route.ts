@@ -4,6 +4,11 @@ import { NextResponse } from 'next/server';
 import { API_BASE_URL } from '@/constants/api';
 import { AUTH_COOKIE_KEY } from '@/constants/auth';
 
+type LoginRequestBody = {
+  email: string;
+  password: string;
+};
+
 type LoginResponse = {
   accessToken?: string;
   message?: string;
@@ -11,20 +16,28 @@ type LoginResponse = {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = (await request.json()) as Partial<LoginRequestBody>;
+    if (!body.email || !body.password) {
+      return NextResponse.json(
+        { message: '이메일과 비밀번호를 확인해 주세요.' },
+        { status: 400 },
+      );
+    }
 
     const upstream = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        email: body.email,
+        password: body.password,
+      }),
     });
 
-    const raw = await upstream.text();
     let data: LoginResponse | null = null;
     try {
-      data = raw ? JSON.parse(raw) : null;
+      data = (await upstream.json()) as LoginResponse;
     } catch {
       data = null;
     }
