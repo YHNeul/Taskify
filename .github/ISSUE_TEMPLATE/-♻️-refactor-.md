@@ -10,7 +10,7 @@ assignees: YHNeul
 ## 📌 배경 및 목적
 
 
-## 🔄 변경 사항 (As-Is vs To-Be)
+## 🔄 변경 사항
 
 
 ### As-Is
@@ -18,8 +18,8 @@ assignees: YHNeul
 ### To-Be
 
 
-## ✅ 작업 목록 (To-Do List)
+## ✅ 작업 목록
 
 [ ] 
 
-## 🚀 기대 효과 (Expected Impact)
+## 🚀 기대 효과
