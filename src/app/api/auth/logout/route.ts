@@ -9,3 +9,10 @@ export async function POST() {
 
   return NextResponse.json({ message: '로그아웃 성공' }, { status: 200 });
 }
+
+export async function GET(request: Request) {
+  const cookieStore = await cookies();
+  cookieStore.delete(AUTH_COOKIE_KEY);
+
+  return NextResponse.redirect(new URL('/', request.url));
+}

@@ -20,22 +20,35 @@ async function handleProxy(request: Request, context: RouteContext) {
   });
 
   const upstreamHeaders = new Headers();
-  upstreamHeaders.set(
-    'Content-Type',
-    request.headers.get('content-type') ?? 'application/json',
-  );
+  const requestContentType = request.headers.get('content-type');
+  if (requestContentType) {
+    upstreamHeaders.set('Content-Type', requestContentType);
+  }
   if (token) {
     upstreamHeaders.set('Authorization', `Bearer ${token}`);
   }
 
   const method = request.method.toUpperCase();
   const shouldSendBody = method !== 'GET' && method !== 'HEAD';
-  const upstream = await fetch(targetUrl.toString(), {
-    method,
-    headers: upstreamHeaders,
-    body: shouldSendBody ? request.body : undefined,
-    duplex: shouldSendBody ? 'half' : undefined,
-  });
+  const requestBodyBuffer = shouldSendBody ? await request.arrayBuffer() : null;
+  const body =
+    requestBodyBuffer && requestBodyBuffer.byteLength > 0
+      ? requestBodyBuffer
+      : undefined;
+
+  let upstream: Response;
+  try {
+    upstream = await fetch(targetUrl.toString(), {
+      method,
+      headers: upstreamHeaders,
+      body,
+    });
+  } catch {
+    return NextResponse.json(
+      { message: '업스트림 API 요청에 실패했습니다.' },
+      { status: 502 },
+    );
+  }
 
   const responseHeaders = new Headers();
   const contentType = upstream.headers.get('content-type');

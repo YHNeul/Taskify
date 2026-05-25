@@ -192,7 +192,7 @@ const SideMenu = () => {
       )}
     >
       <Link
-        href={pathname.startsWith('/dashboard/') ? '/mydashboard' : '/'}
+        href="/mydashboard"
         className={cn(
           'flex items-center shrink-0',
           layout === null
