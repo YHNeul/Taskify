@@ -3,16 +3,13 @@ import { NextResponse } from 'next/server';
 
 import { AUTH_COOKIE_KEY } from '@/constants/auth';
 
-export async function POST() {
+async function clearAuthCookie() {
   const cookieStore = await cookies();
   cookieStore.delete(AUTH_COOKIE_KEY);
-
-  return NextResponse.json({ message: '로그아웃 성공' }, { status: 200 });
 }
 
-export async function GET(request: Request) {
-  const cookieStore = await cookies();
-  cookieStore.delete(AUTH_COOKIE_KEY);
+export async function POST() {
+  await clearAuthCookie();
 
-  return NextResponse.redirect(new URL('/', request.url));
+  return NextResponse.json({ message: '로그아웃 성공' }, { status: 200 });
 }

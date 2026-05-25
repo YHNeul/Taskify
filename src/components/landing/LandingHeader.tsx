@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { cookies } from 'next/headers';
 
 import { AUTH_COOKIE_KEY } from '@/constants/auth';
+import LandingLogoutButton from '@/components/landing/LandingLogoutButton';
 
 export default async function LandingHeader() {
   const cookieStore = await cookies();
@@ -42,9 +43,7 @@ export default async function LandingHeader() {
             <Link href="/mydashboard" className="hover:opacity-80">
               내 대시보드
             </Link>
-            <Link href="/api/auth/logout" className="hover:opacity-80">
-              로그아웃
-            </Link>
+            <LandingLogoutButton />
           </>
         ) : (
           <>
