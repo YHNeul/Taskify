@@ -11,7 +11,7 @@
  */
 
 import { SVGProps } from 'react';
-import EyeOffSvg from '@/shared/components/common/Icon/ic-eye-off.svg';
+import EyeOffSvg from '@/shared/assets/icons/ic-eye-off.svg';
 
 export default function EyeOffIcon(props: SVGProps<SVGSVGElement>) {
   return <EyeOffSvg {...props} />;

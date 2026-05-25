@@ -12,7 +12,7 @@
  */
 
 import { SVGProps } from 'react';
-import CalendarSvg from '@/shared/components/common/Icon/ic-calendar.svg';
+import CalendarSvg from '@/shared/assets/icons/ic-calendar.svg';
 
 export default function CalendarIcon(props: SVGProps<SVGSVGElement>) {
   return <CalendarSvg {...props} />;

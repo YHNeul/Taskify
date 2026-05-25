@@ -11,7 +11,7 @@
  */
 
 import { SVGProps } from 'react';
-import EyeSvg from '@/shared/components/common/Icon/ic-eye.svg';
+import EyeSvg from '@/shared/assets/icons/ic-eye.svg';
 
 export default function EyeIcon(props: SVGProps<SVGSVGElement>) {
   return <EyeSvg {...props} />;

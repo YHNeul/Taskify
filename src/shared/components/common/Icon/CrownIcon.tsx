@@ -6,7 +6,7 @@
  */
 
 import { SVGProps } from 'react';
-import CrownSvg from '@/shared/components/common/Icon/ic-crown.svg';
+import CrownSvg from '@/shared/assets/icons/ic-crown.svg';
 
 export default function CrownIcon(props: SVGProps<SVGSVGElement>) {
   return <CrownSvg {...props} />;

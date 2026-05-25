@@ -12,7 +12,7 @@
  */
 
 import { SVGProps } from 'react';
-import ArrowRightSvg from '@/shared/components/common/Icon/ic-arrow-right.svg';
+import ArrowRightSvg from '@/shared/assets/icons/ic-arrow-right.svg';
 
 export default function ArrowRightIcon(props: SVGProps<SVGSVGElement>) {
   return <ArrowRightSvg {...props} />;

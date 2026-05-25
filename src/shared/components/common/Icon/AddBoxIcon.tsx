@@ -12,7 +12,7 @@
  */
 
 import { SVGProps } from 'react';
-import AddBoxSvg from '@/shared/components/common/Icon/ic-add-box.svg';
+import AddBoxSvg from '@/shared/assets/icons/ic-add-box.svg';
 
 export default function AddBoxIcon(props: SVGProps<SVGSVGElement>) {
   return <AddBoxSvg {...props} />;

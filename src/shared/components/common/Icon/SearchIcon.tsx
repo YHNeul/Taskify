@@ -11,7 +11,7 @@
  */
 
 import { SVGProps } from 'react';
-import SearchSvg from '@/shared/components/common/Icon/ic-search.svg';
+import SearchSvg from '@/shared/assets/icons/ic-search.svg';
 
 export default function SearchIcon(props: SVGProps<SVGSVGElement>) {
   return <SearchSvg {...props} />;

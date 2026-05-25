@@ -11,7 +11,7 @@
  */
 
 import { SVGProps } from 'react';
-import XSvg from '@/shared/components/common/Icon/ic-x.svg';
+import XSvg from '@/shared/assets/icons/ic-x.svg';
 
 export default function XIcon(props: SVGProps<SVGSVGElement>) {
   return <XSvg {...props} />;

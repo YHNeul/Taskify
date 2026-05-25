@@ -13,7 +13,7 @@
  * @author 수경
  */
 
-import ImageUploaderChipSvg from '@/shared/components/common/Chip/ic-image-uploader-chip.svg';
+import ImageUploaderChipSvg from '@/shared/assets/chips/ic-image-uploader-chip.svg';
 
 interface Props {
   /**

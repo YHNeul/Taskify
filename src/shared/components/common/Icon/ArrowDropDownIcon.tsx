@@ -11,7 +11,7 @@
  */
 
 import { SVGProps } from 'react';
-import ArrowDropDownSvg from '@/shared/components/common/Icon/ic-arrow-drop-down.svg';
+import ArrowDropDownSvg from '@/shared/assets/icons/ic-arrow-drop-down.svg';
 
 export default function ArrowDropDownIcon(props: SVGProps<SVGSVGElement>) {
   return <ArrowDropDownSvg {...props} />;

@@ -12,7 +12,7 @@
  */
 
 import { SVGProps } from 'react';
-import KebabMenuSvg from '@/shared/components/common/Icon/ic-kebab-menu.svg';
+import KebabMenuSvg from '@/shared/assets/icons/ic-kebab-menu.svg';
 
 export default function KebabMenuIcon(props: SVGProps<SVGSVGElement>) {
   return <KebabMenuSvg {...props} />;

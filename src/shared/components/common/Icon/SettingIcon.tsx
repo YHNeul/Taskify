@@ -12,7 +12,7 @@
  */
 
 import { SVGProps } from 'react';
-import SettingSvg from '@/shared/components/common/Icon/ic-setting.svg';
+import SettingSvg from '@/shared/assets/icons/ic-setting.svg';
 
 export default function SettingIcon(props: SVGProps<SVGSVGElement>) {
   return <SettingSvg {...props} />;
