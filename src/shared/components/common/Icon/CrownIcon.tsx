@@ -9,5 +9,7 @@ import { SVGProps } from 'react';
 import CrownSvg from '@/shared/assets/icons/ic-crown.svg';
 
 export default function CrownIcon(props: SVGProps<SVGSVGElement>) {
-  return <CrownSvg {...props} />;
+  const { width = 18, height = 14, ...rest } = props;
+
+  return <CrownSvg width={width} height={height} {...rest} />;
 }
