@@ -5,7 +5,14 @@ import { AUTH_COOKIE_KEY } from '@/constants/auth';
 const PROTECTED_PATHS = ['/mydashboard', '/mypage', '/dashboard'];
 const AUTH_PAGES = ['/login', '/signup'];
 
-export function proxy(request: NextRequest) {
+/**
+ * 인증 쿠키 유무에 따라 주요 라우트 접근 제어
+ * 비인증 사용자의 보호 라우트 접근은 로그인으로 보냄,
+ * 인증 사용자의 인증 페이지 접근은 대시보드로 보냄.ㅎ
+ * @param request 현재 Next.js 요청 객체
+ * @returns 요청 통과 또는 리다이렉트를 위한 NextResponse
+ */
+export const proxy = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(AUTH_COOKIE_KEY)?.value;
 
@@ -23,7 +30,7 @@ export function proxy(request: NextRequest) {
   }
 
   return NextResponse.next();
-}
+};
 
 export const config = {
   matcher: [
