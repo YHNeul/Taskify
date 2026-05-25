@@ -24,6 +24,11 @@ jobs:
           LANGUAGE: Korean
 
           PROMPT: |
+            You MUST return ONLY a valid JSON Array. Do NOT wrap the response in markdown blocks like ```json. 
+            Do NOT return an object with a "reviews" key. 
+            Correct format example: [{"review_comment": "your comment", "hunk_header": "..."}]
+
+            [프로젝트 코드리뷰 컨벤션]
             당신은 엄격하고 꼼꼼한 프론트엔드 전문 코드 리뷰어입니다. 아래의 팀 컨벤션과 리뷰 원칙을 반드시 숙지하고, PR로 올라온 코드를 깐깐하게 리뷰해 주세요.
 
             [리뷰 태도 및 원칙] (절대 준수)
