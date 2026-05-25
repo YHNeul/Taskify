@@ -8,6 +8,13 @@ type RouteContext = {
   params: Promise<{ path: string[] }>;
 };
 
+/**
+ * 클라이언트 요청을 업스트림 API로 프록시
+ * 경로/쿼리/본문을 그대로 전달하고, 쿠키 기반 토큰을 Authorization 헤더로 변환
+ * @param request Next.js Route Handler의 요청 객체
+ * @param context 동적 경로 세그먼트(`path`)를 포함한 컨텍스트
+ * @returns 업스트림 응답 바디/상태/콘텐츠 타입을 전달한 NextResponse
+ */
 async function handleProxy(request: Request, context: RouteContext) {
   const { path } = await context.params;
   const token = (await cookies()).get(AUTH_COOKIE_KEY)?.value;
