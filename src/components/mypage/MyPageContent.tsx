@@ -16,13 +16,8 @@ import ModalOverlay from '@/components/common/ModalBase/ModalOverlay';
 import AlertModal from '@/components/modal/AlertModal';
 import Input from '@/components/common/Input/Input';
 import Button from '@/components/common/Button';
-import {
-  updateMyInfo,
-  uploadProfileImage,
-  changePassword,
-} from '@/api/user';
+import { updateMyInfo, uploadProfileImage, changePassword } from '@/api/user';
 import { QUERY_KEYS } from '@/constants/queryKeys';
-import { clearToken, getToken } from '@/lib/auth';
 import { useMyInfoQuery } from '@/hooks/useMyInfoQuery';
 
 export default function MyPageContent() {
@@ -116,15 +111,6 @@ export default function MyPageContent() {
       {isVisible ? <EyeOff size={24} /> : <Eye size={24} />}
     </button>
   );
-
-  // NOTE: 로그인하지 않은 사용자는 메인페이지로 이동
-  useEffect(() => {
-    const token = getToken();
-
-    if (!token) {
-      router.replace('/');
-    }
-  }, [router]);
 
   const openAlert = (message: string) => {
     setAlertMessage(message);
@@ -226,10 +212,13 @@ export default function MyPageContent() {
     }
   };
 
-  // NOTE: 로그아웃 처리 (토큰 삭제 후 메인페이지 이동)
-  const handleLogout = () => {
-    clearToken();
-    router.replace('/');
+  // NOTE: 로그아웃 처리 (서버 쿠키 삭제 후 메인페이지 이동)
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } finally {
+      router.replace('/');
+    }
   };
 
   if (isLoading) {
