@@ -22,7 +22,9 @@ export const proxy = (request: NextRequest) => {
   const isAuthPage = AUTH_PAGES.some((path) => pathname.startsWith(path));
 
   if (!token && isProtectedPath) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    const redirectUrl = new URL('/login', request.url);
+    redirectUrl.searchParams.set('next', pathname);
+    return NextResponse.redirect(redirectUrl);
   }
 
   if (token && isAuthPage) {

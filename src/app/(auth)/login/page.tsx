@@ -8,7 +8,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Eye, EyeOff } from 'lucide-react';
 import Input from '@/shared/components/common/Input/Input';
@@ -20,6 +20,9 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextRaw = searchParams.get('next');
+  const nextPath = nextRaw?.startsWith('/') ? nextRaw : '/mydashboard';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -109,7 +112,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/mydashboard');
+      router.push(nextPath);
     } catch {
       setAlertMessage('서버 오류가 발생했습니다.');
       setIsAlertOpen(true);
@@ -192,7 +195,14 @@ export default function LoginPage() {
 
           <p className="w-full text-center text-[16px] leading-[19px] text-gray-700">
             회원이 아니신가요?{' '}
-            <Link href="/signup" className="text-brand-violet underline">
+            <Link
+              href={
+                nextRaw
+                  ? `/signup?next=${encodeURIComponent(nextRaw)}`
+                  : '/signup'
+              }
+              className="text-brand-violet underline"
+            >
               회원가입하기
             </Link>
           </p>

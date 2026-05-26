@@ -13,6 +13,9 @@ import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
 import { usePaginationSync } from '@/shared/hooks/usePaginationSync';
 import { useDashboardMembersQuery } from '@/shared/hooks/useDashboardMembersQuery';
 import { useMeQuery } from '@/shared/hooks/useMeQuery';
+import useQueryParamState, {
+  parsePositiveIntParam,
+} from '@/shared/hooks/useQueryParamState';
 
 const ITEM_PER_PAGE = 4;
 
@@ -21,7 +24,12 @@ interface MembersTableProps {
 }
 
 export default function ManageMembers({ dashboardId }: MembersTableProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useQueryParamState<number>({
+    key: 'memberPage',
+    defaultValue: 1,
+    parse: (rawValue) => parsePositiveIntParam(rawValue, 1),
+    serialize: (value) => (value > 1 ? String(value) : null),
+  });
   const [isImageError, setIsImageError] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
   const queryClient = useQueryClient();

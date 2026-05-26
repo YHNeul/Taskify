@@ -10,7 +10,7 @@ import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 
 import { Input } from '@/shared/components/common/Input';
@@ -21,6 +21,8 @@ import { API_BASE_URL } from '@/shared/constants/api';
 
 export default function SignupPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextRaw = searchParams.get('next');
 
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
@@ -362,7 +364,14 @@ export default function SignupPage() {
 
             <p className="w-full text-center text-[16px] leading-[19px] text-gray-700">
               이미 회원이신가요?{' '}
-              <Link href="/login" className="text-brand-violet underline">
+              <Link
+                href={
+                  nextRaw
+                    ? `/login?next=${encodeURIComponent(nextRaw)}`
+                    : '/login'
+                }
+                className="text-brand-violet underline"
+              >
                 로그인하기
               </Link>
             </p>
@@ -378,7 +387,10 @@ export default function SignupPage() {
               setIsAlertOpen(false);
 
               if (isSuccess) {
-                router.push('/login');
+                const loginHref = nextRaw
+                  ? `/login?next=${encodeURIComponent(nextRaw)}`
+                  : '/login';
+                router.push(loginHref);
               }
             }}
           />
