@@ -49,7 +49,7 @@ import type { ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-[10px] transition-colors disabled:cursor-not-allowed',
+  'inline-flex items-center justify-center gap-[10px] transition-colors cursor-pointer disabled:cursor-not-allowed',
   {
     variants: {
       /**

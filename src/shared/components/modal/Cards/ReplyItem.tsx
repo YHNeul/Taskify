@@ -77,7 +77,7 @@ export default function ReplyItem({ comment, onDeleteClick }: Props) {
             <div className="flex items-center gap-2 md:gap-[14px]">
               <button
                 type="button"
-                className="text-xs text-gray-400 underline underline-offset-2"
+                className="text-xs text-gray-400 underline underline-offset-2 hover:text-gray-600 transition-colors"
                 onClick={() =>
                   isEditing ? handleEditConfirm() : setIsEditing(true)
                 }
@@ -87,7 +87,7 @@ export default function ReplyItem({ comment, onDeleteClick }: Props) {
 
               <button
                 type="button"
-                className="text-xs text-gray-400 underline underline-offset-2"
+                className="text-xs text-gray-400 underline underline-offset-2 hover:text-gray-600 transition-colors"
                 onClick={() => onDeleteClick(id)}
               >
                 삭제

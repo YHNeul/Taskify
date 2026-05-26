@@ -54,6 +54,7 @@ export default function DropdownAssignee({
   /** Input과 담당자가 선택된 박스의 공통 css */
   const baseStyle =
     'w-full h-[48px] border border-gray-300 px-4 py-2 rounded-md flex justify-between items-center bg-white';
+  const buttonStyle = `${baseStyle} cursor-pointer hover:bg-gray-100 transition-colors`;
 
   return (
     <div className="relative sm:min-w-[217px]">
@@ -61,7 +62,7 @@ export default function DropdownAssignee({
       {selectedUser ? (
         <button
           type="button"
-          className={`${baseStyle}`}
+          className={buttonStyle}
           onClick={() => {
             setOpen(true);
           }}

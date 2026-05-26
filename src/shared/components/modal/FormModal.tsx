@@ -77,7 +77,7 @@ export default function FormModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 hover:opacity-70"
+            className="interactive-icon-btn p-2 cursor-pointer"
           >
             <XIcon className="w-[24px] h-[24px]" />
           </button>

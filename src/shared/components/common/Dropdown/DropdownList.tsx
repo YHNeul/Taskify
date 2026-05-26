@@ -46,7 +46,7 @@ export default function DropdownList<T extends object>({
         <button
           type="button"
           onClick={onClear}
-          className="w-full pl-5 py-2 text-sm text-gray-400 text-left border-b hover:bg-gray-50"
+          className="w-full pl-5 py-2 text-sm text-gray-400 text-left border-b hover:bg-gray-50 transition-colors cursor-pointer"
         >
           담당자 미지정
         </button>
@@ -61,7 +61,7 @@ export default function DropdownList<T extends object>({
             key={getKey(item)}
             type="button"
             onClick={() => onSelect(item)}
-            className="w-full pl-5 py-2 flex items-center gap-3 group"
+            className="w-full pl-5 py-2 flex items-center gap-3 group hover:bg-gray-50 transition-colors cursor-pointer"
           >
             {/* 체크 아이콘 - 호버시에만 표시 */}
             <span className="opacity-0 group-hover:opacity-100 transition-opacity">

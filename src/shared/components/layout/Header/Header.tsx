@@ -97,7 +97,7 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() => router.push(`/dashboard/${dashboardId}/edit`)}
-                  className="flex h-[32px] md:h-[36px] lg:h-[40px] items-center gap-1.5 md:gap-2 rounded-[8px] border border-gray-300 bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0"
+                  className="flex h-[32px] md:h-[36px] lg:h-[40px] items-center gap-1.5 md:gap-2 rounded-[8px] border border-gray-300 bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
                 >
                   <SettingIcon className="h-[16px] w-[16px] md:h-[18px] md:w-[18px] lg:h-[20px] lg:w-[20px]" />
                   <span className="hidden md:inline">관리</span>
@@ -106,7 +106,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={invite.open}
-                className="flex h-[32px] md:h-[36px] lg:h-[40px] items-center gap-1.5 md:gap-2 rounded-[8px] border border-gray-300 bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0"
+                className="flex h-[32px] md:h-[36px] lg:h-[40px] items-center gap-1.5 md:gap-2 rounded-[8px] border border-gray-300 bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
               >
                 <AddBoxIcon className="h-[16px] w-[16px] md:h-[18px] md:w-[18px] lg:h-[20px] lg:w-[20px]" />
                 <span className="hidden md:inline">초대하기</span>
@@ -131,7 +131,7 @@ export default function Header() {
               <button
                 type="button"
                 onClick={() => router.push('/mypage')}
-                className="ml-2 md:ml-4 lg:ml-6 flex items-center gap-2 md:gap-3 border-l border-gray-300 pl-2 md:pl-4 lg:pl-6 hover:opacity-80 transition-opacity shrink-0"
+                className="ml-2 md:ml-4 lg:ml-6 flex items-center gap-2 md:gap-3 border-l border-gray-300 pl-2 md:pl-4 lg:pl-6 hover:opacity-80 transition-opacity shrink-0 cursor-pointer"
               >
                 <div
                   className="flex h-[38px] w-[38px] items-center justify-center rounded-full overflow-hidden text-lg-medium text-white shrink-0"
