@@ -259,14 +259,13 @@ export default function Cards({
 
             {/* 이미지 섹션: 이미지가 있을 때만 렌더링 */}
             {imageUrl && (
-              <div className="relative w-full md:w-[445px] mb-6 md:mb-4">
+              <div className="relative mb-6 w-full overflow-hidden rounded-md md:mb-4 md:w-[445px] aspect-[445/250]">
                 <Image
                   src={imageUrl}
                   alt="할 일 카드 이미지"
-                  width={445}
-                  height={0}
-                  style={{ width: '100%', height: 'auto' }}
-                  className="rounded-md"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) calc(100vw - 32px), 445px"
                   unoptimized
                 />
               </div>

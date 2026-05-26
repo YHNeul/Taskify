@@ -37,6 +37,7 @@ export default function Header() {
   const staticTitle = PAGE_TITLES[pathname] ?? null;
   const dashboardId = params?.id ? Number(params.id) : null;
   const effectiveDashboardId = dashboardId ?? activeDashboardId;
+  const shouldPrioritizeMyAvatar = Boolean(dashboardId);
 
   const { data: dashboard, isLoading: isDashboardLoading } = useDashboardQuery(
     effectiveDashboardId ?? 0,
@@ -142,6 +143,7 @@ export default function Header() {
                       alt={me.nickname}
                       width={38}
                       height={38}
+                      priority={shouldPrioritizeMyAvatar}
                       className="object-cover w-full h-full"
                       unoptimized
                     />
