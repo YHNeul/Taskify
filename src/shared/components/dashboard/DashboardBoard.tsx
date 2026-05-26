@@ -25,7 +25,7 @@ import { applySavedOrder } from '@/shared/utils/cardOrder';
 import { useDashboardQuery } from '@/shared/hooks/useDashboardQuery';
 import { useDashboardColumnsQuery } from '@/shared/hooks/useDashboardColumnsQuery';
 import { useDashboardColumnCardsQuery } from '@/shared/hooks/useDashboardColumnCardsQuery';
-import useQueryParamState from '@/shared/hooks/useQueryParamState';
+import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
 
 interface DashboardBoardProps {
   dashboardId: number;

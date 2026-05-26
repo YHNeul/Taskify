@@ -31,7 +31,8 @@ import SideMenuSkeleton from '@/shared/components/layout/SideMenu/SideMenuSkelet
 import { useSidebarResize } from '@/shared/hooks/useSidebarResize';
 import { useDashboardsPageQuery } from '@/shared/hooks/useDashboardsPageQuery';
 import { useDashboardsInfiniteQuery } from '@/shared/hooks/useDashboardsInfiniteQuery';
-import useQueryParamState, {
+import {
+  useQueryParamState,
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
 

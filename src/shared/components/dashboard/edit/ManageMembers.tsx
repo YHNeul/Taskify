@@ -13,7 +13,8 @@ import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
 import { usePaginationSync } from '@/shared/hooks/usePaginationSync';
 import { useDashboardMembersQuery } from '@/shared/hooks/useDashboardMembersQuery';
 import { useMeQuery } from '@/shared/hooks/useMeQuery';
-import useQueryParamState, {
+import {
+  useQueryParamState,
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
 

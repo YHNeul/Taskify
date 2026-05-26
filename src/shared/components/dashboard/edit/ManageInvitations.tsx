@@ -12,7 +12,8 @@ import { useDashboardInvitationsQuery } from '@/shared/hooks/useDashboardInvitat
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import axios from 'axios';
-import useQueryParamState, {
+import {
+  useQueryParamState,
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
 

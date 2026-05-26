@@ -26,7 +26,7 @@ export function parsePositiveIntParam(
   return normalized > 0 ? normalized : fallback;
 }
 
-export default function useQueryParamState<T>({
+export const useQueryParamState = <T,>({
   key,
   defaultValue,
   parse,
@@ -78,4 +78,4 @@ export default function useQueryParamState<T>({
   );
 
   return [value, setValue];
-}
+};

@@ -5,7 +5,7 @@ import { Input } from '@/shared/components/common/Input';
 import { RefObject, useMemo, useRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { respondToInvitation } from '@/shared/apis/dashboard';
-import useQueryParamState from '@/shared/hooks/useQueryParamState';
+import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
 
 interface InvitationTableProps {
   data: Invitation[];

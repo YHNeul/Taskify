@@ -9,7 +9,8 @@ import Pagination from '@/shared/components/common/Pagination';
 import DashboardCreateModal from '@/shared/components/modal/DashboardCreateModal';
 import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
 import { useDashboardsPageQuery } from '@/shared/hooks/useDashboardsPageQuery';
-import useQueryParamState, {
+import {
+  useQueryParamState,
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
 
