@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-import { AUTH_COOKIE_KEY } from '@/constants/auth';
+import { AUTH_COOKIE_KEY } from '@/shared/constants/auth';
 
 async function clearAuthCookie() {
   const cookieStore = await cookies();

@@ -5,11 +5,11 @@
  */
 
 import { Montserrat } from 'next/font/google';
-import LandingFeatureGrid from '@/components/landing/LandingFeatureGrid';
-import LandingFooter from '@/components/landing/LandingFooter';
-import LandingHeader from '@/components/landing/LandingHeader';
-import LandingHero from '@/components/landing/LandingHero';
-import LandingPointSection from '@/components/landing/LandingPointSection';
+import LandingFeatureGrid from '@/shared/components/landing/LandingFeatureGrid';
+import LandingFooter from '@/shared/components/landing/LandingFooter';
+import LandingHeader from '@/shared/components/landing/LandingHeader';
+import LandingHero from '@/shared/components/landing/LandingHero';
+import LandingPointSection from '@/shared/components/landing/LandingPointSection';
 
 const montserrat = Montserrat({
   subsets: ['latin'],

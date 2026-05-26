@@ -4,11 +4,11 @@
  * @note 구성원 목록과 초대 내역 각각에 대한 페이지네이션 처리가 필요합니다.
  */
 
-import ArrowRightIcon from '@/components/common/Icon/ArrowRightIcon';
-import DeleteDashboardButton from '@/components/dashboard/edit/DeleteDashboardButton';
-import EditDashboardForm from '@/components/dashboard/edit/EditDashboardForm';
-import ManageInvitations from '@/components/dashboard/edit/ManageInvitations';
-import ManageMembers from '@/components/dashboard/edit/ManageMembers';
+import ArrowRightIcon from '@/shared/components/common/Icon/ArrowRightIcon';
+import DeleteDashboardButton from '@/shared/components/dashboard/edit/DeleteDashboardButton';
+import EditDashboardForm from '@/shared/components/dashboard/edit/EditDashboardForm';
+import ManageInvitations from '@/shared/components/dashboard/edit/ManageInvitations';
+import ManageMembers from '@/shared/components/dashboard/edit/ManageMembers';
 import Link from 'next/link';
 
 interface PageProps {

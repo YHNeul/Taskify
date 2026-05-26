@@ -13,11 +13,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 
-import { Input } from '@/components/common/Input';
-import Button from '@/components/common/Button';
-import Checkbox from '@/components/common/Checkbox';
-import AlertModal from '@/components/modal/AlertModal';
-import { API_BASE_URL } from '@/constants/api';
+import { Input } from '@/shared/components/common/Input';
+import Button from '@/shared/components/common/Button';
+import Checkbox from '@/shared/components/common/Checkbox';
+import AlertModal from '@/shared/components/modal/AlertModal';
+import { API_BASE_URL } from '@/shared/constants/api';
 
 export default function SignupPage() {
   const router = useRouter();

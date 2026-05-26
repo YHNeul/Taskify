@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-import { API_BASE_URL } from '@/constants/api';
-import { AUTH_COOKIE_KEY } from '@/constants/auth';
+import { API_BASE_URL } from '@/shared/constants/api';
+import { AUTH_COOKIE_KEY } from '@/shared/constants/auth';
 
 type LoginRequestBody = {
   email: string;

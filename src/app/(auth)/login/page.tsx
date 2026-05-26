@@ -11,9 +11,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Eye, EyeOff } from 'lucide-react';
-import Input from '@/components/common/Input/Input';
-import Button from '@/components/common/Button';
-import AlertModal from '@/components/modal/AlertModal';
+import Input from '@/shared/components/common/Input/Input';
+import Button from '@/shared/components/common/Button';
+import AlertModal from '@/shared/components/modal/AlertModal';
 
 // 이메일 정규식
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
