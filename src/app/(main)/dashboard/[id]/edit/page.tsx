@@ -4,6 +4,7 @@
  * @note 구성원 목록과 초대 내역 각각에 대한 페이지네이션 처리가 필요합니다.
  */
 
+import { Suspense } from 'react';
 import ArrowRightIcon from '@/shared/components/common/Icon/ArrowRightIcon';
 import DeleteDashboardButton from '@/shared/components/dashboard/edit/DeleteDashboardButton';
 import EditDashboardForm from '@/shared/components/dashboard/edit/EditDashboardForm';
@@ -36,11 +37,15 @@ export default async function DashboardEditPage({ params }: PageProps) {
         </div>
 
         <div className="mt-[16px] h-[337px] bg-white rounded-[8px] md:h-[404px]">
-          <ManageMembers dashboardId={id} />
+          <Suspense fallback={<div className="h-full" />}>
+            <ManageMembers dashboardId={id} />
+          </Suspense>
         </div>
 
         <div className="mt-[16px] h-[407px] bg-white rounded-[8px] md:h-[477px]">
-          <ManageInvitations dashboardId={Number(id)} />
+          <Suspense fallback={<div className="h-full" />}>
+            <ManageInvitations dashboardId={Number(id)} />
+          </Suspense>
         </div>
 
         <div className="mt-[24px] mb-[57px]">

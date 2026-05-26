@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
@@ -18,7 +18,7 @@ import AlertModal from '@/shared/components/modal/AlertModal';
 // 이메일 정규식
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nextRaw = searchParams.get('next');
@@ -220,5 +220,13 @@ export default function LoginPage() {
         </div>
       )}
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-gray-100" />}>
+      <LoginPageContent />
+    </Suspense>
   );
 }

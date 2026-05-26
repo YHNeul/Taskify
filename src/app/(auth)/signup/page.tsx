@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -19,7 +19,7 @@ import Checkbox from '@/shared/components/common/Checkbox';
 import AlertModal from '@/shared/components/modal/AlertModal';
 import { API_BASE_URL } from '@/shared/constants/api';
 
-export default function SignupPage() {
+function SignupPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nextRaw = searchParams.get('next');
@@ -397,5 +397,13 @@ export default function SignupPage() {
         </div>
       )}
     </main>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-gray-100" />}>
+      <SignupPageContent />
+    </Suspense>
   );
 }
