@@ -13,10 +13,14 @@ interface UseQueryParamStateOptions<T> {
   history?: 'push' | 'replace';
 }
 
-export function parsePositiveIntParam(
+/**
+ * 쿼리 파라미터 문자열을 양의 정수로 파싱
+ * 값이 없거나 숫자가 아니면 fallback을 반환
+ */
+export const parsePositiveIntParam = (
   rawValue: string | null,
   fallback = 1,
-): number {
+): number => {
   if (!rawValue) return fallback;
 
   const parsed = Number(rawValue);
@@ -24,15 +28,19 @@ export function parsePositiveIntParam(
 
   const normalized = Math.floor(parsed);
   return normalized > 0 ? normalized : fallback;
-}
+};
 
+/**
+ * URL 쿼리 파라미터를 React 상태처럼 읽고/쓰기 위한 훅
+ * parse/serialize를 통해 타입별 변환 규칙 주입 가능
+ */
 export const useQueryParamState = <T,>({
   key,
   defaultValue,
   parse,
   serialize,
   history = 'replace',
-}: UseQueryParamStateOptions<T>): [T, (action: SetStateAction<T>) => void] {
+}: UseQueryParamStateOptions<T>): [T, (action: SetStateAction<T>) => void] => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -50,7 +58,7 @@ export const useQueryParamState = <T,>({
           ? (action as (prev: T) => T)(value)
           : action;
 
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(searchParams);
 
       const serialized = serialize
         ? serialize(nextValue)
