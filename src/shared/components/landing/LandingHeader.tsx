@@ -30,7 +30,7 @@ export default async function LandingHeader() {
           alt=""
           width={24}
           height={28}
-          className="size-7 brightness-0 invert"
+          className="h-7 w-auto brightness-0 invert"
           priority
         />
         <span className="hidden text-xl font-bold text-white sm:inline">

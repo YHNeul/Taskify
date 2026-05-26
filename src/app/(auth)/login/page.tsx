@@ -132,12 +132,14 @@ export default function LoginPage() {
                 alt="Taskify icon"
                 width={200}
                 height={190}
+                className="h-auto w-auto"
               />
               <Image
                 src="/logo-taskify-text-main.svg"
                 alt="Taskify"
                 width={198}
                 height={55}
+                className="h-auto w-auto"
               />
               <p className="text-lg-medium text-gray-900">
                 오늘도 만나서 반가워요!
