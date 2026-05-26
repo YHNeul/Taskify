@@ -6,9 +6,9 @@
 
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Eye, EyeOff } from 'lucide-react';
 import Input from '@/shared/components/common/Input/Input';
@@ -18,8 +18,11 @@ import AlertModal from '@/shared/components/modal/AlertModal';
 // 이메일 정규식
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextRaw = searchParams.get('next');
+  const nextPath = nextRaw?.startsWith('/') ? nextRaw : '/mydashboard';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -109,7 +112,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/mydashboard');
+      router.push(nextPath);
     } catch {
       setAlertMessage('서버 오류가 발생했습니다.');
       setIsAlertOpen(true);
@@ -129,12 +132,14 @@ export default function LoginPage() {
                 alt="Taskify icon"
                 width={200}
                 height={190}
+                className="h-auto w-auto"
               />
               <Image
                 src="/logo-taskify-text-main.svg"
                 alt="Taskify"
                 width={198}
                 height={55}
+                className="h-auto w-auto"
               />
               <p className="text-lg-medium text-gray-900">
                 오늘도 만나서 반가워요!
@@ -192,7 +197,14 @@ export default function LoginPage() {
 
           <p className="w-full text-center text-[16px] leading-[19px] text-gray-700">
             회원이 아니신가요?{' '}
-            <Link href="/signup" className="text-brand-violet underline">
+            <Link
+              href={
+                nextRaw
+                  ? `/signup?next=${encodeURIComponent(nextRaw)}`
+                  : '/signup'
+              }
+              className="text-brand-violet underline"
+            >
               회원가입하기
             </Link>
           </p>
@@ -208,5 +220,13 @@ export default function LoginPage() {
         </div>
       )}
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen bg-gray-100" />}>
+      <LoginPageContent />
+    </Suspense>
   );
 }

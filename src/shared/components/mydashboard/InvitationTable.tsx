@@ -2,9 +2,10 @@ import { Invitation } from '@/shared/types/dashboard';
 import ConfirmButton from '@/shared/components/common/ConfirmButton';
 import SearchIcon from '@/shared/components/common/Icon/SearchIcon';
 import { Input } from '@/shared/components/common/Input';
-import { RefObject, useMemo, useRef, useState } from 'react';
+import { RefObject, useMemo, useRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { respondToInvitation } from '@/shared/apis/dashboard';
+import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
 
 interface InvitationTableProps {
   data: Invitation[];
@@ -38,7 +39,15 @@ export default function InvitationTable({
 }: InvitationTableProps) {
   const queryClient = useQueryClient();
   const mutationInFlightRef = useRef(false);
-  const [titleSearch, setTitleSearch] = useState('');
+  const [titleSearch, setTitleSearch] = useQueryParamState<string>({
+    key: 'inviteSearch',
+    defaultValue: '',
+    parse: (rawValue) => rawValue ?? '',
+    serialize: (value) => {
+      const trimmed = value.trim();
+      return trimmed ? trimmed : null;
+    },
+  });
   const uniqueData = useMemo(() => getUniqueInvitations(data), [data]);
 
   const filteredData = useMemo(

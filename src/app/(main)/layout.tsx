@@ -6,7 +6,7 @@
  * @author 하늘,승미
  */
 
-// import Header from '@/shared/components/layout/Header';
+import { Suspense } from 'react';
 import SideMenu from '@/shared/components/layout/SideMenu';
 import Header from '@/shared/components/layout/Header';
 
@@ -18,7 +18,9 @@ export default function MainLayout({
   return (
     // h-screen + overflow-hidden으로 전체 높이를 뷰포트에 고정해야 자식의 h-full이 작동함
     <div className="flex h-screen overflow-hidden">
-      <SideMenu />
+      <Suspense fallback={<div className="w-[67px] md:w-[160px] lg:w-[300px] shrink-0 bg-white border-r border-gray-200" />}>
+        <SideMenu />
+      </Suspense>
 
       <div className="flex flex-col flex-1 min-w-0">
         <Header />

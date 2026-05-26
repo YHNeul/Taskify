@@ -1,9 +1,6 @@
 'use client';
 
-import {
-  deleteInvitation,
-  inviteMember,
-} from '@/shared/apis/dashboard';
+import { deleteInvitation, inviteMember } from '@/shared/apis/dashboard';
 import Button from '@/shared/components/common/Button';
 import AddBoxIcon from '@/shared/components/common/Icon/AddBoxIcon';
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
@@ -15,6 +12,10 @@ import { useDashboardInvitationsQuery } from '@/shared/hooks/useDashboardInvitat
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import axios from 'axios';
+import {
+  useQueryParamState,
+  parsePositiveIntParam,
+} from '@/shared/hooks/useQueryParamState';
 
 const EMAIL_PER_PAGE = 5;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,7 +25,12 @@ interface EmailTableProps {
 }
 
 export default function ManageInvitations({ dashboardId }: EmailTableProps) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useQueryParamState<number>({
+    key: 'invitePage',
+    defaultValue: 1,
+    parse: (rawValue) => parsePositiveIntParam(rawValue, 1),
+    serialize: (value) => (value > 1 ? String(value) : null),
+  });
   const [selectedInviterEmail, setSelectedInviterEmail] = useState<
     number | null
   >(null);

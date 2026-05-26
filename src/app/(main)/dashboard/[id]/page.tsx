@@ -9,6 +9,7 @@
  * - 상호작용 로직(모달, 무한스크롤 등)은 DashboardBoard.tsx에서 처리합니다.
  */
 
+import { Suspense } from 'react';
 import DashboardBoard from '@/shared/components/dashboard/DashboardBoard';
 
 interface PageProps {
@@ -25,5 +26,9 @@ export default async function DashboardPage({ params }: PageProps) {
   const { id } = await params;
   const dashboardId = Number(id);
 
-  return <DashboardBoard dashboardId={dashboardId} />;
+  return (
+    <Suspense fallback={<div className="h-[calc(100vh-64px)] bg-gray-100" />}>
+      <DashboardBoard dashboardId={dashboardId} />
+    </Suspense>
+  );
 }

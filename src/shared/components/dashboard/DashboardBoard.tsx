@@ -25,6 +25,7 @@ import { applySavedOrder } from '@/shared/utils/cardOrder';
 import { useDashboardQuery } from '@/shared/hooks/useDashboardQuery';
 import { useDashboardColumnsQuery } from '@/shared/hooks/useDashboardColumnsQuery';
 import { useDashboardColumnCardsQuery } from '@/shared/hooks/useDashboardColumnCardsQuery';
+import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
 
 interface DashboardBoardProps {
   dashboardId: number;
@@ -38,8 +39,20 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     new Set(),
   );
 
-  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
-  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
+  const [selectedCardId, setSelectedCardId] = useQueryParamState<number | null>(
+    {
+      key: 'cardId',
+      defaultValue: null,
+      parse: (rawValue) => {
+        if (!rawValue) return null;
+        const parsed = Number(rawValue);
+        return Number.isFinite(parsed) && parsed > 0
+          ? Math.floor(parsed)
+          : null;
+      },
+      serialize: (value) => (value ? String(value) : null),
+    },
+  );
   const [createCardColumnId, setCreateCardColumnId] = useState<number | null>(
     null,
   );
@@ -219,7 +232,6 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                 }
                 onCardClick={(card: Card) => {
                   setSelectedCardId(card.id);
-                  setIsCardModalOpen(true);
                 }}
                 onLoadMore={handleLoadMore}
                 isLoadingMore={loadingColumnIds.has(column.id)}
@@ -258,10 +270,9 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
         </DndContext>
       </div>
 
-      {isCardModalOpen && (
+      {selectedCardId !== null && (
         <Cards
           onModalClose={() => {
-            setIsCardModalOpen(false);
             setSelectedCardId(null);
           }}
           cardId={selectedCardId!}

@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Dashboard } from '@/shared/types/dashboard';
 
 import Button from '@/shared/components/common/Button';
@@ -10,12 +9,26 @@ import Pagination from '@/shared/components/common/Pagination';
 import DashboardCreateModal from '@/shared/components/modal/DashboardCreateModal';
 import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
 import { useDashboardsPageQuery } from '@/shared/hooks/useDashboardsPageQuery';
+import {
+  useQueryParamState,
+  parsePositiveIntParam,
+} from '@/shared/hooks/useQueryParamState';
 
 const DASHBOARD_LIMIT = 6;
 
 export default function DashboardList() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useQueryParamState<number>({
+    key: 'dashboardPage',
+    defaultValue: 1,
+    parse: (rawValue) => parsePositiveIntParam(rawValue, 1),
+    serialize: (value) => (value > 1 ? String(value) : null),
+  });
+  const [isModalOpen, setIsModalOpen] = useQueryParamState<boolean>({
+    key: 'createDashboard',
+    defaultValue: false,
+    parse: (rawValue) => rawValue === '1',
+    serialize: (value) => (value ? '1' : null),
+  });
 
   const { data, isPending } = useDashboardsPageQuery({
     page: currentPage,

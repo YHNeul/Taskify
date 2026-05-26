@@ -31,6 +31,10 @@ import SideMenuSkeleton from '@/shared/components/layout/SideMenu/SideMenuSkelet
 import { useSidebarResize } from '@/shared/hooks/useSidebarResize';
 import { useDashboardsPageQuery } from '@/shared/hooks/useDashboardsPageQuery';
 import { useDashboardsInfiniteQuery } from '@/shared/hooks/useDashboardsInfiniteQuery';
+import {
+  useQueryParamState,
+  parsePositiveIntParam,
+} from '@/shared/hooks/useQueryParamState';
 
 const PAGE_SIZE = 15;
 
@@ -65,7 +69,12 @@ function applyStoredOrder(items: Dashboard[], key: string): Dashboard[] {
 const SideMenu = () => {
   const pathname = usePathname();
   const queryClient = useQueryClient();
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useQueryParamState<number>({
+    key: 'sidePage',
+    defaultValue: 1,
+    parse: (rawValue) => parsePositiveIntParam(rawValue, 1),
+    serialize: (value) => (value > 1 ? String(value) : null),
+  });
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [localOrderMap, setLocalOrderMap] = useState<Record<string, number[]>>(
     {},
