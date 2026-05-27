@@ -346,7 +346,7 @@ export default function Cards({
 
         {/* 댓글 삭제확인 모달 */}
         {deletingCommentId && (
-          <ModalOverlay onClose={() => setIsDeleting(false)}>
+          <ModalOverlay onClose={() => setDeletingCommentId(null)}>
             <DeleteConfirmModal
               message="정말 댓글을 삭제하겠습니까?"
               onCancel={() => setDeletingCommentId(null)}

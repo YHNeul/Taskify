@@ -1,6 +1,6 @@
 /**
  * @file Button.tsx
- * @description Taskify의 공통 버튼 컴포넌트입니다.
+ * @description Taskify의 공통 버튼 컴포넌트
  *
  * ### variant (시각적 스타일)
  * - primary — 보라색 채움 버튼 (로그인, 모달 확인 등)
@@ -44,7 +44,7 @@
  */
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import type { ButtonHTMLAttributes } from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -149,23 +149,9 @@ const buttonVariants = cva(
 /** {@link buttonVariants}에서 추론된 variant/size prop 타입 */
 export type ButtonVariantProps = VariantProps<typeof buttonVariants>;
 
-/**
- * Button 컴포넌트의 props 타입 정의입니다.
- * HTML <button> 요소의 모든 속성을 상속합니다.
- */
-export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariantProps {
-  /**
-   * 버튼의 시각적 스타일 타입
-   * @default 'primary'
-   */
-  variant?: 'primary' | 'secondary';
-  /**
-   * 버튼의 크기 및 레이아웃
-   * @default 'modal_lg'
-   */
-  size?: ButtonVariantProps['size'];
-}
+/** HTML button 속성과 cva variant/size 타입을 결합한 Button props */
+export type ButtonProps = ComponentPropsWithoutRef<'button'> &
+  ButtonVariantProps;
 
 /**
  * 공통 버튼 컴포넌트입니다.

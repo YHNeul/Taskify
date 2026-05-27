@@ -295,29 +295,28 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
             setAddColumnModal({ isOpen: false, title: '', error: '' })
           }
         >
-          <div
-            className="flex min-h-full items-center justify-center px-4 py-8"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <FormModal
-              title="새 컬럼 생성"
-              label="이름"
-              value={addColumnModal.title}
-              placeholder="새로운 프로젝트"
-              confirmText="생성"
-              errorText={addColumnModal.error}
-              showCloseButton
-              onChange={(v) =>
-                setAddColumnModal((prev) => ({ ...prev, title: v, error: '' }))
-              }
-              onCancel={() =>
-                setAddColumnModal({ isOpen: false, title: '', error: '' })
-              }
-              onConfirm={handleAddColumnConfirm}
-              onClose={() =>
-                setAddColumnModal({ isOpen: false, title: '', error: '' })
-              }
-            />
+          <div className="flex min-h-full items-center justify-center px-4 py-8">
+            <div onClick={(e) => e.stopPropagation()}>
+              <FormModal
+                title="새 컬럼 생성"
+                label="이름"
+                value={addColumnModal.title}
+                placeholder="새로운 프로젝트"
+                confirmText="생성"
+                errorText={addColumnModal.error}
+                showCloseButton
+                onChange={(v) =>
+                  setAddColumnModal((prev) => ({ ...prev, title: v, error: '' }))
+                }
+                onCancel={() =>
+                  setAddColumnModal({ isOpen: false, title: '', error: '' })
+                }
+                onConfirm={handleAddColumnConfirm}
+                onClose={() =>
+                  setAddColumnModal({ isOpen: false, title: '', error: '' })
+                }
+              />
+            </div>
           </div>
         </div>
       )}
@@ -329,31 +328,30 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
             setEditColumnModal({ column: null, title: '', error: '' })
           }
         >
-          <div
-            className="flex min-h-full items-center justify-center px-4 py-8"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <FormModal
-              title="컬럼 수정"
-              label="이름"
-              value={editColumnModal.title}
-              confirmText="변경"
-              cancelText="삭제하기"
-              errorText={editColumnModal.error}
-              showCloseButton
-              onChange={(v) =>
-                setEditColumnModal((prev) => ({ ...prev, title: v, error: '' }))
-              }
-              onCancel={() => {
-                if (!editColumnModal.column) return;
-                setDeleteColumnId(editColumnModal.column.id);
-                setEditColumnModal({ column: null, title: '', error: '' });
-              }}
-              onConfirm={handleEditColumnConfirm}
-              onClose={() =>
-                setEditColumnModal({ column: null, title: '', error: '' })
-              }
-            />
+          <div className="flex min-h-full items-center justify-center px-4 py-8">
+            <div onClick={(e) => e.stopPropagation()}>
+              <FormModal
+                title="컬럼 수정"
+                label="이름"
+                value={editColumnModal.title}
+                confirmText="변경"
+                cancelText="삭제하기"
+                errorText={editColumnModal.error}
+                showCloseButton
+                onChange={(v) =>
+                  setEditColumnModal((prev) => ({ ...prev, title: v, error: '' }))
+                }
+                onCancel={() => {
+                  if (!editColumnModal.column) return;
+                  setDeleteColumnId(editColumnModal.column.id);
+                  setEditColumnModal({ column: null, title: '', error: '' });
+                }}
+                onConfirm={handleEditColumnConfirm}
+                onClose={() =>
+                  setEditColumnModal({ column: null, title: '', error: '' })
+                }
+              />
+            </div>
           </div>
         </div>
       )}
@@ -363,16 +361,15 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
           className="fixed inset-0 z-50 overflow-y-auto bg-black/40"
           onClick={() => setDeleteColumnId(null)}
         >
-          <div
-            className="flex min-h-full items-center justify-center px-4 py-8"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <ConfirmModal
-              message="칼럼의 모든 카드가 삭제됩니다. 정말 삭제하시겠습니까?"
-              confirmText="삭제"
-              onCancel={() => setDeleteColumnId(null)}
-              onConfirm={handleDeleteColumnConfirm}
-            />
+          <div className="flex min-h-full items-center justify-center px-4 py-8">
+            <div onClick={(e) => e.stopPropagation()}>
+              <ConfirmModal
+                message="칼럼의 모든 카드가 삭제됩니다. 정말 삭제하시겠습니까?"
+                confirmText="삭제"
+                onCancel={() => setDeleteColumnId(null)}
+                onConfirm={handleDeleteColumnConfirm}
+              />
+            </div>
           </div>
         </div>
       )}
