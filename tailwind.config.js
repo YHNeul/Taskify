@@ -1,7 +1,7 @@
 /**
  * @description Taskify 타이포그래피 및 컬러 시스템 활용 가이드
  * * ### 1. 텍스트 스타일 (Font Size & Weight)
- * Tailwind의 `text-{key}` 규칙을 사용하여 적용합니다.
+ * Tailwind의 `text-{key}` 규칙을 사용하여 적용
  * - **Usage:** `<p className="text-3xl-bold">...</p>`
  * * | Size Key | 실제 수치 (Size / LineHeight / Weight) |
  * |:---|:---|
@@ -20,9 +20,7 @@
  * 대시보드 관리
  * </div>
  */
-import type { Config } from 'tailwindcss';
-
-const config: Config = {
+module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -89,12 +87,11 @@ const config: Config = {
         'xs-regular': ['12px', { lineHeight: '18px', fontWeight: '400' }],
       },
       screens: {
-        mobile: '375px', // 모바일
-        tablet: '744px', // 태블릿
-        desktop: '1280px', // 데스크탑
+        mobile: '375px',
+        tablet: '744px',
+        desktop: '1280px',
       },
     },
   },
   plugins: [],
 };
-export default config;

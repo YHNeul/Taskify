@@ -103,7 +103,7 @@ export default function FormModal({
         <Button
           type="button"
           variant="secondary"
-          size="modal_lg"
+          legacySize="modal_lg"
           onClick={onCancel}
           className="flex-1"
         >
@@ -113,7 +113,7 @@ export default function FormModal({
         <Button
           type="button"
           variant="primary"
-          size="modal_lg"
+          legacySize="modal_lg"
           onClick={() => {
             if (confirmDisabled) return;
             onConfirm();

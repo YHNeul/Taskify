@@ -70,7 +70,7 @@ function DeleteConfirmModal({
       <div className="flex gap-[14px] flex-col mobile:flex-row">
         <Button
           variant="secondary"
-          size="modal_sm"
+          legacySize="modal_sm"
           onClick={onCancel}
           className="w-auto mobile:flex-1"
         >
@@ -79,7 +79,7 @@ function DeleteConfirmModal({
 
         <Button
           variant="primary"
-          size="modal_sm"
+          legacySize="modal_sm"
           onClick={onConfirm}
           className="w-auto mobile:flex-1"
         >

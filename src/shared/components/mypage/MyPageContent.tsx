@@ -306,7 +306,7 @@ export default function MyPageContent() {
               />
 
               <Button
-                size="modal_lg"
+                legacySize="modal_lg"
                 className="w-full"
                 disabled={!isProfileChanged}
                 onClick={handleProfileSave}
@@ -368,7 +368,7 @@ export default function MyPageContent() {
             </div>
 
             <Button
-              size="modal_lg"
+              legacySize="modal_lg"
               className="w-full"
               disabled={!isPasswordFormValid}
               onClick={handlePasswordChange}
@@ -380,7 +380,7 @@ export default function MyPageContent() {
 
         <Button
           variant="secondary"
-          size="modal_lg"
+          legacySize="modal_lg"
           className="w-full mt-6"
           onClick={handleLogout}
         >

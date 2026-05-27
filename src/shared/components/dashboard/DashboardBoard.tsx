@@ -241,7 +241,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
             <div className="flex items-start pt-4 lg:pt-[64px] px-4 md:px-5 pb-8 lg:pb-0 shrink-0">
               <Button
                 variant="secondary"
-                size="add_column"
+                legacySize="add_column"
                 onClick={() =>
                   setAddColumnModal({ isOpen: true, title: '', error: '' })
                 }

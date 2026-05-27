@@ -123,7 +123,7 @@ export default function Column({
       <div className="px-4 md:px-5 mb-4 shrink-0">
         <Button
           variant="secondary"
-          size="add_todo"
+          legacySize="add_todo"
           onClick={() => onAddCard(column.id)}
           className="w-full md:w-full lg:w-[314px]"
           aria-label="할 일 추가"

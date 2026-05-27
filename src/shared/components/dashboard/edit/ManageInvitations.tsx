@@ -234,7 +234,7 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
                 <td className="pl-[20px] pr-[20px] text-right md:pr-[28px]">
                   <Button
                     variant="secondary"
-                    size="delete_lg"
+                    legacySize="delete_lg"
                     className="px-[14px] py-[7px] w-[52px] h-[32px] text-xs-medium
                             md:px-[20px] md:py-[4px] md:w-[84px] md:h-[32px] md:text-md-medium"
                     onClick={() => setSelectedInviterEmail(item.id)}
