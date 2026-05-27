@@ -21,6 +21,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           OPENAI_API_ENDPOINT: https://generativelanguage.googleapis.com/v1beta/openai
           MODEL: gemini-2.5-flash
+          IGNORE_PATTERNS: "public/**/*, *.json, *.config.js, package-lock.json"
           LANGUAGE: Korean
 
           PROMPT: |

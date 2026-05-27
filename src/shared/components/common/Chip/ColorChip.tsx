@@ -58,7 +58,7 @@ export default function ColorChip({
               type="button"
               onClick={() => handleSelect(color.hex)}
               className={`w-7 h-7 rounded-full flex items-center justify-center
-            ${color.color}`}
+            ${color.color} transition-transform hover:scale-105 cursor-pointer`}
             >
               {/* 선택됐을 때만 아이콘 표시 */}
               {selected === color.hex && (

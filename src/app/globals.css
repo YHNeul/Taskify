@@ -104,3 +104,38 @@ a {
   text-decoration: none;
 }
 
+/* 클릭 가능한 요소는 손가락 커서를 우선 적용 */
+button:not(:disabled),
+a[href],
+[role='button']:not([aria-disabled='true']) {
+  cursor: pointer !important;
+}
+
+button:disabled,
+[aria-disabled='true'] {
+  cursor: not-allowed !important;
+}
+
+/* 아이콘(svg) 위에서도 부모 클릭 요소 커서를 유지 */
+button svg,
+a[href] svg,
+[role='button'] svg {
+  pointer-events: none;
+}
+
+/* 아이콘형 액션 버튼의 hover를 눈에 띄게 통일 */
+.interactive-icon-btn {
+  border-radius: 6px;
+  transition:
+    background-color 0.15s ease,
+    transform 0.05s ease;
+}
+
+.interactive-icon-btn:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.interactive-icon-btn:active {
+  transform: translateY(0.5px);
+}
+

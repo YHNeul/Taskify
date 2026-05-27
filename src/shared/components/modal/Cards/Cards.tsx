@@ -173,7 +173,11 @@ export default function Cards({
           <div className="flex flex-col items-end gap-6 min-w-[200px] w-full">
             <div className="flex gap-2 md:gap-6 relative">
               {/* 메뉴 */}
-              <button onClick={() => setIsMenuOpen((prev) => !prev)}>
+              <button
+                type="button"
+                onClick={() => setIsMenuOpen((prev) => !prev)}
+                className="interactive-icon-btn cursor-pointer"
+              >
                 <KebabMenuIcon width={22} className="w-7 aspect-square" />
               </button>
 
@@ -191,7 +195,11 @@ export default function Cards({
               )}
 
               {/* 모달 닫기 버튼 */}
-              <button onClick={onModalClose}>
+              <button
+                type="button"
+                onClick={onModalClose}
+                className="interactive-icon-btn cursor-pointer"
+              >
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
