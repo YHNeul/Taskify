@@ -123,9 +123,9 @@ export default function Column({
       <div className="px-4 md:px-5 mb-4 shrink-0">
         <Button
           variant="secondary"
-          legacySize="add_todo"
+          size="sm"
           onClick={() => onAddCard(column.id)}
-          className="w-full md:w-full lg:w-[314px]"
+          className="h-[32px] w-full text-md-medium md:h-[40px] md:w-full lg:w-[314px]"
           aria-label="할 일 추가"
         >
           <span className="w-4 h-4 flex items-center justify-center rounded bg-brand-violet-light text-brand-violet text-lg-bold leading-none">

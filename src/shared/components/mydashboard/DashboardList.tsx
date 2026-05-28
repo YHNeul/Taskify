@@ -75,8 +75,8 @@ export default function DashboardList() {
         {isFirstPage && (
           <Button
             variant="secondary"
-            legacySize="add_board"
-            className="w-full!"
+            size="lg"
+            className="h-[58px] w-full text-md-semibold md:h-[68px] md:text-lg-semibold lg:h-[70px]"
             onClick={openModal}
           >
             <span className="text-gray-700">새로운 대시보드</span>

@@ -38,8 +38,8 @@ export default function DeleteDashboardButton({ dashboardId }: Props) {
     <>
       <Button
         variant="secondary"
-        legacySize="delete_dashboard"
-        className="bg-gray-100 w-full md:w-auto md:min-w-[320px]"
+        size="lg"
+        className="h-[52px] w-full bg-gray-100 text-lg-medium md:h-[62px] md:w-auto md:min-w-[320px] md:text-2lg-medium"
         onClick={() => setIsModalOpen(true)}
         disabled={isPending}
       >
