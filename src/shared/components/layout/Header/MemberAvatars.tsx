@@ -42,7 +42,7 @@ export default function MemberAvatars({
         {Array.from({ length: 3 }).map((_, i) => (
           <Skeleton
             key={i}
-            className="w-[38px] h-[38px] rounded-full border-2 border-white"
+            className="w-profile-desktop h-profile-desktop rounded-full border-2 border-white"
             style={{ marginLeft: i !== 0 ? '-8px' : undefined }}
           />
         ))}
@@ -68,7 +68,7 @@ export default function MemberAvatars({
       ))}
       {extraCount > 0 && (
         <div
-          className="-ml-2 flex h-[38px] min-w-[38px] items-center justify-center rounded-full border-2 border-white bg-[#F4D7DA] px-[8px] text-xs-semibold text-[#D25B68]"
+          className="-ml-2 flex h-profile-desktop min-w-profile-desktop items-center justify-center rounded-full border-2 border-white bg-gray-200 px-2 text-xs-semibold text-red"
           style={{ zIndex: visibleMembers.length + 1 }}
         >
           +{extraCount}

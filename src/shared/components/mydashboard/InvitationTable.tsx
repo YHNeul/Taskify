@@ -76,17 +76,17 @@ export default function InvitationTable({
   };
 
   return (
-    <div className="py-[24px] bg-white md:py-[18px] lg:py-[32px]">
+    <div className="py-6 bg-white md:py-4.5 lg:py-8">
       <div>
-        <h2 className="px-[20px] text-gray-700 text-lg-bold md:px-[40px] md:text-2xl-bold">
+        <h2 className="px-5 text-gray-700 text-lg-bold md:px-10 md:text-2xl-bold">
           초대받은 대시보드
         </h2>
       </div>
 
-      <div className="mt-[16px] px-[16px] md:mt-[17px] md:px-[28px] lg:px-[40px] lg:mt-[32px]">
+      <div className="mt-4 px-4 md:mt-17 md:px-7 lg:px-10 lg:mt-8">
         <div className="relative w-full">
-          <div className="absolute inset-y-0 left-[12px] flex items-center z-10">
-            <SearchIcon className="w-[22px] md:w-[24px]" />
+          <div className="absolute inset-y-0 left-3 flex items-center z-10">
+            <SearchIcon className="w-5.5 md:w-6" />
           </div>
           <Input
             type="search"
@@ -94,19 +94,19 @@ export default function InvitationTable({
             value={titleSearch}
             aria-label="대시보드 이름으로 검색"
             onChange={(e) => setTitleSearch(e.target.value)}
-            className="w-full px-[44px] border border-gray-300 rounded-[6px]"
+            className="w-full px-11 border border-gray-300 rounded-md"
           />
         </div>
       </div>
 
-      <div className="flex-1 max-h-[625px] overflow-y-auto custom-scrollbar mt-[13px] md:mt-[24px]">
+      <div className="flex-1 max-h-screen overflow-y-auto custom-scrollbar mt-3 md:mt-6">
         {/** --- 1. 모바일 카드 레이아웃 (768px 미만) --- */}
-        <div className="md:hidden px-[16px] flex flex-col">
+        <div className="md:hidden px-4 flex flex-col">
           {filteredData.map((item) => (
-            <div key={item.id} className="py-[14px] border-b border-gray-200">
-              <div className="flex flex-col gap-[3px] mb-[14px]">
+            <div key={item.id} className="py-3.5 border-b border-gray-200">
+              <div className="flex flex-col gap-1 mb-3.5">
                 <div className="flex items-center">
-                  <span className="w-[60px] shrink-0 text-md-regular text-gray-400">
+                  <span className="w-15 shrink-0 text-md-regular text-gray-400">
                     이름
                   </span>
                   <span className="text-md-regular text-gray-700 truncate">
@@ -114,7 +114,7 @@ export default function InvitationTable({
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <span className="w-[60px] shrink-0 text-md-regular text-gray-400">
+                  <span className="w-15 shrink-0 text-md-regular text-gray-400">
                     초대자
                   </span>
                   <span className="text-md-regular text-gray-700 truncate">
@@ -138,28 +138,28 @@ export default function InvitationTable({
           <table className="w-full table-fixed text-lg-regular text-gray-500">
             <thead className="sticky top-0 bg-white z-10 text-lg-regular text-gray-400">
               <tr>
-                <th className="pl-[28px] font-normal text-left lg:pl-[76px] w-[40%]">
+                <th className="pl-7 font-normal text-left lg:pl-20 w-2/5">
                   이름
                 </th>
-                <th className="font-normal text-left w-[20%]">초대자</th>
-                <th className="px-[28px] font-normal text-center">수락 여부</th>
+                <th className="font-normal text-left w-1/5">초대자</th>
+                <th className="px-7 font-normal text-center">수락 여부</th>
               </tr>
             </thead>
 
             <tbody>
               {filteredData.map((item) => (
                 <tr key={item.id} className="border-gray-200 border-b">
-                  <td className="pl-[28px] pr-[10px] py-[20px] font-normal text-left lg:pl-[76px] lg:pr-[20px] text-gray-700">
-                    <div className="truncate max-w-[250px] lg:max-w-[400px]">
+                  <td className="pl-7 pr-2.5 py-5 font-normal text-left lg:pl-20 lg:pr-5 text-gray-700">
+                    <div className="truncate max-w-60 lg:max-w-sm">
                       {item.dashboard.title}
                     </div>
                   </td>
-                  <td className="py-[20px] font-normal text-left">
-                    <div className="truncate md:max-w-[200px]">
+                  <td className="py-5 font-normal text-left">
+                    <div className="truncate md:max-w-48">
                       {item.inviter.nickname}
                     </div>
                   </td>
-                  <td className="px-[28px] text-center">
+                  <td className="px-7 text-center">
                     <ConfirmButton
                       onAccept={() =>
                         handleInvitation({ id: item.id, accepted: true })

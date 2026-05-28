@@ -88,7 +88,7 @@ export default function SortableDashboardItem({
         <div
           className={cn(
             'flex items-center justify-center',
-            'w-10 h-10 ml-[14px] rounded-[4px] transition-colors cursor-pointer',
+            'w-10 h-10 ml-3.5 rounded transition-colors cursor-pointer',
             isActive ? 'bg-white' : 'hover:bg-gray-100',
             isDragging && 'bg-gray-100',
           )}
@@ -105,7 +105,7 @@ export default function SortableDashboardItem({
           <div
             className={cn(
               'md:hidden flex items-center justify-center',
-              'w-10 h-10 ml-[14px] rounded-[4px] transition-colors cursor-pointer',
+              'w-10 h-10 ml-3.5 rounded transition-colors cursor-pointer',
               isActive ? 'bg-white' : 'hover:bg-gray-100',
               isDragging && 'bg-gray-100',
             )}
@@ -118,7 +118,7 @@ export default function SortableDashboardItem({
           <div
             className={cn(
               'hidden md:flex lg:hidden items-center gap-4',
-              'h-[43px] mx-2 px-[10px] rounded-[4px] transition-colors cursor-pointer',
+              'h-11 mx-2 px-2.5 rounded transition-colors cursor-pointer',
               isActive ? 'bg-brand-violet-light' : 'hover:bg-gray-100',
               isDragging && 'bg-gray-100',
             )}
@@ -144,7 +144,7 @@ export default function SortableDashboardItem({
           <div
             className={cn(
               'hidden lg:flex items-center gap-4',
-              'h-[50px] mx-3 px-3 rounded-[4px] transition-colors cursor-pointer',
+              'h-12 mx-3 px-3 rounded transition-colors cursor-pointer',
               isActive ? 'bg-brand-violet-light' : 'hover:bg-gray-100',
               isDragging && 'bg-gray-100',
             )}
@@ -174,7 +174,7 @@ export default function SortableDashboardItem({
         <div
           className={cn(
             'flex items-center gap-4',
-            'h-[43px] mx-2 px-[10px] rounded-[4px] transition-colors cursor-pointer',
+            'h-11 mx-2 px-2.5 rounded transition-colors cursor-pointer',
             isActive ? 'bg-brand-violet-light' : 'hover:bg-gray-100',
             isDragging && 'bg-gray-100',
           )}
@@ -203,7 +203,7 @@ export default function SortableDashboardItem({
         <div
           className={cn(
             'flex items-center gap-4',
-            'h-[50px] mx-3 px-3 rounded-[4px] transition-colors cursor-pointer',
+            'h-12 mx-3 px-3 rounded transition-colors cursor-pointer',
             isActive ? 'bg-brand-violet-light' : 'hover:bg-gray-100',
             isDragging && 'bg-gray-100',
           )}

@@ -36,7 +36,7 @@ export default function SideMenuSkeleton({ layout }: SideMenuSkeletonProps) {
           {(layout === null || layout === 'mobile') && (
             <div
               className={cn(
-                'flex items-center justify-center w-10 h-10 ml-[14px]',
+                'flex items-center justify-center w-10 h-10 ml-3.5',
                 layout === null && 'md:hidden',
               )}
             >
@@ -46,23 +46,23 @@ export default function SideMenuSkeleton({ layout }: SideMenuSkeletonProps) {
           {(layout === null || layout === 'tablet') && (
             <div
               className={cn(
-                'flex items-center gap-4 h-[43px] mx-2 px-[10px]',
+                'flex items-center gap-4 h-11 mx-2 px-2.5',
                 layout === null && 'hidden md:flex lg:hidden',
               )}
             >
               <Skeleton className="w-2 h-2 rounded-full shrink-0" />
-              <Skeleton className="h-4 flex-1 rounded-[4px]" />
+              <Skeleton className="h-4 flex-1 rounded" />
             </div>
           )}
           {(layout === null || layout === 'desktop') && (
             <div
               className={cn(
-                'flex items-center gap-4 h-[50px] mx-3 px-3',
+                'flex items-center gap-4 h-12 mx-3 px-3',
                 layout === null && 'hidden lg:flex',
               )}
             >
               <Skeleton className="w-2 h-2 rounded-full shrink-0" />
-              <Skeleton className="h-4 flex-1 rounded-[4px]" />
+              <Skeleton className="h-4 flex-1 rounded" />
             </div>
           )}
         </li>

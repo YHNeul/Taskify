@@ -40,17 +40,17 @@ export default function ConfirmModal({
   onConfirm,
 }: ConfirmModalProps) {
   return (
-    <ModalBase className="w-[568px] rounded-[16px] p-[24px]">
-      <p className="mb-[24px] text-center text-xl-medium text-gray-700">
+    <ModalBase className="w-modal-form rounded-2xl p-6">
+      <p className="mb-6 text-center text-xl-medium text-gray-700">
         {message}
       </p>
 
-      <div className="flex gap-[14px]">
+      <div className="flex gap-3.5">
         <Button
           variant="secondary"
           size="lg"
           onClick={onCancel}
-          className="h-[48px] flex-1"
+          className="h-12 flex-1"
         >
           {cancelText}
         </Button>
@@ -59,7 +59,7 @@ export default function ConfirmModal({
           variant="primary"
           size="lg"
           onClick={onConfirm}
-          className="h-[48px] flex-1"
+          className="h-12 flex-1"
         >
           {confirmText}
         </Button>

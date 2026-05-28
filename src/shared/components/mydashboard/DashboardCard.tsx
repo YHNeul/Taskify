@@ -21,15 +21,15 @@ export default function DashboardCard({ board }: DashboardCardProps) {
     <Button
       variant="secondary"
       size="lg"
-      className="h-[58px] w-full! justify-between overflow-hidden text-md-semibold md:h-[68px] md:text-lg-semibold lg:h-[70px]"
+      className="h-58 w-full! justify-between overflow-hidden text-md-semibold md:h-68 md:text-lg-semibold lg:h-70"
       onClick={handleNavigate}
     >
       <div className="flex items-center min-w-0 flex-1">
         <span
-          className="shrink-0 mr-[12px] w-[8px] h-[8px] rounded-full lg:mr-[16px]"
+          className="shrink-0 mr-3 w-2 h-2 rounded-full lg:mr-4"
           style={{ backgroundColor: board.color }}
         ></span>
-        <span className="truncate pr-[4px] md:pr-[6px] lg:pr-[8px]">
+        <span className="truncate pr-1 md:pr-1.5 lg:pr-2">
           {board.title}
         </span>
         {board.createdByMe && <CrownIcon className="shrink-0" />}

@@ -56,6 +56,7 @@ module.exports = {
       },
       fontFamily: {
         main: ['var(--font-pretendard)', 'sans-serif'],
+        landing: ['var(--font-landing-montserrat)', 'sans-serif'],
       },
       fontSize: {
         '3xl-bold': ['32px', { lineHeight: '42px', fontWeight: '700' }],
@@ -90,6 +91,11 @@ module.exports = {
         19: '19px',
       },
       spacing: {
+        17: '17px',
+        53: '53px',
+        58: '58px',
+        68: '68px',
+        70: '70px',
         'space-22': '22px',
         'space-26': '26px',
         'space-19': '19px',
@@ -110,6 +116,12 @@ module.exports = {
         'invite-button-desktop': '105px',
         'action-button-mobile': '52px',
         'action-button-desktop': '84px',
+        'modal-form': '568px',
+        'modal-card': '584px',
+        'content-450': '450px',
+        'sidebar-mobile': '67px',
+        'sidebar-tablet': '160px',
+        'sidebar-desktop': '300px',
         'profile-mobile': '34px',
         'profile-desktop': '38px',
       },
@@ -133,11 +145,16 @@ module.exports = {
       },
       minWidth: {
         'delete-dashboard': '320px',
+        'card-detail-content': '664px',
       },
       minHeight: {
         'screen-without-header': 'calc(100vh - 64px)',
         'screen-dvh-without-header': 'calc(100dvh - 64px)',
         'column-dropzone': '60px',
+      },
+      maxHeight: {
+        'screen-minus-110': 'calc(100vh - 110px)',
+        'screen-minus-160': 'calc(100vh - 160px)',
       },
       inset: {
         'invite-button-top': '72px',

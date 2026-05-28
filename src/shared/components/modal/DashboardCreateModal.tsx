@@ -89,7 +89,7 @@ export default function DashboardCreateModal({
   return (
     <ModalOverlay onClose={handleClose}>
       <div
-        className="w-full max-w-[568px] [&>div]:w-full"
+        className="w-full max-w-modal-form"
         onClick={(e) => e.stopPropagation()}
       >
         <FormModal

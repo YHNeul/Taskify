@@ -56,7 +56,7 @@ export default function DashboardList() {
     return Array.from({ length: DASHBOARD_LIMIT }).map((_, i) => (
       <div
         key={`skeleton-${i}`}
-        className="flex h-[58px] items-center gap-[10px] border border-gray-200 rounded-lg px-5 md:h-[68px] lg:h-[70px] animate-pulse"
+        className="flex h-58 items-center gap-2.5 border border-gray-200 rounded-lg px-5 md:h-68 lg:h-70 animate-pulse"
       >
         <Skeleton className="h-2 w-2 rounded-full bg-gray-300" />
         <Skeleton className="h-4 w-24 bg-gray-200" />
@@ -66,17 +66,17 @@ export default function DashboardList() {
   };
 
   return (
-    <div className="pt-[40px] flex flex-col w-full">
+    <div className="pt-10 flex flex-col w-full">
       <div
-        className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[8px] content-start 
-          md:gap-[10px] lg:gap-[13px] 
-          ${dashboards.length > 0 ? 'min-h-[160px] md:min-h-[235px] lg:min-h-[160px]' : 'min-h-0'}`}
+        className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 content-start 
+          md:gap-2.5 lg:gap-3 
+          ${dashboards.length > 0 ? 'min-h-40 md:min-h-56 lg:min-h-40' : 'min-h-0'}`}
       >
         {isFirstPage && (
           <Button
             variant="secondary"
             size="lg"
-            className="h-[58px] w-full text-md-semibold md:h-[68px] md:text-lg-semibold lg:h-[70px]"
+            className="h-58 w-full text-md-semibold md:h-68 md:text-lg-semibold lg:h-70"
             onClick={openModal}
           >
             <span className="text-gray-700">새로운 대시보드</span>
@@ -98,7 +98,7 @@ export default function DashboardList() {
       </div>
 
       {!isPending && dashboards.length > 0 && (
-        <div className="mt-[8px] flex justify-end items-center gap-[16px]">
+        <div className="mt-2 flex justify-end items-center gap-4">
           <span className="text-xs-regular text-gray-500 md:text-md-regular">
             {totalPages} 페이지 중 {currentPage}
           </span>

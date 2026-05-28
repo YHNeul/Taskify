@@ -197,7 +197,8 @@ const SideMenu = () => {
       style={sidebarWidth !== null ? { width: sidebarWidth } : undefined}
       className={cn(
         'flex flex-col shrink-0 bg-white border-r border-gray-200 min-h-screen relative select-none',
-        sidebarWidth === null && 'w-[67px] md:w-[160px] lg:w-[300px]',
+        sidebarWidth === null &&
+          'w-sidebar-mobile md:w-sidebar-tablet lg:w-sidebar-desktop',
       )}
     >
       <Link
@@ -205,11 +206,11 @@ const SideMenu = () => {
         className={cn(
           'flex items-center shrink-0',
           layout === null
-            ? 'pt-5 pl-[22px] md:pt-5 md:pl-[13px] lg:pl-2 mb-[39px] md:mb-[57px] lg:mb-14'
+            ? 'pt-5 pl-5.5 md:pt-5 md:pl-3 lg:pl-2 mb-10 md:mb-space-57 lg:mb-14'
             : layout === 'mobile'
-              ? 'pt-5 pl-[22px] mb-[39px]'
+              ? 'pt-5 pl-5.5 mb-10'
               : layout === 'tablet'
-                ? 'pt-5 pl-[13px] mb-[57px]'
+                ? 'pt-5 pl-3 mb-space-57'
                 : 'pt-5 pl-2 mb-14',
         )}
       >
@@ -233,11 +234,11 @@ const SideMenu = () => {
         className={cn(
           'flex items-center justify-between shrink-0',
           layout === null
-            ? 'pl-6 pr-[14px] md:pl-[13px] md:pr-[13px] lg:pl-2 lg:pr-3 mb-[18px] md:mb-4'
+            ? 'pl-6 pr-3.5 md:pl-3 md:pr-3 lg:pl-2 lg:pr-3 mb-4.5 md:mb-4'
             : layout === 'mobile'
-              ? 'pl-6 pr-[14px] mb-[18px]'
+              ? 'pl-6 pr-3.5 mb-4.5'
               : layout === 'tablet'
-                ? 'pl-[13px] pr-[13px] mb-4'
+                ? 'pl-3 pr-3 mb-4'
                 : 'pl-2 pr-3 mb-4',
         )}
       >
