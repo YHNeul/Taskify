@@ -176,13 +176,13 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
   const isInviteButtonDisabled = !email.trim() || !!errorText || isSubmitting;
 
   return (
-    <div className="relative pt-[22px] md:pt-[26px]">
+    <div className="relative pt-space-22 md:pt-space-26">
       <div className="flex items-center justify-between">
-        <span className="pl-[16px] text-xl-bold text-gray-700 md:pl-[28px] md:text-2xl-bold">
+        <span className="pl-4 text-xl-bold text-gray-700 md:pl-7 md:text-2xl-bold">
           초대 내역
         </span>
 
-        <div className="pr-[16px] flex items-center gap-[12px] md:pr-[28px] md:gap-[16px]">
+        <div className="pr-4 flex items-center gap-3 md:pr-7 md:gap-4">
           <span className="text-xs-regular text-gray-500 md:text-md-regular">
             {totalPages} 페이지 중 {currentPage}
           </span>
@@ -198,23 +198,23 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
           <Button
             variant="primary"
             onClick={() => setIsInviteModalOpen(true)}
-            className="absolute right-[16px] top-[72px]
-            px-0 w-[86px] h-[26px] justify-center text-white text-xs-medium gap-[6px]
-            md:static md:w-[105px] md:h-[32px] md:text-md-medium md:gap-[8px]"
+            className="absolute right-4 top-invite-button-top
+            px-0 w-invite-button-mobile h-invite-button-mobile justify-center text-white text-xs-medium gap-1.5
+            md:static md:w-invite-button-desktop md:h-8 md:text-md-medium md:gap-2"
           >
-            <AddBoxIcon className="w-[14px] h-[14px] md:w-[16px] md:h-[16px] brightness-0 invert" />
+            <AddBoxIcon className="w-3.5 h-3.5 md:w-4 md:h-4 brightness-0 invert" />
             초대하기
           </Button>
         </div>
       </div>
 
-      <table className="table-fixed mt-[18px] w-full text-lg-regular text-gray-500 md:mt-[27px]">
+      <table className="table-fixed mt-5 w-full text-lg-regular text-gray-500 md:mt-7">
         <thead>
           <tr className="text-left text-gray-400 text-md-regular md:text-lg-regular">
-            <th className="w-[60%] pl-[20px] pb-[24px] font-normal md:pl-[28px] md:pb-px md:w-[70%]">
+            <th className="w-3/5 pl-5 pb-6 font-normal md:pl-7 md:pb-px md:w-2/3">
               이메일
             </th>
-            <th className="w-[40%] pr-[20px] pb-[24px] md:pr-[28px] md:pb-px md:w-[30%]"></th>
+            <th className="w-2/5 pr-5 pb-6 md:pr-7 md:pb-px md:w-1/3"></th>
           </tr>
         </thead>
         <tbody>
@@ -227,16 +227,16 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
                 key={item.id}
                 className={`border-gray-200 border-b ${isPageEnd ? 'border-b-0' : ''}`}
               >
-                <td className="pl-[20px] py-[15px] md:pl-[28px] md:py-[22px]">
+                <td className="pl-5 py-4 md:pl-7 md:py-6">
                   <div className="truncate">{item.invitee.email}</div>
                 </td>
 
-                <td className="pl-[20px] pr-[20px] text-right md:pr-[28px]">
+                <td className="pl-5 pr-5 text-right md:pr-7">
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="px-[14px] py-[7px] w-[52px] h-[32px] text-xs-medium
-                            md:px-[20px] md:py-[4px] md:w-[84px] md:h-[32px] md:text-md-medium"
+                    className="px-3.5 py-2 w-action-button-mobile h-8 text-xs-medium
+                            md:px-5 md:py-1 md:w-action-button-desktop md:h-8 md:text-md-medium"
                     onClick={() => setSelectedInviterEmail(item.id)}
                   >
                     취소

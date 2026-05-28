@@ -72,7 +72,7 @@ export default function TaskCard({
     >
       {/* 썸네일 이미지 */}
       {imageUrl && (
-        <div className="relative w-full h-[160px] rounded-md overflow-hidden mb-3">
+        <div className="relative w-full h-40 rounded-md overflow-hidden mb-3">
           <Image
             src={imageUrl}
             alt={title}
@@ -111,7 +111,7 @@ export default function TaskCard({
         )}
 
         {assignee && (
-          <div className="w-[26px] h-[26px] rounded-full overflow-hidden shrink-0 ring-2 ring-white">
+          <div className="w-avatar-26 h-avatar-26 rounded-full overflow-hidden shrink-0 ring-2 ring-white">
             <UserProfileImage profile={assignee} />
           </div>
         )}

@@ -72,12 +72,12 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
   };
 
   return (
-    <div className="pt-[22px] md:pt-[26px]">
+    <div className="pt-space-22 md:pt-space-26">
       <div className="flex items-center justify-between">
-        <span className="pl-[16px] text-xl-bold text-gray-700 md:pl-[28px] md:text-2xl-bold">
+        <span className="pl-4 text-xl-bold text-gray-700 md:pl-7 md:text-2xl-bold">
           구성원
         </span>
-        <div className="pr-[16px] flex justify-end items-center gap-[16px] md:pr-[28px]">
+        <div className="pr-4 flex justify-end items-center gap-4 md:pr-7">
           <span className="text-xs-regular text-gray-500 md:text-md-regular">
             {totalPages} 페이지 중 {currentPage}
           </span>
@@ -90,13 +90,13 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
           />
         </div>
       </div>
-      <table className="mt-[18px] w-full table-fixed text-lg-regular text-gray-500 md:mt-[27px]">
+      <table className="mt-5 w-full table-fixed text-lg-regular text-gray-500 md:mt-7">
         <thead className="text-lg-regular text-gray-400">
           <tr>
-            <th className="w-[70%] pl-[16px] font-normal text-left md:pl-[28px]">
+            <th className="w-2/3 pl-4 font-normal text-left md:pl-7">
               이름
             </th>
-            <th className="w-[30%]"></th>
+            <th className="w-1/3"></th>
           </tr>
         </thead>
 
@@ -111,11 +111,11 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
                 className={`border-gray-200 border-b ${isLastRow ? 'border-b-0' : ''}`}
               >
                 <td
-                  className="flex items-center gap-[8px] pl-[16px] py-[12px] 
+                  className="flex items-center gap-2 pl-4 py-3 
                   font-normal text-left text-md-regular text-gray-700 
-                  md:pl-[28px] md:py-[16px] md:gap-[12px] md:text-lg-regular"
+                  md:pl-7 md:py-4 md:gap-3 md:text-lg-regular"
                 >
-                  <div className="shrink-0 relative w-[34px] h-[34px] md:w-[38px] md:h-[38px] rounded-full overflow-hidden">
+                  <div className="shrink-0 relative w-profile-mobile h-profile-mobile md:w-profile-desktop md:h-profile-desktop rounded-full overflow-hidden">
                     {item.profileImageUrl && !isImageError ? (
                       <Image
                         src={item.profileImageUrl}
@@ -135,13 +135,13 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
                     {item.nickname}
                   </span>
                 </td>
-                <td className="pr-[16px] text-right md:pr-[28px]">
+                <td className="pr-4 text-right md:pr-7">
                   {!isMe && (
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="px-[14px] py-[7px] w-[52px] h-[32px] text-xs-medium
-                              md:px-[20px] md:py-[4px] md:w-[84px] md:h-[32px] md:text-md-medium"
+                      className="px-3.5 py-2 w-action-button-mobile h-8 text-xs-medium
+                              md:px-5 md:py-1 md:w-action-button-desktop md:h-8 md:text-md-medium"
                       onClick={() => setSelectedMemberId(item.id)}
                     >
                       삭제
