@@ -51,13 +51,13 @@ export default function Textarea({
           className="mb-2 block text-2lg-medium text-gray-700"
         >
           {label}
-          {required && <span className="text-brand-violet pl-[2px]">*</span>}
+          {required && <span className="text-brand-violet pl-0.5">*</span>}
         </label>
       )}
 
       <div
         className={clsx(
-          'rounded-md border bg-white px-4 py-[11px] flex flex-col min-h-[110px] ',
+          'rounded-md border bg-white px-4 py-2.5 flex flex-col min-h-28',
           hasError
             ? 'border-red focus-within:border-red'
             : 'border-gray-300 focus-within:border-brand-violet',

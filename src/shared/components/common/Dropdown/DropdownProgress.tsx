@@ -35,12 +35,12 @@ export default function DropdownProgress({
   };
   return (
     <>
-      <div className="relative sm:min-w-[217px]">
+      <div className="relative sm:min-w-56">
         {/* 선택된 값 */}
         <button
           type="button"
           onClick={() => setOpen(!open)}
-          className="w-full h-[48px] border border-gray-300 px-4 py-2 rounded-md flex justify-between items-center bg-white cursor-pointer hover:bg-gray-100 transition-colors"
+          className="w-full h-12 border border-gray-300 px-4 py-2 rounded-md flex justify-between items-center bg-white cursor-pointer hover:bg-gray-100 transition-colors"
         >
           <StatusChip status={title} />
           <ArrowDropDownIcon className="w-5 h-5" />

@@ -51,7 +51,7 @@ export default function Input({
           className="mb-2 block text-2lg-medium text-gray-700"
         >
           {label}
-          {required && <span className="text-brand-violet pl-[2px]">*</span>}
+          {required && <span className="text-brand-violet pl-0.5">*</span>}
         </label>
       )}
       <div className="relative">
@@ -59,7 +59,7 @@ export default function Input({
           id={inputId}
           {...props}
           className={clsx(
-            'w-full h-[48px] px-4 py-[11px] text-lg-regular rounded-md border outline-none transition',
+            'w-full h-12 px-4 py-2.5 text-lg-regular rounded-md border outline-none transition',
             'placeholder:text-gray-400',
             'bg-white',
             'text-gray-800',

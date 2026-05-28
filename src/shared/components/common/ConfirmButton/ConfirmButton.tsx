@@ -62,14 +62,14 @@ export default function ConfirmButton({
   className,
 }: ConfirmButtonProps) {
   const btnBase =
-    'inline-flex items-center justify-center rounded-[4px] text-md-medium transition-colors disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center rounded text-md-medium transition-colors disabled:cursor-not-allowed';
 
   /** 개별 버튼 크기 — mobile: 109×32, tablet: 72×30, desktop: 84×32 */
   const btnSize =
-    'w-[109px] h-[32px] md:w-[72px] md:h-[30px] lg:w-[84px] lg:h-[32px]';
+    'w-28 h-8 md:w-[72px] md:h-[30px] lg:w-20 lg:h-8';
 
   return (
-    <div className={cn('inline-flex items-center gap-[10px]', className)}>
+    <div className={cn('inline-flex items-center gap-2.5', className)}>
       {/* 수락 버튼 — 항상 primary(보라색) */}
       <button
         type="button"
@@ -77,7 +77,7 @@ export default function ConfirmButton({
         className={cn(
           btnBase,
           btnSize,
-          'bg-brand-violet text-white hover:bg-[#4a2dc0]',
+          'bg-brand-violet text-white hover:brightness-95',
         )}
       >
         수락
