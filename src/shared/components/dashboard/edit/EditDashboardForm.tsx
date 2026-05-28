@@ -60,14 +60,14 @@ export default function EditDashboardForm({
   const hasErrorMessage = title.length > 0 && !isTitleValid;
 
   return (
-    <div className="px-[16px] py-[20px] md:px-[28px] md:py-[32px]">
+    <div className="px-4 py-5 md:px-7 md:py-8">
       <div>
         <span className="text-xl-bold text-gray-700 md:text-2xl-bold">
           {dashboard?.title ?? '대시보드 불러오는 중...'}
         </span>
       </div>
-      <div className="pt-[24px]">
-        <span className="inline-block mb-[8px] text-lg-medium text-gray-700 md:text-2lg-medium">
+      <div className="pt-6">
+        <span className="inline-block mb-2 text-lg-medium text-gray-700 md:text-2lg-medium">
           대시보드 이름
         </span>
         <Input
@@ -79,7 +79,7 @@ export default function EditDashboardForm({
             hasErrorMessage ? '한글·영문·숫자 조합 2자 이상 입력해 주세요.' : ''
           }
         />
-        <div className="mt-[16px]">
+        <div className="mt-4">
           {dashboard && (
             <ColorChip
               onSelectedColor={(hex) => setSelectedColor(hex)}
@@ -89,7 +89,7 @@ export default function EditDashboardForm({
         </div>
         <div>
           <Button
-            className="w-full h-[54px] mt-[32px] text-lg-semibold md:mt-[40px]"
+            className="w-full h-14 mt-8 text-lg-semibold md:mt-10"
             variant="primary"
             disabled={isSubmitDisabled}
             onClick={() => {

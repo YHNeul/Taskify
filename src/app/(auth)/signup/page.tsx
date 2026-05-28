@@ -46,16 +46,16 @@ function SignupPageContent() {
   return (
     <main className="min-h-screen bg-gray-100 px-4 sm:px-6">
       <div className="mx-auto flex min-h-screen w-full items-center justify-center py-10">
-        <div className="flex w-full max-w-[520px] flex-col items-center gap-6 sm:gap-[30px]">
+        <div className="flex w-full max-w-lg flex-col items-center gap-6 sm:gap-7">
           <Link href="/">
-            <div className="flex cursor-pointer flex-col items-center gap-[10px]">
-              <div className="flex flex-col items-center justify-center gap-5 sm:gap-[30px]">
+            <div className="flex cursor-pointer flex-col items-center gap-2.5">
+              <div className="flex flex-col items-center justify-center gap-5 sm:gap-7">
                 <Image
                   src="/logo-taskify-icon-main.svg"
                   alt="Taskify icon"
                   width={200}
                   height={190}
-                  className="h-auto w-[120px] sm:w-[200px]"
+                  className="h-auto w-32 sm:w-52"
                   priority
                 />
                 <Image
@@ -63,7 +63,7 @@ function SignupPageContent() {
                   alt="Taskify"
                   width={198}
                   height={55}
-                  className="h-auto w-[140px] sm:w-[198px]"
+                  className="h-auto w-36 sm:w-48"
                   priority
                 />
               </div>
@@ -74,11 +74,11 @@ function SignupPageContent() {
             </div>
           </Link>
 
-          <div className="flex w-full flex-col items-center gap-5 sm:gap-[24px]">
+          <div className="flex w-full flex-col items-center gap-5 sm:gap-6">
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="flex w-full flex-col gap-5 sm:gap-[24px]"
+              className="flex w-full flex-col gap-5 sm:gap-6"
             >
               <div className="flex w-full flex-col gap-4">
                 <Input
@@ -89,7 +89,7 @@ function SignupPageContent() {
                   onChange={handleEmailChange}
                   isError={!!errors.email}
                   errorMessage={errors.email || undefined}
-                  className="h-[50px]"
+                  className="h-12"
                 />
 
                 <Input
@@ -100,7 +100,7 @@ function SignupPageContent() {
                   onChange={handleNicknameChange}
                   isError={!!errors.nickname}
                   errorMessage={errors.nickname || undefined}
-                  className="h-[50px]"
+                  className="h-12"
                 />
 
                 <Input
@@ -111,7 +111,7 @@ function SignupPageContent() {
                   onChange={handlePasswordChange}
                   isError={!!errors.password}
                   errorMessage={errors.password || undefined}
-                  className="h-[50px]"
+                  className="h-12"
                   rightIcon={
                     <button
                       type="button"
@@ -134,7 +134,7 @@ function SignupPageContent() {
                   onChange={handlePasswordConfirmChange}
                   isError={!!errors.passwordConfirm}
                   errorMessage={errors.passwordConfirm || undefined}
-                  className="h-[50px]"
+                  className="h-12"
                   rightIcon={
                     <button
                       type="button"
@@ -168,13 +168,13 @@ function SignupPageContent() {
                 variant="primary"
                 size="lg"
                 disabled={isButtonDisabled}
-                className="h-[50px] w-full rounded-[8px]"
+                className="h-12 w-full rounded-lg"
               >
                 {isSubmitting ? '가입 중...' : '가입하기'}
               </Button>
             </form>
 
-            <p className="w-full text-center text-[16px] leading-[19px] text-gray-700">
+            <p className="w-full text-center text-base leading-5 text-gray-700">
               이미 회원이신가요?{' '}
               <Link href={loginHref} className="text-brand-violet underline">
                 로그인하기

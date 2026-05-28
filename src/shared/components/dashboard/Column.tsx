@@ -91,13 +91,13 @@ export default function Column({
     <div
       className={[
         'flex flex-col shrink-0',
-        'w-full lg:w-[354px]',
+        'w-full lg:w-80',
         'border-b lg:border-b-0 lg:border-r border-gray-200',
         'pb-4 lg:pb-0',
       ].join(' ')}
     >
       {/* ── 컬럼 헤더 ── */}
-      <div className="flex items-center justify-between px-4 md:px-5 h-[64px] shrink-0">
+      <div className="flex items-center justify-between px-4 md:px-5 h-16 shrink-0">
         <div className="flex items-center gap-2">
           <span
             className="w-2 h-2 rounded-full shrink-0"
@@ -125,7 +125,7 @@ export default function Column({
           variant="secondary"
           size="sm"
           onClick={() => onAddCard(column.id)}
-          className="h-[32px] w-full text-md-medium md:h-[40px] md:w-full lg:w-[314px]"
+          className="h-8 w-full text-md-medium md:h-10 md:w-full lg:w-80"
           aria-label="할 일 추가"
         >
           <span className="w-4 h-4 flex items-center justify-center rounded bg-brand-violet-light text-brand-violet text-lg-bold leading-none">
@@ -143,7 +143,7 @@ export default function Column({
           ref={setNodeRef}
           className={[
             'flex-1 overflow-y-auto px-4 md:px-5 flex flex-col gap-2 pb-4',
-            'rounded-b-[4px] transition-colors min-h-[60px]',
+            'rounded-b transition-colors min-h-16',
             isOver ? 'bg-brand-violet-light/30' : '',
           ].join(' ')}
         >
