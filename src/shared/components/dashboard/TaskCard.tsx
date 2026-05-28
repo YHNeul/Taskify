@@ -111,7 +111,7 @@ export default function TaskCard({
         )}
 
         {assignee && (
-          <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 ring-2 ring-white">
+          <div className="w-avatar-26 h-avatar-26 rounded-full overflow-hidden shrink-0 ring-2 ring-white">
             <UserProfileImage profile={assignee} />
           </div>
         )}

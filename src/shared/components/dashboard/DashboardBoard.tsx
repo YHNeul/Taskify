@@ -194,7 +194,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
 
   if (!dashboard) {
     return (
-      <div className="flex items-center justify-center flex-1 h-full min-h-screen">
+      <div className="flex items-center justify-center flex-1 h-full min-h-screen-without-header">
         <p className="text-gray-400 text-lg-regular">
           대시보드를 찾을 수 없습니다.
         </p>
@@ -245,7 +245,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                 onClick={() =>
                   setAddColumnModal({ isOpen: true, title: '', error: '' })
                 }
-                className="h-16 w-full text-lg-bold md:h-16 md:w-full md:text-2lg-bold lg:w-80"
+                className="h-dashboard-add-mobile w-full text-lg-bold md:h-dashboard-add-desktop md:w-full md:text-2lg-bold lg:w-dashboard-column"
               >
                 새로운 컬럼 추가하기
                 <span className="w-5 h-5 flex items-center justify-center rounded bg-brand-violet-light text-brand-violet text-lg-bold leading-none">

@@ -124,7 +124,7 @@ function LoginPageContent() {
   return (
     <main className="min-h-screen bg-gray-100 px-4 sm:px-6">
       <div className="mx-auto flex min-h-screen w-full items-center justify-center py-10">
-        <div className="flex w-full max-w-lg flex-col items-center gap-6">
+        <div className="flex w-full max-w-auth-form flex-col items-center gap-6">
           <Link href="/">
             <div className="flex cursor-pointer flex-col items-center gap-3">
               <Image
@@ -195,7 +195,7 @@ function LoginPageContent() {
             </Button>
           </form>
 
-          <p className="w-full text-center text-base leading-5 text-gray-700">
+          <p className="w-full text-center text-base leading-19 text-gray-700">
             회원이 아니신가요?{' '}
             <Link
               href={

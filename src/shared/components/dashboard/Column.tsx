@@ -91,7 +91,7 @@ export default function Column({
     <div
       className={[
         'flex flex-col shrink-0',
-        'w-full lg:w-80',
+        'w-full lg:w-dashboard-column',
         'border-b lg:border-b-0 lg:border-r border-gray-200',
         'pb-4 lg:pb-0',
       ].join(' ')}
@@ -125,7 +125,7 @@ export default function Column({
           variant="secondary"
           size="sm"
           onClick={() => onAddCard(column.id)}
-          className="h-8 w-full text-md-medium md:h-10 md:w-full lg:w-80"
+          className="h-8 w-full text-md-medium md:h-10 md:w-full lg:w-dashboard-column-inner"
           aria-label="할 일 추가"
         >
           <span className="w-4 h-4 flex items-center justify-center rounded bg-brand-violet-light text-brand-violet text-lg-bold leading-none">
@@ -143,7 +143,7 @@ export default function Column({
           ref={setNodeRef}
           className={[
             'flex-1 overflow-y-auto px-4 md:px-5 flex flex-col gap-2 pb-4',
-            'rounded-b transition-colors min-h-16',
+            'rounded-b transition-colors min-h-column-dropzone',
             isOver ? 'bg-brand-violet-light/30' : '',
           ].join(' ')}
         >

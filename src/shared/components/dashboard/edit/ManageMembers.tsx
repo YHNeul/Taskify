@@ -72,7 +72,7 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
   };
 
   return (
-    <div className="pt-6 md:pt-6">
+    <div className="pt-space-22 md:pt-space-26">
       <div className="flex items-center justify-between">
         <span className="pl-4 text-xl-bold text-gray-700 md:pl-7 md:text-2xl-bold">
           구성원
@@ -115,7 +115,7 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
                   font-normal text-left text-md-regular text-gray-700 
                   md:pl-7 md:py-4 md:gap-3 md:text-lg-regular"
                 >
-                  <div className="shrink-0 relative w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden">
+                  <div className="shrink-0 relative w-profile-mobile h-profile-mobile md:w-profile-desktop md:h-profile-desktop rounded-full overflow-hidden">
                     {item.profileImageUrl && !isImageError ? (
                       <Image
                         src={item.profileImageUrl}
@@ -140,8 +140,8 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="px-3.5 py-2 w-14 h-8 text-xs-medium
-                              md:px-5 md:py-1 md:w-20 md:h-8 md:text-md-medium"
+                      className="px-3.5 py-2 w-action-button-mobile h-8 text-xs-medium
+                              md:px-5 md:py-1 md:w-action-button-desktop md:h-8 md:text-md-medium"
                       onClick={() => setSelectedMemberId(item.id)}
                     >
                       삭제

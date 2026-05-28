@@ -27,7 +27,7 @@ export default async function DashboardPage({ params }: PageProps) {
   const dashboardId = Number(id);
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-100" />}>
+    <Suspense fallback={<div className="min-h-screen-without-header bg-gray-100" />}>
       <DashboardBoard dashboardId={dashboardId} />
     </Suspense>
   );

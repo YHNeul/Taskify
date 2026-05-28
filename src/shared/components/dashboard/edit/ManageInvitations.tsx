@@ -176,7 +176,7 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
   const isInviteButtonDisabled = !email.trim() || !!errorText || isSubmitting;
 
   return (
-    <div className="relative pt-6 md:pt-6">
+    <div className="relative pt-space-22 md:pt-space-26">
       <div className="flex items-center justify-between">
         <span className="pl-4 text-xl-bold text-gray-700 md:pl-7 md:text-2xl-bold">
           초대 내역
@@ -198,9 +198,9 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
           <Button
             variant="primary"
             onClick={() => setIsInviteModalOpen(true)}
-            className="absolute right-4 top-18
-            px-0 w-20 h-6 justify-center text-white text-xs-medium gap-1.5
-            md:static md:w-24 md:h-8 md:text-md-medium md:gap-2"
+            className="absolute right-4 top-invite-button-top
+            px-0 w-invite-button-mobile h-invite-button-mobile justify-center text-white text-xs-medium gap-1.5
+            md:static md:w-invite-button-desktop md:h-8 md:text-md-medium md:gap-2"
           >
             <AddBoxIcon className="w-3.5 h-3.5 md:w-4 md:h-4 brightness-0 invert" />
             초대하기
@@ -235,8 +235,8 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="px-3.5 py-2 w-14 h-8 text-xs-medium
-                            md:px-5 md:py-1 md:w-20 md:h-8 md:text-md-medium"
+                    className="px-3.5 py-2 w-action-button-mobile h-8 text-xs-medium
+                            md:px-5 md:py-1 md:w-action-button-desktop md:h-8 md:text-md-medium"
                     onClick={() => setSelectedInviterEmail(item.id)}
                   >
                     취소

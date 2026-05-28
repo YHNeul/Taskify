@@ -22,7 +22,7 @@ function TaskCardSkeleton() {
       </div>
       <div className="flex items-center justify-between mt-1">
         <Skeleton className="h-4 w-24 rounded" />
-        <Skeleton className="w-6 h-6 rounded-full" />
+        <Skeleton className="w-avatar-26 h-avatar-26 rounded-full" />
       </div>
     </div>
   );
@@ -38,7 +38,7 @@ function ColumnSkeleton({ cardCount = 3 }: { cardCount?: number }) {
     <div
       className={[
         'flex flex-col shrink-0',
-        'w-full lg:w-80',
+        'w-full lg:w-dashboard-column',
         'border-b lg:border-b-0 lg:border-r border-gray-200',
         'pb-4 lg:pb-0',
       ].join(' ')}
@@ -52,7 +52,7 @@ function ColumnSkeleton({ cardCount = 3 }: { cardCount?: number }) {
         <Skeleton className="w-6 h-6 rounded" />
       </div>
       <div className="px-4 md:px-5 mb-4 shrink-0">
-        <Skeleton className="h-10 w-full lg:w-80 rounded-md" />
+        <Skeleton className="h-10 w-full lg:w-dashboard-column-inner rounded-md" />
       </div>
       <div className="flex-1 px-4 md:px-5 flex flex-col gap-2 pb-4">
         {Array.from({ length: cardCount }).map((_, i) => (
