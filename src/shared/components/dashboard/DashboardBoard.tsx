@@ -241,11 +241,11 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
             <div className="flex items-start pt-4 lg:pt-[64px] px-4 md:px-5 pb-8 lg:pb-0 shrink-0">
               <Button
                 variant="secondary"
-                legacySize="add_column"
+                size="lg"
                 onClick={() =>
                   setAddColumnModal({ isOpen: true, title: '', error: '' })
                 }
-                className="w-full md:w-full lg:w-[354px]"
+                className="h-[66px] w-full text-lg-bold md:h-[70px] md:w-full md:text-2lg-bold lg:w-[354px]"
               >
                 새로운 컬럼 추가하기
                 <span className="w-5 h-5 flex items-center justify-center rounded bg-brand-violet-light text-brand-violet text-lg-bold leading-none">
@@ -306,7 +306,11 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                 errorText={addColumnModal.error}
                 showCloseButton
                 onChange={(v) =>
-                  setAddColumnModal((prev) => ({ ...prev, title: v, error: '' }))
+                  setAddColumnModal((prev) => ({
+                    ...prev,
+                    title: v,
+                    error: '',
+                  }))
                 }
                 onCancel={() =>
                   setAddColumnModal({ isOpen: false, title: '', error: '' })
@@ -339,7 +343,11 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                 errorText={editColumnModal.error}
                 showCloseButton
                 onChange={(v) =>
-                  setEditColumnModal((prev) => ({ ...prev, title: v, error: '' }))
+                  setEditColumnModal((prev) => ({
+                    ...prev,
+                    title: v,
+                    error: '',
+                  }))
                 }
                 onCancel={() => {
                   if (!editColumnModal.column) return;

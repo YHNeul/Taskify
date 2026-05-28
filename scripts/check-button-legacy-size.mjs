@@ -1,30 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
 
 const ROOT = process.cwd();
 const SRC_DIR = path.join(ROOT, 'src');
 const TARGET_EXTENSIONS = new Set(['.ts', '.tsx']);
-
-const LEGACY_SIZES = [
-  'login_lg',
-  'login_sm',
-  'modal_lg',
-  'modal_sm',
-  'delete_lg',
-  'delete_sm',
-  'comment_lg',
-  'comment_sm',
-  'add_column',
-  'add_todo',
-  'dashboard_card',
-  'add_board',
-  'delete_dashboard',
-];
-
-const LEGACY_SIZE_PATTERN = new RegExp(
-  `\\bsize\\s*=\\s*"(${LEGACY_SIZES.join('|')})"`,
-  'g',
-);
+const LEGACY_PROP_PATTERN = /\blegacySize\s*=/g;
 
 function walk(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -50,12 +30,11 @@ function findViolations(filePath) {
   const violations = [];
 
   lines.forEach((line, index) => {
-    LEGACY_SIZE_PATTERN.lastIndex = 0;
-    const matched = LEGACY_SIZE_PATTERN.exec(line);
+    LEGACY_PROP_PATTERN.lastIndex = 0;
+    const matched = LEGACY_PROP_PATTERN.exec(line);
     if (matched) {
       violations.push({
         line: index + 1,
-        value: matched[1],
         source: line.trim(),
       });
     }
@@ -81,17 +60,15 @@ function main() {
   }
 
   if (allViolations.length === 0) {
-    console.log('PASS: legacy size 신규 유입이 없습니다.');
+    console.log('PASS: legacySize 사용이 없습니다.');
     return;
   }
 
-  console.error('FAIL: legacy preset은 legacySize로 사용해야 합니다.\n');
+  console.error('FAIL: legacySize 속성은 제거되었습니다.\n');
   for (const fileViolation of allViolations) {
     const relativePath = path.relative(ROOT, fileViolation.filePath);
     for (const violation of fileViolation.violations) {
-      console.error(
-        `${relativePath}:${violation.line} size="${violation.value}" -> legacySize="${violation.value}"`,
-      );
+      console.error(`${relativePath}:${violation.line} legacySize 사용 발견`);
       console.error(`  ${violation.source}`);
     }
   }

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "check:button-size-usage": "node scripts/check-button-legacy-size.js",
+    "check:button-size-usage": "node scripts/check-button-legacy-size.mjs",
     "prepare": "husky"
   },
   "dependencies": {

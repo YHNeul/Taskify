@@ -70,18 +70,18 @@ function DeleteConfirmModal({
       <div className="flex gap-[14px] flex-col mobile:flex-row">
         <Button
           variant="secondary"
-          legacySize="modal_sm"
+          size="md"
           onClick={onCancel}
-          className="w-auto mobile:flex-1"
+          className="h-[42px] w-auto mobile:flex-1"
         >
           취소
         </Button>
 
         <Button
           variant="primary"
-          legacySize="modal_sm"
+          size="md"
           onClick={onConfirm}
-          className="w-auto mobile:flex-1"
+          className="h-[42px] w-auto mobile:flex-1"
         >
           삭제
         </Button>

@@ -34,7 +34,7 @@ export const parsePositiveIntParam = (
  * URL 쿼리 파라미터를 React 상태처럼 읽고/쓰기 위한 훅
  * parse/serialize를 통해 타입별 변환 규칙 주입 가능
  */
-export const useQueryParamState = <T,>({
+export const useQueryParamState = <T>({
   key,
   defaultValue,
   parse,

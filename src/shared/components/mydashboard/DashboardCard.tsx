@@ -20,8 +20,8 @@ export default function DashboardCard({ board }: DashboardCardProps) {
   return (
     <Button
       variant="secondary"
-      legacySize="dashboard_card"
-      className="!w-full flex items-center justify-between overflow-hidden"
+      size="lg"
+      className="h-[58px] w-full! justify-between overflow-hidden text-md-semibold md:h-[68px] md:text-lg-semibold lg:h-[70px]"
       onClick={handleNavigate}
     >
       <div className="flex items-center min-w-0 flex-1">

@@ -17,7 +17,7 @@ import DropdownAssignee from '@/shared/components/common/Dropdown/DropdownAssign
 import { Input, Textarea } from '@/shared/components/common/Input';
 import ImageUploaderInput from '@/shared/components/common/Input/ImageUploaderInput';
 import Button from '@/shared/components/common/Button';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import DateInput from '@/shared/components/common/Input/DateInput';
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
 import { createCard, uploadCardImage } from '@/shared/apis/dashboard';
@@ -126,13 +126,10 @@ export default function CreateCard({
     dashboardId,
   });
 
-  useEffect(() => {
-    if (isMembersError) {
-      setErrorMessage('멤버 조회에 문제가 발생했습니다.');
-    }
-  }, [isMembersError]);
-
   const members = membersData?.members ?? [];
+  const resolvedErrorMessage =
+    errorMessage ??
+    (isMembersError ? '멤버 조회에 문제가 발생했습니다.' : null);
 
   /** 카드 생성 */
   const { mutateAsync: submitCard, isPending: isSubmitting } = useMutation({
@@ -310,10 +307,10 @@ export default function CreateCard({
         </ModalBase>
 
         {/* API 호출 에러 처리 */}
-        {errorMessage && (
+        {resolvedErrorMessage && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
             <AlertModal
-              message={errorMessage}
+              message={resolvedErrorMessage}
               onConfirm={() => setErrorMessage(null)}
             />
           </div>
