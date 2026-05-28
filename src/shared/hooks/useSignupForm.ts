@@ -4,8 +4,6 @@ import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { API_BASE_URL } from '@/shared/constants/api';
-
 type SignupErrors = {
   email: string;
   nickname: string;
@@ -182,7 +180,7 @@ export default function useSignupForm() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/users`, {
+      const res = await fetch('/api/proxy/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
