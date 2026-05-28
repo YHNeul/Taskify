@@ -70,7 +70,7 @@ function DeleteConfirmModal({
       <div className="flex gap-[14px] flex-col mobile:flex-row">
         <Button
           variant="secondary"
-          size="modal_sm"
+          legacySize="modal_sm"
           onClick={onCancel}
           className="w-auto mobile:flex-1"
         >
@@ -79,7 +79,7 @@ function DeleteConfirmModal({
 
         <Button
           variant="primary"
-          size="modal_sm"
+          legacySize="modal_sm"
           onClick={onConfirm}
           className="w-auto mobile:flex-1"
         >
@@ -346,7 +346,7 @@ export default function Cards({
 
         {/* 댓글 삭제확인 모달 */}
         {deletingCommentId && (
-          <ModalOverlay onClose={() => setIsDeleting(false)}>
+          <ModalOverlay onClose={() => setDeletingCommentId(null)}>
             <DeleteConfirmModal
               message="정말 댓글을 삭제하겠습니까?"
               onCancel={() => setDeletingCommentId(null)}

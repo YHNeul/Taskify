@@ -23,7 +23,7 @@ import {
 } from '@dnd-kit/sortable';
 import type { Card, Column as ColumnType } from '@/shared/types/dashboard';
 import Button from '@/shared/components/common/Button';
-import SettingIcon from '@/shared/components/common/Icon/SettingIcon';
+import EditIcon from '@/shared/components/common/Icon/EditIcon';
 import CountCardChip from '@/shared/components/common/Chip/CountCardChip';
 import TaskCard from '@/shared/components/dashboard/TaskCard';
 
@@ -115,7 +115,7 @@ export default function Column({
           className="interactive-icon-btn w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 cursor-pointer"
           aria-label={`${column.title} 컬럼 수정`}
         >
-          <SettingIcon width={24} height={24} />
+          <EditIcon width={20} height={20} />
         </button>
       </div>
 
@@ -123,7 +123,7 @@ export default function Column({
       <div className="px-4 md:px-5 mb-4 shrink-0">
         <Button
           variant="secondary"
-          size="add_todo"
+          legacySize="add_todo"
           onClick={() => onAddCard(column.id)}
           className="w-full md:w-full lg:w-[314px]"
           aria-label="할 일 추가"

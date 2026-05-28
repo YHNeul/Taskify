@@ -75,7 +75,7 @@ export default function DashboardList() {
         {isFirstPage && (
           <Button
             variant="secondary"
-            size="add_board"
+            legacySize="add_board"
             className="w-full!"
             onClick={openModal}
           >

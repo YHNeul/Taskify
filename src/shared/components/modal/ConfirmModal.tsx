@@ -48,7 +48,7 @@ export default function ConfirmModal({
       <div className="flex gap-[14px]">
         <Button
           variant="secondary"
-          size="modal_lg"
+          legacySize="modal_lg"
           onClick={onCancel}
           className="flex-1"
         >
@@ -57,7 +57,7 @@ export default function ConfirmModal({
 
         <Button
           variant="primary"
-          size="modal_lg"
+          legacySize="modal_lg"
           onClick={onConfirm}
           className="flex-1"
         >

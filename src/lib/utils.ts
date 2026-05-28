@@ -6,7 +6,7 @@ import { type ClassValue, clsx } from 'clsx';
 import { extendTailwindMerge } from 'tailwind-merge';
 
 /**
- * tailwind.config.ts의 커스텀 fontSize 토큰을 font-size 그룹으로 등록합니다.
+ * tailwind.config.js의 커스텀 fontSize 토큰을 font-size 그룹으로 등록합니다.
  * 미등록 시 tailwind-merge가 text-gray-700 같은 색상 클래스를 제거할 수 있습니다.
  */
 const twMerge = extendTailwindMerge({

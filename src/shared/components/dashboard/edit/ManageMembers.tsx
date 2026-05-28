@@ -139,7 +139,7 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
                   {!isMe && (
                     <Button
                       variant="secondary"
-                      size="delete_lg"
+                      legacySize="delete_lg"
                       className="px-[14px] py-[7px] w-[52px] h-[32px] text-xs-medium
                               md:px-[20px] md:py-[4px] md:w-[84px] md:h-[32px] md:text-md-medium"
                       onClick={() => setSelectedMemberId(item.id)}

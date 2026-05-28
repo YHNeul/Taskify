@@ -3,6 +3,7 @@ export { default as ArrowDropDownIcon } from '@/shared/components/common/Icon/Ar
 export { default as ArrowRightIcon } from '@/shared/components/common/Icon/ArrowRightIcon';
 export { default as CalendarIcon } from '@/shared/components/common/Icon/CalendarIcon';
 export { default as CrownIcon } from '@/shared/components/common/Icon/CrownIcon';
+export { default as EditIcon } from '@/shared/components/common/Icon/EditIcon';
 export { default as EyeIcon } from '@/shared/components/common/Icon/EyeIcon';
 export { default as EyeOffIcon } from '@/shared/components/common/Icon/EyeOffIcon';
 export { default as KebabMenuIcon } from '@/shared/components/common/Icon/KebabMenuIcon';

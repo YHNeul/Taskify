@@ -40,7 +40,7 @@ export default function AlertModal({
 
       <Button
         variant="primary"
-        size="modal_lg"
+        legacySize="modal_lg"
         onClick={onConfirm}
         className="mx-auto w-full max-w-[240px]"
       >
