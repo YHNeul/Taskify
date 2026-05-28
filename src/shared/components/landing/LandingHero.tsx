@@ -16,9 +16,9 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
   return (
     <section className="bg-gray-900">
       {/* 일러스트 — 페이지 로드 시 위에서 내려오며 등장 */}
-      <div className="mx-auto w-full max-w-[1200px] px-[44px] pt-[42px] sm:px-[103px] sm:pt-[94px] lg:px-0 lg:pt-[94px]">
+      <div className="mx-auto w-full max-w-6xl px-11 pt-10 sm:px-24 sm:pt-24 lg:px-0 lg:pt-24">
         <div
-          className="mx-auto w-full max-w-[720px]"
+          className="mx-auto w-full max-w-3xl"
           style={{ animation: 'fadeInDown 0.8s ease-out both' }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- 히어로 전체 이미지 */}
@@ -32,16 +32,16 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
       </div>
 
       {/* 제목 + CTA — 아래에서 올라오며 순차 등장 */}
-      <div className="flex flex-col items-center pb-[46px] sm:pb-16 md:pb-20 lg:pb-[5.2vw]">
+      <div className="flex flex-col items-center pb-12 sm:pb-16 md:pb-20 lg:pb-24">
         <h1
-          className="mt-[26px] flex flex-col items-center gap-2 text-center sm:mt-8 md:flex-row md:items-baseline md:gap-5 lg:mt-[clamp(24px,2.5vw,48px)]"
+          className="mt-6 flex flex-col items-center gap-2 text-center sm:mt-8 md:flex-row md:items-baseline md:gap-5 lg:mt-10"
           style={{ animation: 'fadeInUp 0.8s ease-out 0.3s both' }}
         >
-          <span className="text-[40px] font-bold leading-none tracking-[-0.02em] text-white md:text-[48px] lg:text-[clamp(40px,3.125vw,60px)] lg:leading-[1.3]">
+          <span className="text-4xl font-bold leading-none tracking-tight text-white md:text-5xl lg:text-6xl lg:leading-tight">
             새로운 일정 관리
           </span>
           <span
-            className={`text-[40px] font-bold leading-none tracking-[-1px] text-brand-violet md:text-[52px] lg:text-[clamp(48px,3.958vw,76px)] ${montserratClass}`}
+            className={`text-4xl font-bold leading-none tracking-tight text-brand-violet md:text-5xl lg:text-7xl ${montserratClass}`}
           >
             Taskify
           </span>
@@ -49,7 +49,7 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
 
         <Link
           href="/login"
-          className="mt-[101px] inline-flex h-[46px] min-w-[235px] items-center justify-center rounded-lg bg-brand-violet text-base font-medium text-white transition-opacity hover:opacity-90 sm:mt-8 md:h-[54px] md:min-w-[280px] lg:mt-[clamp(48px,5.78vw,111px)]"
+          className="mt-24 inline-flex h-12 min-w-56 items-center justify-center rounded-lg bg-brand-violet text-base font-medium text-white transition-opacity hover:opacity-90 sm:mt-8 md:h-14 md:min-w-72 lg:mt-20"
           style={{ animation: 'fadeInUp 0.8s ease-out 0.6s both' }}
         >
           로그인하기

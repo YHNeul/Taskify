@@ -62,17 +62,17 @@ function DeleteConfirmModal({
   onConfirm,
 }: ConfirmModalProps) {
   return (
-    <ModalBase className="w-screen mobile:w-[400px] rounded-[16px] p-[24px]">
-      <p className="mb-[24px] text-center text-lg-medium text-gray-700">
+    <ModalBase className="w-screen mobile:w-full mobile:max-w-sm rounded-2xl p-6">
+      <p className="mb-6 text-center text-lg-medium text-gray-700">
         {message}
       </p>
 
-      <div className="flex gap-[14px] flex-col mobile:flex-row">
+      <div className="flex gap-3.5 flex-col mobile:flex-row">
         <Button
           variant="secondary"
           size="md"
           onClick={onCancel}
-          className="h-[42px] w-auto mobile:flex-1"
+          className="h-10 w-auto mobile:flex-1"
         >
           취소
         </Button>
@@ -81,7 +81,7 @@ function DeleteConfirmModal({
           variant="primary"
           size="md"
           onClick={onConfirm}
-          className="h-[42px] w-auto mobile:flex-1"
+          className="h-10 w-auto mobile:flex-1"
         >
           삭제
         </Button>
@@ -167,10 +167,10 @@ export default function Cards({
       <ModalOverlay onClose={onModalClose}>
         <ModalBase
           ref={modalRef}
-          className="px-4 mobile:px-[30px] py-6 relative w-full md:w-fit max-h-[calc(100vh-160px)] overflow-y-auto flex flex-col md:flex-row-reverse md:gap-[14px] gap-4 text-gray-700 rounded-lg"
+          className="px-4 mobile:px-8 py-6 relative w-full md:w-fit md:min-w-card-detail-content max-h-screen-minus-160 overflow-y-auto flex flex-col md:flex-row-reverse md:gap-3.5 gap-4 text-gray-700 rounded-lg"
         >
           {/* 우측 영역 - 메뉴, 닫기 버튼, 담당자 */}
-          <div className="flex flex-col items-end gap-6 min-w-[200px] w-full">
+          <div className="flex flex-col items-end gap-6 min-w-50 w-full md:w-auto">
             <div className="flex gap-2 md:gap-6 relative">
               {/* 메뉴 */}
               <button
@@ -183,7 +183,7 @@ export default function Cards({
 
               {/* 드롭다운 메뉴 */}
               {isMenuOpen && (
-                <div className="absolute top-8 right-[53px]" ref={menuRef}>
+                <div className="absolute top-8 right-14" ref={menuRef}>
                   <DropdownMenu
                     onEdit={() => {
                       setIsEditing(true);
@@ -229,10 +229,10 @@ export default function Cards({
           </div>
 
           {/* 좌측 영역 - 제목, 진행 상태 및 태그, 내용, 댓글 */}
-          <div className="flex flex-col md:max-w-[450px] md:min-w-[450px]">
+          <div className="flex flex-col md:w-content-450 md:shrink-0">
             {/* 제목 */}
             <header className="mb-2 md:mb-6">
-              <h2 className="text-2xl-bold break-words">{title}</h2>
+              <h2 className="text-2xl-bold wrap-break-word">{title}</h2>
             </header>
 
             {/* 담당자 컴포넌트 - 모바일용 */}
@@ -241,15 +241,15 @@ export default function Cards({
             </div>
 
             {/* 진행 상태 및 태그 */}
-            <div className="flex items-center mb-4 md:mb-[17px] h-8">
+            <div className="flex items-center mb-4 md:mb-17 h-8">
               {/* 진행 상태 */}
-              <div className="w-fit max-w-[140px] mr-5">
+              <div className="w-fit max-w-36 mr-5">
                 <StatusChip status={columnTitle} />
               </div>
               {/* 구분선 */}
-              <div className="w-[1px] h-5 bg-gray-300 mr-5"></div>
+              <div className="w-px h-5 bg-gray-300 mr-5"></div>
               {/* 태그 */}
-              <div className="flex items-center gap-[6px] overflow-x-auto">
+              <div className="flex items-center gap-1.5 overflow-x-auto">
                 {tags.map((tag) => {
                   return (
                     <div key={tag}>
@@ -261,7 +261,7 @@ export default function Cards({
             </div>
 
             {/* 설명 */}
-            <p className="box-content min-h-[100px] p-[10px] mb-8 md:mb-2 text-md-regular">
+            <p className="box-content min-h-24 p-2.5 mb-8 md:mb-2 text-md-regular">
               {description}
             </p>
 
@@ -295,7 +295,7 @@ export default function Cards({
               ────────────────────────────────────────── */}
               <div
                 ref={scrollContainerRef}
-                className="max-h-[80px] mb-0 mt-4 md:mb-6 md:mt-6 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-300 [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:rounded-full"
+                className="max-h-20 mb-0 mt-4 md:mb-6 md:mt-6 overflow-y-auto"
               >
                 {commentsList.length > 0 ? (
                   <>

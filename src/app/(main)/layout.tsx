@@ -20,7 +20,7 @@ export default function MainLayout({
     <div className="flex h-screen overflow-hidden">
       <Suspense
         fallback={
-          <div className="w-[67px] md:w-[160px] lg:w-[300px] shrink-0 bg-white border-r border-gray-200" />
+          <div className="w-sidebar-mobile md:w-sidebar-tablet lg:w-sidebar-desktop shrink-0 bg-white border-r border-gray-200" />
         }
       >
         <SideMenu />

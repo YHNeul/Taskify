@@ -35,7 +35,7 @@ export default function InvitationList() {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage, invitations.length]);
 
   const renderTableSkeleton = () => (
-    <div className="flex flex-col gap-4 p-6 bg-white rounded-[16px]">
+    <div className="flex flex-col gap-4 p-6 bg-white rounded-2xl">
       <Skeleton className="h-8 w-40 mb-4" />
       {Array.from({ length: 5 }).map((_, i) => (
         <div

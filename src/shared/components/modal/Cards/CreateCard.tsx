@@ -53,7 +53,7 @@ interface CreateCardProps {
 function CreateCardSkeleton({ onModalClose }: { onModalClose: () => void }) {
   return (
     <ModalOverlay onClose={onModalClose}>
-      <ModalBase className="max-h-[calc(100vh-110px)] overflow-y-auto w-[584px] h-auto rounded-2xl text-gray-700 p-8 flex flex-col gap-8 mx-6 md:m-0">
+      <ModalBase className="max-h-screen-minus-110 overflow-y-auto w-modal-card h-auto rounded-2xl text-gray-700 p-8 flex flex-col gap-8 mx-6 md:m-0">
         <header>
           <Skeleton className="h-8 w-32 rounded-md" />
         </header>
@@ -61,41 +61,41 @@ function CreateCardSkeleton({ onModalClose }: { onModalClose: () => void }) {
         {/* 담당자 */}
         <div className="flex flex-col gap-2">
           <Skeleton className="h-5 w-16 rounded" />
-          <Skeleton className="h-[48px] w-full rounded-md" />
+          <Skeleton className="h-12 w-full rounded-md" />
         </div>
 
         {/* 제목 */}
         <div className="flex flex-col gap-2">
           <Skeleton className="h-5 w-12 rounded" />
-          <Skeleton className="h-[48px] w-full rounded-md" />
+          <Skeleton className="h-12 w-full rounded-md" />
         </div>
 
         {/* 설명 */}
         <div className="flex flex-col gap-2">
           <Skeleton className="h-5 w-12 rounded" />
-          <Skeleton className="h-[96px] w-full rounded-md" />
+          <Skeleton className="h-24 w-full rounded-md" />
         </div>
 
         {/* 마감일 */}
         <div className="flex flex-col gap-2">
           <Skeleton className="h-5 w-16 rounded" />
-          <Skeleton className="h-[48px] w-full rounded-md" />
+          <Skeleton className="h-12 w-full rounded-md" />
         </div>
 
         {/* 태그 */}
         <div className="flex flex-col gap-2">
           <Skeleton className="h-5 w-10 rounded" />
-          <Skeleton className="h-[50px] w-full rounded-md" />
+          <Skeleton className="h-12 w-full rounded-md" />
         </div>
 
         {/* 이미지 */}
         <div className="flex flex-col gap-2">
           <Skeleton className="h-5 w-12 rounded" />
-          <Skeleton className="h-[76px] w-[76px] rounded-md" />
+          <Skeleton className="h-20 w-20 rounded-md" />
         </div>
 
         {/* 버튼 */}
-        <div className="flex gap-2 h-[54px]">
+        <div className="flex gap-2 h-14">
           <Skeleton className="flex-1 rounded-lg" />
           <Skeleton className="flex-1 rounded-lg" />
         </div>
@@ -194,7 +194,7 @@ export default function CreateCard({
   return (
     <>
       <ModalOverlay onClose={onModalClose}>
-        <ModalBase className="px-4 mobile:px-[30px] max-h-[calc(100vh-160px)] overflow-y-auto w-[584px] h-auto rounded-2xl text-gray-700 p-8 flex flex-col gap-8">
+        <ModalBase className="px-4 mobile:px-8 max-h-screen-minus-160 overflow-y-auto w-modal-card h-auto rounded-2xl text-gray-700 p-8 flex flex-col gap-8">
           <header>
             <h2 className="text-2xl-bold wrap-break-word">할 일 생성</h2>
           </header>
@@ -247,7 +247,7 @@ export default function CreateCard({
           <div className="">
             <p className={`${baseFontStyle}`}>태그</p>
             <div
-              className={`flex flex-wrap gap-1 items-center w-full min-h-[50px] px-4 py-2 text-sm rounded-md border cursor-text outline-none transition ${
+              className={`flex flex-wrap gap-1 items-center w-full min-h-12 px-4 py-2 text-sm rounded-md border cursor-text outline-none transition ${
                 isTagFocused ? 'border-brand-violet' : 'border-gray-300'
               }`}
               onClick={() => inputRef.current?.focus()}
@@ -270,7 +270,7 @@ export default function CreateCard({
                 onKeyDown={handleTagKeyDown}
                 onFocus={() => setIsTagFocused(true)}
                 onBlur={() => setIsTagFocused(false)}
-                className="bg-transparent outline-none flex-1 min-w-[80px] text-gray-700 text-lg-regular"
+                className="bg-transparent outline-none flex-1 min-w-20 text-gray-700 text-lg-regular"
                 placeholder={
                   formData.tags.length === 0 ? '태그 입력 후 Enter' : ''
                 }
@@ -285,7 +285,7 @@ export default function CreateCard({
           </div>
 
           {/* 생성,취소 버튼 */}
-          <div className="relative flex items-stretch gap-2 h-[54px]">
+          <div className="relative flex items-stretch gap-2 h-14">
             <Button
               variant="secondary"
               className="flex-1"

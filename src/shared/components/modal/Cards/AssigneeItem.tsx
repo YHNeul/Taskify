@@ -23,11 +23,11 @@ interface Props {
 }
 
 export default function AssigneeItem({ assignee, dueDate }: Props) {
-  const sectionClass = 'flex flex-col gap-[6px] w-full';
+  const sectionClass = 'flex flex-col gap-1.5 w-full';
   const titleClass = 'text-xs-semibold';
 
   return (
-    <div className="flex md:flex-col flex-row flex-wrap mobile:flex-nowrap items-center md:gap-4 gap-1 md:w-[200px] px-4 py-[14px] border border-gray-300 rounded-lg">
+    <div className="flex md:flex-col flex-row flex-wrap mobile:flex-nowrap items-center md:gap-4 gap-1 md:w-48 px-4 py-3.5 border border-gray-300 rounded-lg">
       <div className={sectionClass}>
         <p className={titleClass}>담당자</p>
         <div>

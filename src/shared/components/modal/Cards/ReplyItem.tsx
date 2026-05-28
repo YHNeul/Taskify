@@ -49,9 +49,9 @@ export default function ReplyItem({ comment, onDeleteClick }: Props) {
 
   return (
     <>
-      <div className="flex items-start mt-4 gap-[10px]">
+      <div className="flex items-start mt-4 gap-2.5">
         <UserProfileImage profile={author} />
-        <div className="flex flex-col gap-[6px] flex-1 pr-5">
+        <div className="flex flex-col gap-1.5 flex-1 pr-5">
           {/* 작성자 이름, 작성 날짜 */}
           <div className="flex items-center gap-2">
             <span className="text-md-semibold leading-4">
@@ -74,7 +74,7 @@ export default function ReplyItem({ comment, onDeleteClick }: Props) {
 
           {/* 댓글 수정, 삭제 버튼 - 작성자만 표시 */}
           {isAuthor && (
-            <div className="flex items-center gap-2 md:gap-[14px]">
+            <div className="flex items-center gap-2 md:gap-3.5">
               <button
                 type="button"
                 className="text-xs text-gray-400 underline underline-offset-2 hover:text-gray-600 transition-colors"

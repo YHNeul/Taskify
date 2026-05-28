@@ -114,14 +114,14 @@ export default function ModalTestPage() {
   const isInviteButtonDisabled = !email.trim() || !!errorText || isSubmitting;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#F5F5F5] px-4 py-10">
-      <h1 className="text-[24px] font-bold text-[#222222]">Modal Test Page</h1>
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-gray-100 px-4 py-10">
+      <h1 className="text-2xl font-bold text-gray-700">Modal Test Page</h1>
 
       <div className="flex flex-wrap justify-center gap-3">
         <button
           type="button"
           onClick={() => setOpenModal('alert')}
-          className="rounded-[12px] bg-[#5534DA] px-4 py-2 text-white"
+          className="rounded-xl bg-brand-violet px-4 py-2 text-white"
         >
           원버튼 알림 모달
         </button>
@@ -129,7 +129,7 @@ export default function ModalTestPage() {
         <button
           type="button"
           onClick={() => setOpenModal('confirm')}
-          className="rounded-[12px] bg-[#5534DA] px-4 py-2 text-white"
+          className="rounded-xl bg-brand-violet px-4 py-2 text-white"
         >
           투버튼 삭제 확인 모달
         </button>
@@ -137,7 +137,7 @@ export default function ModalTestPage() {
         <button
           type="button"
           onClick={() => setOpenModal('createColumn')}
-          className="rounded-[12px] bg-[#5534DA] px-4 py-2 text-white"
+          className="rounded-xl bg-brand-violet px-4 py-2 text-white"
         >
           새 컬럼 생성 모달
         </button>
@@ -145,7 +145,7 @@ export default function ModalTestPage() {
         <button
           type="button"
           onClick={() => setOpenModal('createColumnError')}
-          className="rounded-[12px] bg-[#5534DA] px-4 py-2 text-white"
+          className="rounded-xl bg-brand-violet px-4 py-2 text-white"
         >
           새 컬럼 생성 에러 모달
         </button>
@@ -153,7 +153,7 @@ export default function ModalTestPage() {
         <button
           type="button"
           onClick={() => setOpenModal('manageColumn')}
-          className="rounded-[12px] bg-[#5534DA] px-4 py-2 text-white"
+          className="rounded-xl bg-brand-violet px-4 py-2 text-white"
         >
           컬럼 관리 모달
         </button>
@@ -161,7 +161,7 @@ export default function ModalTestPage() {
         <button
           type="button"
           onClick={() => setOpenModal('invite')}
-          className="rounded-[12px] bg-[#5534DA] px-4 py-2 text-white"
+          className="rounded-xl bg-brand-violet px-4 py-2 text-white"
         >
           초대하기 모달
         </button>

@@ -69,7 +69,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="flex h-[64px] w-full items-center justify-between shrink-0 border-b border-gray-200 bg-white px-3 md:px-5 lg:px-8">
+      <header className="flex h-16 w-full items-center justify-between shrink-0 border-b border-gray-200 bg-white px-3 md:px-5 lg:px-8">
         <div className="flex min-w-0 items-center gap-2">
           {isDashboardLoading && !staticTitle ? (
             <Skeleton className="hidden lg:block h-6 w-36 rounded" />
@@ -79,7 +79,7 @@ export default function Header() {
                 {staticTitle ?? dashboard?.title ?? ''}
               </h1>
               {!staticTitle && dashboard?.createdByMe && (
-                <CrownIcon className="hidden lg:block h-[20px] w-[16px] shrink-0" />
+                <CrownIcon className="hidden lg:block h-5 w-4 shrink-0" />
               )}
             </>
           )}
@@ -88,8 +88,8 @@ export default function Header() {
         <div className="flex min-w-0 items-center gap-2 md:gap-3 lg:gap-4">
           {isDashboardLoading && dashboardId ? (
             <>
-              <Skeleton className="h-[40px] w-[72px] rounded-[8px]" />
-              <Skeleton className="h-[40px] w-[88px] rounded-[8px]" />
+              <Skeleton className="h-10 w-18 rounded-lg" />
+              <Skeleton className="h-10 w-22 rounded-lg" />
             </>
           ) : (
             <>
@@ -97,18 +97,18 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() => router.push(`/dashboard/${dashboardId}/edit`)}
-                  className="flex h-[32px] md:h-[36px] lg:h-[40px] items-center gap-1.5 md:gap-2 rounded-[8px] border border-gray-300 bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
+                  className="flex h-8 md:h-9 lg:h-10 items-center gap-1.5 md:gap-2 rounded-lg border border-gray-300 bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
                 >
-                  <SettingIcon className="h-[16px] w-[16px] md:h-[18px] md:w-[18px] lg:h-[20px] lg:w-[20px]" />
+                  <SettingIcon className="h-4 w-4 md:h-4.5 md:w-4.5 lg:h-5 lg:w-5" />
                   <span className="hidden md:inline">관리</span>
                 </button>
               )}
               <button
                 type="button"
                 onClick={invite.open}
-                className="flex h-[32px] md:h-[36px] lg:h-[40px] items-center gap-1.5 md:gap-2 rounded-[8px] border border-gray-300 bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
+                className="flex h-8 md:h-9 lg:h-10 items-center gap-1.5 md:gap-2 rounded-lg border border-gray-300 bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
               >
-                <AddBoxIcon className="h-[16px] w-[16px] md:h-[18px] md:w-[18px] lg:h-[20px] lg:w-[20px]" />
+                <AddBoxIcon className="h-4 w-4 md:h-4.5 md:w-4.5 lg:h-5 lg:w-5" />
                 <span className="hidden md:inline">초대하기</span>
               </button>
             </>
@@ -124,7 +124,7 @@ export default function Header() {
 
             {isMeLoading ? (
               <div className="ml-2 md:ml-4 lg:ml-6 flex items-center gap-2 md:gap-3 border-l border-gray-300 pl-2 md:pl-4 lg:pl-6 shrink-0">
-                <Skeleton className="w-[38px] h-[38px] rounded-full shrink-0" />
+                <Skeleton className="w-profile-desktop h-profile-desktop rounded-full shrink-0" />
                 <Skeleton className="h-4 w-20 rounded hidden lg:block" />
               </div>
             ) : (
@@ -134,7 +134,7 @@ export default function Header() {
                 className="ml-2 md:ml-4 lg:ml-6 flex items-center gap-2 md:gap-3 border-l border-gray-300 pl-2 md:pl-4 lg:pl-6 hover:opacity-80 transition-opacity shrink-0 cursor-pointer"
               >
                 <div
-                  className="flex h-[38px] w-[38px] items-center justify-center rounded-full overflow-hidden text-lg-medium text-white shrink-0"
+                  className="flex h-profile-desktop w-profile-desktop items-center justify-center rounded-full overflow-hidden text-lg-medium text-white shrink-0"
                   style={{ backgroundColor: myChipColor }}
                 >
                   {me?.profileImageUrl ? (

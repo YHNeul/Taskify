@@ -24,7 +24,7 @@ export default function Home() {
     >
       <LandingHeader />
       <main>
-        <LandingHero montserratClass="font-[family-name:var(--font-landing-montserrat)]" />
+        <LandingHero montserratClass="font-landing" />
         <LandingPointSection
           point="Point 1"
           title="일의 우선순위를 관리하세요"

@@ -43,28 +43,28 @@ export default function LandingFeatureGrid() {
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className="bg-gray-900 px-4 pt-[60px] pb-14 md:px-10 md:py-20"
+      className="bg-gray-900 px-4 pt-14 pb-14 md:px-10 md:py-20"
     >
-      <div className="mx-auto max-w-[1200px]">
+      <div className="mx-auto max-w-6xl">
         {/* 타이틀 — 섹션 진입 시 위로 올라오며 등장 */}
         <h2
-          className={`reveal-up mb-10 text-center text-[22px] font-bold leading-none text-white sm:text-[28px] lg:text-left lg:text-[clamp(22px,1.5vw,28px)] ${
+          className={`reveal-up mb-10 text-center text-2xl font-bold leading-none text-white sm:text-3xl lg:text-left lg:text-3xl ${
             isVisible ? 'is-visible' : ''
           }`}
         >
           생산성을 높이는 다양한 설정 ⚡
         </h2>
 
-        <div className="flex flex-col items-stretch gap-[40.48px] md:gap-12 lg:flex-row lg:gap-[33px]">
+        <div className="flex flex-col items-stretch gap-10 md:gap-12 lg:flex-row lg:gap-8">
           {CARDS.map((card, i) => (
             <article
               key={card.title}
-              className={`reveal-up mx-auto flex w-full max-w-[378px] flex-col overflow-hidden rounded-lg lg:mx-0 lg:max-w-none lg:flex-1 ${
+              className={`reveal-up mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-lg lg:mx-0 lg:max-w-none lg:flex-1 ${
                 isVisible ? 'is-visible' : ''
               }`}
               style={{ transitionDelay: CARD_DELAYS[i] }}
             >
-              <div className="flex h-[236px] shrink-0 items-center justify-center bg-gray-600 p-4 sm:h-[260px]">
+              <div className="flex h-56 shrink-0 items-center justify-center bg-gray-600 p-4 sm:h-64">
                 {/* eslint-disable-next-line @next/next/no-img-element -- 카드 미리보기 PNG */}
                 <img
                   src={card.image}
@@ -73,10 +73,10 @@ export default function LandingFeatureGrid() {
                 />
               </div>
               <div className="flex flex-1 flex-col justify-center bg-gray-800 px-8 py-5 sm:px-6">
-                <h3 className="font-bold leading-none text-white text-[clamp(13px,4.8vw,18px)] lg:text-[clamp(14px,0.94vw,18px)]">
+                <h3 className="font-bold leading-none text-white text-sm sm:text-lg lg:text-lg">
                   {card.title}
                 </h3>
-                <p className="mt-[18px] font-medium leading-none text-white text-[clamp(12px,4.27vw,16px)] sm:mt-3 lg:text-[clamp(13px,0.83vw,16px)]">
+                <p className="mt-4 font-medium leading-none text-white text-xs sm:mt-3 sm:text-base lg:text-base">
                   {card.description}
                 </p>
               </div>

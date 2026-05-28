@@ -65,8 +65,7 @@ export default function ConfirmButton({
     'inline-flex items-center justify-center rounded text-md-medium transition-colors disabled:cursor-not-allowed';
 
   /** 개별 버튼 크기 — mobile: 109×32, tablet: 72×30, desktop: 84×32 */
-  const btnSize =
-    'w-28 h-8 md:w-[72px] md:h-[30px] lg:w-20 lg:h-8';
+  const btnSize = 'w-28 h-8 md:w-18 md:h-8 lg:w-20 lg:h-8';
 
   return (
     <div className={cn('inline-flex items-center gap-2.5', className)}>

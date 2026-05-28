@@ -9,10 +9,10 @@ import InvitationList from '@/shared/components/mydashboard/InvitationList';
 
 export default async function MyDashboardPage() {
   return (
-    <div className="min-h-screen bg-gray-100 px-[24px] md:px-[40px]">
-      <div className="max-w-[1022px] flex flex-col gap-[74px]">
+    <div className="min-h-screen bg-gray-100 px-6 md:px-10">
+      <div className="max-w-5xl flex flex-col gap-18">
         <section aria-label="나의 대시보드">
-          <Suspense fallback={<div className="h-[160px]" />}>
+          <Suspense fallback={<div className="h-40" />}>
             <DashboardList />
           </Suspense>
         </section>

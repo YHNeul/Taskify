@@ -69,8 +69,8 @@ export default function FormModal({
   onClose,
 }: FormModalProps) {
   return (
-    <ModalBase className="w-[568px] rounded-[8px] p-[24px]">
-      <div className="mb-[24px] flex items-start justify-between">
+    <ModalBase className="w-modal-form rounded-lg p-6">
+      <div className="mb-6 flex items-start justify-between">
         <h2 className="text-2xl-bold text-gray-900">{title}</h2>
 
         {showCloseButton && (
@@ -79,13 +79,13 @@ export default function FormModal({
             onClick={onClose}
             className="interactive-icon-btn p-2 cursor-pointer"
           >
-            <XIcon className="w-[24px] h-[24px]" />
+            <XIcon className="w-6 h-6" />
           </button>
         )}
       </div>
 
-      <div className="mb-[10px]">
-        <label className="mb-[8px] block text-2lg-medium text-gray-700">
+      <div className="mb-2.5">
+        <label className="mb-2 block text-2lg-medium text-gray-700">
           {label}
         </label>
 
@@ -96,16 +96,16 @@ export default function FormModal({
           isError={!!errorText}
           errorMessage={errorText}
         />
-        {children && <div className="mt-[16px]">{children}</div>}
+        {children && <div className="mt-4">{children}</div>}
       </div>
 
-      <div className="mt-[20px] flex gap-[14px]">
+      <div className="mt-5 flex gap-3.5">
         <Button
           type="button"
           variant="secondary"
           size="lg"
           onClick={onCancel}
-          className="h-[48px] flex-1"
+          className="h-12 flex-1"
         >
           {cancelText}
         </Button>
@@ -119,7 +119,7 @@ export default function FormModal({
             onConfirm();
           }}
           disabled={confirmDisabled}
-          className="h-[48px] flex-1"
+          className="h-12 flex-1"
         >
           {confirmText}
         </Button>

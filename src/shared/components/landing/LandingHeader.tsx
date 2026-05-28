@@ -19,7 +19,7 @@ export default async function LandingHeader() {
   const logoHref = isLoggedIn ? '/mydashboard' : '/';
 
   return (
-    <header className="flex h-[70px] w-full shrink-0 items-center justify-between bg-gray-900 px-4 md:px-10 lg:px-20">
+    <header className="flex h-70 w-full shrink-0 items-center justify-between bg-gray-900 px-4 md:px-10 lg:px-20">
       <Link
         href={logoHref}
         className="flex items-center gap-2"

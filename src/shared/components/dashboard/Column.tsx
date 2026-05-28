@@ -59,6 +59,9 @@ export default function Column({
   const dotColor = COLUMN_COLORS[colorIndex % COLUMN_COLORS.length];
   const sentinelRef = useRef<HTMLDivElement>(null);
   const hasMore = totalCount > cards.length;
+  const firstImageCardId = isFirstColumn
+    ? (cards.find((card) => Boolean(card.imageUrl))?.id ?? null)
+    : null;
 
   /**
    * 컬럼 카드 목록 영역 전체를 드롭존으로 설정.
@@ -147,13 +150,13 @@ export default function Column({
             isOver ? 'bg-brand-violet-light/30' : '',
           ].join(' ')}
         >
-          {cards.map((card, index) => (
+          {cards.map((card) => (
             <TaskCard
               key={card.id}
               card={card}
               columnId={column.id}
               onClick={onCardClick}
-              priority={isFirstColumn && index === 0}
+              priority={card.id === firstImageCardId}
             />
           ))}
 
