@@ -166,7 +166,7 @@ function SignupPageContent() {
               <Button
                 type="submit"
                 variant="primary"
-                legacySize="login_sm"
+                size="lg"
                 disabled={isButtonDisabled}
                 className="h-[50px] w-full rounded-[8px]"
               >
