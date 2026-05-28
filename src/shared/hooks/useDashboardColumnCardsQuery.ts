@@ -18,7 +18,9 @@ export function useDashboardColumnCardsQuery({
   return useQuery({
     queryKey: QUERY_KEYS.columnCards(dashboardId),
     queryFn: async () => {
-      const results = await Promise.all(columns.map((col) => getCards(col.id, size)));
+      const results = await Promise.all(
+        columns.map((col) => getCards(col.id, size)),
+      );
       const map: Record<number, ColumnCardState> = {};
 
       columns.forEach((col, i) => {

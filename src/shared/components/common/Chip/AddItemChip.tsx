@@ -37,7 +37,10 @@ export default function AddItemChip({ asIcon = false }: AddItemChipProps) {
   }
 
   return (
-    <button type="button" className="rounded transition-opacity hover:opacity-80">
+    <button
+      type="button"
+      className="rounded transition-opacity hover:opacity-80"
+    >
       {plusIcon}
     </button>
   );

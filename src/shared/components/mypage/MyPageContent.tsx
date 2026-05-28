@@ -16,7 +16,11 @@ import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
 import AlertModal from '@/shared/components/modal/AlertModal';
 import Input from '@/shared/components/common/Input/Input';
 import Button from '@/shared/components/common/Button';
-import { updateMyInfo, uploadProfileImage, changePassword } from '@/shared/apis/user';
+import {
+  updateMyInfo,
+  uploadProfileImage,
+  changePassword,
+} from '@/shared/apis/user';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { useMyInfoQuery } from '@/shared/hooks/useMyInfoQuery';
 

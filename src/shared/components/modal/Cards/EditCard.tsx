@@ -21,7 +21,11 @@ import { Card, Column, Member } from '@/shared/types/dashboard';
 import DateInput from '@/shared/components/common/Input/DateInput';
 import DropdownProgress from '@/shared/components/common/Dropdown/DropdownProgress';
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
-import { getMembers, updateCard, uploadCardImage } from '@/shared/apis/dashboard';
+import {
+  getMembers,
+  updateCard,
+  uploadCardImage,
+} from '@/shared/apis/dashboard';
 import { formatDateTime } from '@/shared/utils/formatDate';
 import TagChip from '@/shared/components/common/Chip/TagChip';
 import AlertModal from '@/shared/components/modal/AlertModal';

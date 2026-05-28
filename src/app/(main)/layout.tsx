@@ -18,7 +18,11 @@ export default function MainLayout({
   return (
     // h-screen + overflow-hidden으로 전체 높이를 뷰포트에 고정해야 자식의 h-full이 작동함
     <div className="flex h-screen overflow-hidden">
-      <Suspense fallback={<div className="w-[67px] md:w-[160px] lg:w-[300px] shrink-0 bg-white border-r border-gray-200" />}>
+      <Suspense
+        fallback={
+          <div className="w-[67px] md:w-[160px] lg:w-[300px] shrink-0 bg-white border-r border-gray-200" />
+        }
+      >
         <SideMenu />
       </Suspense>
 

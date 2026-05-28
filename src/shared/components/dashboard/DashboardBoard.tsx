@@ -306,7 +306,11 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                 errorText={addColumnModal.error}
                 showCloseButton
                 onChange={(v) =>
-                  setAddColumnModal((prev) => ({ ...prev, title: v, error: '' }))
+                  setAddColumnModal((prev) => ({
+                    ...prev,
+                    title: v,
+                    error: '',
+                  }))
                 }
                 onCancel={() =>
                   setAddColumnModal({ isOpen: false, title: '', error: '' })
@@ -339,7 +343,11 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                 errorText={editColumnModal.error}
                 showCloseButton
                 onChange={(v) =>
-                  setEditColumnModal((prev) => ({ ...prev, title: v, error: '' }))
+                  setEditColumnModal((prev) => ({
+                    ...prev,
+                    title: v,
+                    error: '',
+                  }))
                 }
                 onCancel={() => {
                   if (!editColumnModal.column) return;
