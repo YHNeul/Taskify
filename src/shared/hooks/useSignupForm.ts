@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import type { ChangeEvent, FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 type SignupErrors = {
   email: string;
@@ -13,6 +15,33 @@ type SignupErrors = {
 };
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const signupSchema = z
+  .object({
+    email: z
+      .string()
+      .trim()
+      .min(1, '이메일을 입력해 주세요.')
+      .regex(emailRegex, '이메일 형식으로 작성해 주세요.'),
+    nickname: z
+      .string()
+      .trim()
+      .min(1, '닉네임을 입력해 주세요.')
+      .max(10, '열 자 이하로 작성해주세요.'),
+    password: z
+      .string()
+      .min(1, '비밀번호를 입력해 주세요.')
+      .min(8, '8자 이상 입력해 주세요.'),
+    passwordConfirm: z.string().min(1, '비밀번호를 한 번 더 입력해 주세요.'),
+    agree: z.boolean().refine((value) => value, {
+      message: '이용약관에 동의해 주세요.',
+    }),
+  })
+  .refine((value) => value.password === value.passwordConfirm, {
+    message: '비밀번호가 일치하지 않습니다.',
+    path: ['passwordConfirm'],
+  });
+
+type SignupFormValues = z.infer<typeof signupSchema>;
 
 export const useSignupForm = () => {
   const router = useRouter();
@@ -22,144 +51,44 @@ export const useSignupForm = () => {
     ? `/login?next=${encodeURIComponent(nextRaw)}`
     : '/login';
 
-  const [email, setEmail] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [agree, setAgree] = useState(false);
+  const [email, setEmailState] = useState('');
+  const [nickname, setNicknameState] = useState('');
+  const [password, setPasswordState] = useState('');
+  const [passwordConfirm, setPasswordConfirmState] = useState('');
+  const [agree, setAgreeState] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
-  const [signupError, setSignupError] = useState('');
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [errors, setErrors] = useState<SignupErrors>({
-    email: '',
-    nickname: '',
-    password: '',
-    passwordConfirm: '',
-    agree: '',
-  });
-
-  const clearTransientErrorState = () => {
-    if (signupError) setSignupError('');
-    if (isAlertOpen) setIsAlertOpen(false);
-  };
-
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-    clearTransientErrorState();
-
-    setErrors((prev) => ({
-      ...prev,
-      email: !value
-        ? ''
-        : !emailRegex.test(value)
-          ? '이메일 형식으로 작성해 주세요.'
-          : '',
-    }));
-  };
-
-  const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setNickname(value);
-    clearTransientErrorState();
-
-    setErrors((prev) => ({
-      ...prev,
-      nickname: !value
-        ? ''
-        : value.length > 10
-          ? '열 자 이하로 작성해주세요.'
-          : '',
-    }));
-  };
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPassword(value);
-    clearTransientErrorState();
-
-    setErrors((prev) => ({
-      ...prev,
-      password: !value ? '' : value.length < 8 ? '8자 이상 입력해 주세요.' : '',
-      passwordConfirm:
-        passwordConfirm && value !== passwordConfirm
-          ? '비밀번호가 일치하지 않습니다.'
-          : '',
-    }));
-  };
-
-  const handlePasswordConfirmChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPasswordConfirm(value);
-    clearTransientErrorState();
-
-    setErrors((prev) => ({
-      ...prev,
-      passwordConfirm: !value
-        ? ''
-        : value !== password
-          ? '비밀번호가 일치하지 않습니다.'
-          : '',
-    }));
-  };
-
-  const handleAgreeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
-    setAgree(checked);
-    clearTransientErrorState();
-
-    setErrors((prev) => ({
-      ...prev,
-      agree: checked ? '' : prev.agree,
-    }));
-  };
-
-  const validate = () => {
-    const nextErrors: SignupErrors = {
+  const {
+    handleSubmit: submitWithValidation,
+    setValue,
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
+    mode: 'onChange',
+    defaultValues: {
       email: '',
       nickname: '',
       password: '',
       passwordConfirm: '',
-      agree: '',
-    };
+      agree: false,
+    },
+  });
 
-    if (!email.trim()) {
-      nextErrors.email = '이메일을 입력해 주세요.';
-    } else if (!emailRegex.test(email)) {
-      nextErrors.email = '이메일 형식으로 작성해 주세요.';
-    }
+  const normalizedErrors: SignupErrors = {
+    email: errors.email?.message ?? '',
+    nickname: errors.nickname?.message ?? '',
+    password: errors.password?.message ?? '',
+    passwordConfirm: errors.passwordConfirm?.message ?? '',
+    agree: errors.agree?.message ?? '',
+  };
 
-    if (!nickname.trim()) {
-      nextErrors.nickname = '닉네임을 입력해 주세요.';
-    } else if (nickname.length > 10) {
-      nextErrors.nickname = '열 자 이하로 작성해주세요.';
-    }
-
-    if (!password) {
-      nextErrors.password = '비밀번호를 입력해 주세요.';
-    } else if (password.length < 8) {
-      nextErrors.password = '8자 이상 입력해 주세요.';
-    }
-
-    if (!passwordConfirm) {
-      nextErrors.passwordConfirm = '비밀번호를 한 번 더 입력해 주세요.';
-    } else if (password !== passwordConfirm) {
-      nextErrors.passwordConfirm = '비밀번호가 일치하지 않습니다.';
-    }
-
-    if (!agree) {
-      nextErrors.agree = '이용약관에 동의해 주세요.';
-    }
-
-    setErrors(nextErrors);
-    return !Object.values(nextErrors).some(Boolean);
+  const clearTransientErrorState = () => {
+    if (isAlertOpen) setIsAlertOpen(false);
   };
 
   const isButtonDisabled =
@@ -168,17 +97,11 @@ export const useSignupForm = () => {
     !password.trim() ||
     !passwordConfirm.trim() ||
     !agree ||
-    Object.values(errors).some((error) => error !== '') ||
+    !isValid ||
     isSubmitting;
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!validate() || isSubmitting) return;
-
-    setSignupError('');
-    setIsSubmitting(true);
-
+  const handleSubmit = submitWithValidation(async (formValues) => {
+    clearTransientErrorState();
     try {
       const res = await fetch('/api/proxy/users', {
         method: 'POST',
@@ -186,9 +109,9 @@ export const useSignupForm = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email,
-          nickname,
-          password,
+          email: formValues.email,
+          nickname: formValues.nickname,
+          password: formValues.password,
         }),
       });
 
@@ -215,10 +138,8 @@ export const useSignupForm = () => {
       setIsSuccess(false);
       setAlertMessage('서버 오류가 발생했습니다.');
       setIsAlertOpen(true);
-    } finally {
-      setIsSubmitting(false);
     }
-  };
+  });
 
   const handleAlertConfirm = () => {
     setIsAlertOpen(false);
@@ -236,16 +157,39 @@ export const useSignupForm = () => {
     agree,
     showPassword,
     showPasswordConfirm,
-    errors,
+    errors: normalizedErrors,
     isButtonDisabled,
     isSubmitting,
     isAlertOpen,
     alertMessage,
-    handleEmailChange,
-    handleNicknameChange,
-    handlePasswordChange,
-    handlePasswordConfirmChange,
-    handleAgreeChange,
+    setEmail: (value: string) => {
+      clearTransientErrorState();
+      setEmailState(value);
+      setValue('email', value, { shouldDirty: true, shouldValidate: true });
+    },
+    setNickname: (value: string) => {
+      clearTransientErrorState();
+      setNicknameState(value);
+      setValue('nickname', value, { shouldDirty: true, shouldValidate: true });
+    },
+    setPassword: (value: string) => {
+      clearTransientErrorState();
+      setPasswordState(value);
+      setValue('password', value, { shouldDirty: true, shouldValidate: true });
+    },
+    setPasswordConfirm: (value: string) => {
+      clearTransientErrorState();
+      setPasswordConfirmState(value);
+      setValue('passwordConfirm', value, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    },
+    setAgree: (value: boolean) => {
+      clearTransientErrorState();
+      setAgreeState(value);
+      setValue('agree', value, { shouldDirty: true, shouldValidate: true });
+    },
     setShowPassword,
     setShowPasswordConfirm,
     handleSubmit,
