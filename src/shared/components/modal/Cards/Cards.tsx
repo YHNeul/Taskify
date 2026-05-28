@@ -267,7 +267,7 @@ export default function Cards({
 
             {/* 이미지 섹션: 이미지가 있을 때만 렌더링 */}
             {imageUrl && (
-              <div className="relative mb-6 w-full rounded-md bg-gray-100 md:mb-4 md:w-[445px] aspect-[445/250]">
+              <div className="relative mb-6 w-full rounded-md bg-gray-100 md:mb-4 aspect-video">
                 <Image
                   src={imageUrl}
                   alt="할 일 카드 이미지"
