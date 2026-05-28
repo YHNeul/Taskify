@@ -14,7 +14,7 @@ type SignupErrors = {
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function useSignupForm() {
+export const useSignupForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nextRaw = searchParams.get('next');
@@ -251,4 +251,4 @@ export default function useSignupForm() {
     handleSubmit,
     handleAlertConfirm,
   };
-}
+};

@@ -15,7 +15,7 @@ import { Input } from '@/shared/components/common/Input';
 import Button from '@/shared/components/common/Button';
 import Checkbox from '@/shared/components/common/Checkbox';
 import AlertModal from '@/shared/components/modal/AlertModal';
-import useSignupForm from '@/shared/hooks/useSignupForm';
+import { useSignupForm } from '@/shared/hooks/useSignupForm';
 
 function SignupPageContent() {
   const {
