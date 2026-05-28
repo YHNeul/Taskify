@@ -14,14 +14,14 @@
  */
 
 const TAG_COLORS = [
-  { bg: 'bg-[#F9EEE3]', text: 'text-[#D58D49]' }, // 오렌지
-  { bg: 'bg-[#E7F7DB]', text: 'text-[#86D549]' }, // 그린
-  { bg: 'bg-[#F7DBF0]', text: 'text-[#D549B6]' }, // 핑크
-  { bg: 'bg-[#DBE6F7]', text: 'text-[#4981D5]' }, // 블루
-  { bg: 'bg-[#EDE3F9]', text: 'text-[#8549D5]' }, // 퍼플
-  { bg: 'bg-[#F9E3E3]', text: 'text-[#D54949]' }, // 레드
-  { bg: 'bg-[#E3F9F5]', text: 'text-[#2FADA8]' }, // 민트
-  { bg: 'bg-[#FDF6D3]', text: 'text-[#C4A823]' }, // 옐로우
+  { bg: 'bg-orange-100', text: 'text-orange-600' }, // 오렌지
+  { bg: 'bg-green-100', text: 'text-green-500' }, // 그린
+  { bg: 'bg-pink-100', text: 'text-pink-500' }, // 핑크
+  { bg: 'bg-blue-100', text: 'text-blue-500' }, // 블루
+  { bg: 'bg-purple-100', text: 'text-purple-500' }, // 퍼플
+  { bg: 'bg-red-100', text: 'text-red' }, // 레드
+  { bg: 'bg-teal-100', text: 'text-teal-600' }, // 민트
+  { bg: 'bg-yellow-100', text: 'text-yellow-600' }, // 옐로우
 ];
 
 interface TagChipProps {

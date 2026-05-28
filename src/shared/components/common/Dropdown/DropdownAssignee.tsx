@@ -53,11 +53,11 @@ export default function DropdownAssignee({
 
   /** Input과 담당자가 선택된 박스의 공통 css */
   const baseStyle =
-    'w-full h-[48px] border border-gray-300 px-4 py-2 rounded-md flex justify-between items-center bg-white';
+    'w-full h-12 border border-gray-300 px-4 py-2 rounded-md flex justify-between items-center bg-white';
   const buttonStyle = `${baseStyle} cursor-pointer hover:bg-gray-100 transition-colors`;
 
   return (
-    <div className="relative sm:min-w-[217px]">
+    <div className="relative sm:min-w-56">
       {/* 선택을 안했을 때는 입력 input 렌더링, 선택 했을 때는 사용자 이름 및 아이콘 렌더링 */}
       {selectedUser ? (
         <button

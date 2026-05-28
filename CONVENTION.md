@@ -62,3 +62,31 @@ Utils/Constants/기타 일반 로직: export const 함수명 = () => {...} 형�
 6. 💬 주석
 주석: 공용 함수, 복잡한 로직에는 TSDoc(/** ... */) 작성을 권장합니다 (@params 생략, 필요시 @example 작성).
 미완성 작업은 // TODO: 내용 형식을 사용합니다.
+
+7. 🎨 Tailwind 클래스 사용 규칙
+- 임의값(`w-[...]`, `px-[...]`, `rounded-[...]`, `text-[...]`, `bg-[#...]`)보다 Tailwind 공식 스케일 클래스를 우선 사용합니다.
+- 우선순위: `기본 Tailwind 유틸리티` > `tailwind.config.js에 정의된 토큰` > `불가피한 임의값`.
+- 불가피한 임의값은 다음 조건을 모두 만족해야 합니다.
+  - 디자인 요구사항을 스케일 값으로 대체할 수 없음
+  - 근사치 사용 시 UI 회귀가 발생함
+  - PR 설명에 사용 이유를 명시함
+- 치환 예시
+  - `h-[48px]` → `h-12`
+  - `gap-[10px]` → `gap-2.5`
+  - `pl-[2px]` / `px-[2px]` → `pl-0.5` / `px-0.5`
+  - `rounded-[4px]` / `rounded-[8px]` → `rounded` / `rounded-lg`
+  - `bg-[#4a2dc0]`(hover) → `hover:brightness-95` 또는 프로젝트 토큰 색상
+
+8. ✅ Tailwind 임의값 리팩토링 전수조사 (2026-05-28)
+- 조사 범위: `src/**/*.{ts,tsx}`
+- 조사 패턴: 크기/간격/라운드/색상 계열의 Tailwind 임의값 유틸리티
+- 결과 요약
+  - 임의값 사용 파일: 53개
+  - 이 중 `src/shared/components/common` 사용 파일: 12개
+- 1차 리팩토링 대상(`common`)에서 우선 치환 완료
+  - `Button`, `ConfirmButton`, `Pagination`
+  - `Input`, `Textarea`, `DateInput`
+  - `DropdownProgress`, `DropdownAssignee`, `ModalOverlay`
+  - `TagChip`, `StatusChip`, `CountCardChip`
+- 잔여 예외(스케일 미지원값) 예시
+  - `md:h-[30px]`, `md:w-[72px]` (`ConfirmButton`)

@@ -28,7 +28,7 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-[10px] transition-colors cursor-pointer disabled:cursor-not-allowed',
+  'inline-flex items-center justify-center gap-2.5 transition-colors cursor-pointer disabled:cursor-not-allowed',
   {
     variants: {
       /**
@@ -37,7 +37,7 @@ const buttonVariants = cva(
        */
       variant: {
         primary:
-          'bg-brand-violet text-white hover:bg-[#4a2dc0] disabled:bg-gray-400',
+          'bg-brand-violet text-white hover:brightness-95 disabled:bg-gray-400',
         secondary:
           'bg-white text-gray-700 border border-gray-300 hover:bg-brand-violet-light disabled:text-gray-400',
       },
@@ -45,9 +45,9 @@ const buttonVariants = cva(
        * 공통 semantic 크기입니다.
        */
       size: {
-        sm: 'h-[32px] rounded-[6px] px-3 text-md-medium',
-        md: 'h-[40px] rounded-[8px] px-4 text-md-medium',
-        lg: 'h-[48px] rounded-[8px] px-6 text-lg-medium',
+        sm: 'h-8 rounded-md px-3 text-md-medium',
+        md: 'h-10 rounded-lg px-4 text-md-medium',
+        lg: 'h-12 rounded-lg px-6 text-lg-medium',
       },
     },
     defaultVariants: {

@@ -106,14 +106,13 @@ export default function Pagination({
   const isPrevDisabled = currentPage <= 1;
   const isNextDisabled = currentPage >= totalPages;
 
-  const containerSize =
-    size === 'sm' ? 'w-[72px] h-[36px]' : 'w-[80px] h-[40px]';
-  const btnSize = size === 'sm' ? 'w-[36px] h-[36px]' : 'w-[40px] h-[40px]';
+  const containerSize = size === 'sm' ? 'w-18 h-9' : 'w-20 h-10';
+  const btnSize = size === 'sm' ? 'w-9 h-9' : 'w-10 h-10';
 
   return (
     <div
       className={cn(
-        'inline-flex items-center overflow-hidden rounded-[4px] border border-gray-300',
+        'inline-flex items-center overflow-hidden rounded border border-gray-300',
         containerSize,
         className,
       )}

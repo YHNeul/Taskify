@@ -17,7 +17,7 @@ export default function CountCardChip({ count = 0 }: Props) {
   return (
     <>
       <div className="w-fit min-h-5 rounded bg-gray-200 px-1 py-1">
-        <p className="text-gray-500 text-xs-medium leading-3 px-[2px]">
+        <p className="text-gray-500 text-xs-medium leading-3 px-0.5">
           {count}
         </p>
       </div>
