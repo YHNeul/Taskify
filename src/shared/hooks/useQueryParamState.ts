@@ -44,21 +44,26 @@ export const useQueryParamState = <T>({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const searchParamsString = searchParams.toString();
 
   const value = useMemo(() => {
-    const rawValue = searchParams.get(key);
+    const params = new URLSearchParams(searchParamsString);
+    const rawValue = params.get(key);
     if (parse) return parse(rawValue);
     return (rawValue ?? defaultValue) as T;
-  }, [defaultValue, key, parse, searchParams]);
+  }, [defaultValue, key, parse, searchParamsString]);
 
   const setValue = useCallback(
     (action: SetStateAction<T>) => {
+      const params = new URLSearchParams(searchParamsString);
+      const rawValue = params.get(key);
+      const prevValue = parse
+        ? parse(rawValue)
+        : ((rawValue ?? defaultValue) as T);
       const nextValue =
         typeof action === 'function'
-          ? (action as (prev: T) => T)(value)
+          ? (action as (prev: T) => T)(prevValue)
           : action;
-
-      const params = new URLSearchParams(searchParams);
 
       const serialized = serialize
         ? serialize(nextValue)
@@ -73,6 +78,8 @@ export const useQueryParamState = <T>({
       }
 
       const query = params.toString();
+      if (query === searchParamsString) return;
+
       const url = query ? `${pathname}?${query}` : pathname;
 
       if (history === 'push') {
@@ -82,7 +89,16 @@ export const useQueryParamState = <T>({
 
       router.replace(url, { scroll: false });
     },
-    [history, key, pathname, router, searchParams, serialize, value],
+    [
+      defaultValue,
+      history,
+      key,
+      parse,
+      pathname,
+      router,
+      searchParamsString,
+      serialize,
+    ],
   );
 
   return [value, setValue];
