@@ -123,8 +123,6 @@ export default function EditCard({
     tags: [...(cardData.tags ?? [])],
   });
 
-  const [title, setTitle] = useState(cardData.title);
-  const [description, setDescription] = useState(cardData.description);
   const [columnId, setColumnId] = useState(cardData.columnId);
   const [dueDate, setDueDate] = useState<string | null>(cardData.dueDate);
   const [tags, setTags] = useState<string[]>([...(cardData.tags ?? [])]);
@@ -144,8 +142,8 @@ export default function EditCard({
   const inputRef = useRef<HTMLInputElement>(null);
   const {
     register,
+    watch,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<EditCardFormValues>({
     resolver: zodResolver(editCardSchema),
@@ -155,6 +153,7 @@ export default function EditCard({
       description: cardData.description,
     },
   });
+  const [title, description] = watch(['title', 'description']);
 
   /** 변경된 필드만 감지 */
   const getChangedFields = () => {
@@ -324,14 +323,6 @@ export default function EditCard({
             placeholder="제목을 입력해 주세요"
             required
             {...register('title')}
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-              setValue('title', e.target.value, {
-                shouldDirty: true,
-                shouldValidate: true,
-              });
-            }}
             isError={!!errors.title}
             errorMessage={errors.title?.message}
           />
@@ -342,14 +333,6 @@ export default function EditCard({
             placeholder="설명을 입력해 주세요"
             required
             {...register('description')}
-            value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-              setValue('description', e.target.value, {
-                shouldDirty: true,
-                shouldValidate: true,
-              });
-            }}
             isError={!!errors.description}
             errorMessage={errors.description?.message}
           />
