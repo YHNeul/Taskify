@@ -11,12 +11,26 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Eye, EyeOff } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import Input from '@/shared/components/common/Input/Input';
 import Button from '@/shared/components/common/Button';
 import AlertModal from '@/shared/components/modal/AlertModal';
 
-// 이메일 정규식
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const loginSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .min(1, '이메일을 입력해 주세요.')
+    .email('이메일 형식으로 작성해 주세요.'),
+  password: z
+    .string()
+    .min(1, '비밀번호를 입력해 주세요.')
+    .min(8, '8자 이상 입력해 주세요.'),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 function LoginPageContent() {
   const router = useRouter();
@@ -24,69 +38,26 @@ function LoginPageContent() {
   const nextRaw = searchParams.get('next');
   const nextPath = nextRaw?.startsWith('/') ? nextRaw : '/mydashboard';
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const [isEmailError, setIsEmailError] = useState(false);
-  const [isPasswordError, setIsPasswordError] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isButtonDisabled = !isValid || isSubmitting;
 
-  const isButtonDisabled =
-    !email.trim() ||
-    !password.trim() ||
-    isEmailError ||
-    isPasswordError ||
-    isSubmitting;
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
-
-    if (!value) {
-      setIsEmailError(false);
-      return;
-    }
-
-    setIsEmailError(!emailRegex.test(value));
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPassword(value);
-
-    if (!value) {
-      setIsPasswordError(false);
-      return;
-    }
-
-    setIsPasswordError(value.length < 8);
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    let hasError = false;
-
-    if (!emailRegex.test(email)) {
-      setIsEmailError(true);
-      hasError = true;
-    }
-
-    if (password.length < 8) {
-      setIsPasswordError(true);
-      hasError = true;
-    }
-
-    if (hasError || isSubmitting) return;
-
-    setIsSubmitting(true);
-
+  const handleLogin = async ({ email, password }: LoginFormValues) => {
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
@@ -116,8 +87,6 @@ function LoginPageContent() {
     } catch {
       setAlertMessage('서버 오류가 발생했습니다.');
       setIsAlertOpen(true);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -148,30 +117,26 @@ function LoginPageContent() {
           </Link>
 
           <form
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(handleLogin)}
             noValidate
             className="w-full flex flex-col gap-4"
           >
             <Input
               label="이메일"
               type="text"
-              value={email}
-              onChange={handleEmailChange}
-              isError={isEmailError}
-              errorMessage={
-                isEmailError ? '이메일 형식으로 작성해 주세요.' : undefined
-              }
+              placeholder="이메일을 입력해 주세요"
+              {...register('email')}
+              isError={!!errors.email}
+              errorMessage={errors.email?.message}
             />
 
             <Input
               label="비밀번호"
               type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={handlePasswordChange}
-              isError={isPasswordError}
-              errorMessage={
-                isPasswordError ? '8자 이상 입력해 주세요.' : undefined
-              }
+              placeholder="비밀번호를 입력해 주세요"
+              {...register('password')}
+              isError={!!errors.password}
+              errorMessage={errors.password?.message}
               rightIcon={
                 <button
                   type="button"
