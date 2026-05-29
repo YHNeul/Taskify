@@ -1,18 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useLogout } from '@/shared/hooks/useLogout';
 
 export default function LandingLogoutButton() {
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' });
-    } finally {
-      router.replace('/');
-      router.refresh();
-    }
-  };
+  const handleLogout = useLogout('/');
 
   return (
     <button type="button" onClick={handleLogout} className="hover:opacity-80">
