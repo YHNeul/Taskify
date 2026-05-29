@@ -11,6 +11,9 @@ import Image from 'next/image';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
 import AlertModal from '@/shared/components/modal/AlertModal';
@@ -24,6 +27,28 @@ import {
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { useMyInfoQuery } from '@/shared/hooks/useMyInfoQuery';
 
+const profileSchema = z.object({
+  nickname: z
+    .string()
+    .trim()
+    .min(1, '닉네임을 입력해 주세요.')
+    .max(10, '열 자 이하로 작성해주세요.'),
+});
+
+const passwordSchema = z
+  .object({
+    currentPassword: z.string().min(1, '현재 비밀번호를 입력해 주세요.'),
+    newPassword: z.string().min(1, '새 비밀번호를 입력해 주세요.'),
+    confirmPassword: z.string().min(1, '새 비밀번호를 한 번 더 입력해 주세요.'),
+  })
+  .refine((value) => value.newPassword === value.confirmPassword, {
+    message: '비밀번호가 일치하지 않습니다.',
+    path: ['confirmPassword'],
+  });
+
+type ProfileFormValues = z.infer<typeof profileSchema>;
+type PasswordFormValues = z.infer<typeof passwordSchema>;
+
 export default function MyPageContent() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -32,40 +57,61 @@ export default function MyPageContent() {
   const { data: myInfo, isLoading } = useMyInfoQuery();
 
   const initialEmail = myInfo?.email ?? '';
-  const initialNickname = myInfo?.nickname ?? '';
   const initialProfileImageUrl = myInfo?.profileImageUrl ?? null;
 
-  const [nickname, setNickname] = useState<string | undefined>(undefined);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | undefined>(
     undefined,
   );
   const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
 
   // NOTE: 서버에서 받아온 초기값과 사용자가 수정 중인 값을 분리해서 다루기 위한 값
-  const currentNickname = nickname ?? initialNickname;
   const currentPreviewImageUrl = previewImageUrl ?? initialProfileImageUrl;
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-
-  // 비밀번호 state
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // 에러 상태
-  const [isPasswordMismatch, setIsPasswordMismatch] = useState(false);
+  const {
+    register: registerProfile,
+    handleSubmit: handleProfileSubmit,
+    reset: resetProfileForm,
+    formState: {
+      errors: profileErrors,
+      isDirty: isProfileNicknameDirty,
+      isSubmitting: isProfileSubmitting,
+    },
+  } = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    mode: 'onChange',
+    defaultValues: {
+      nickname: '',
+    },
+  });
 
-  const isNicknameChanged =
-    nickname !== undefined && currentNickname !== initialNickname;
+  const {
+    register: registerPassword,
+    handleSubmit: handlePasswordSubmit,
+    reset: resetPasswordForm,
+    formState: {
+      errors: passwordErrors,
+      isValid: isPasswordFormValid,
+      isSubmitting: isPasswordSubmitting,
+    },
+  } = useForm<PasswordFormValues>({
+    resolver: zodResolver(passwordSchema),
+    mode: 'onChange',
+    defaultValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    },
+  });
+
+  const isNicknameChanged = isProfileNicknameDirty;
   const isImageChanged = selectedImageFile !== null;
   const isProfileChanged = isNicknameChanged || isImageChanged;
-
-  const isPasswordFormValid =
-    currentPassword !== '' && newPassword !== '' && confirmPassword !== '';
 
   // NOTE: 이미지 업로드와 프로필 수정은 요청 흐름이 달라 mutation을 분리했습니다.
   const uploadProfileImageMutation = useMutation({
@@ -86,12 +132,14 @@ export default function MyPageContent() {
     mutationFn: changePassword,
     onSuccess: () => {
       openAlert('비밀번호가 변경되었습니다.');
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      setIsPasswordMismatch(false);
+      resetPasswordForm();
     },
   });
+
+  useEffect(() => {
+    if (!myInfo?.nickname) return;
+    resetProfileForm({ nickname: myInfo.nickname });
+  }, [myInfo?.nickname, resetProfileForm]);
 
   // NOTE: 이미지 미리보기용으로 생성한 object URL이 남지 않도록 정리합니다.
   useEffect(() => {
@@ -124,50 +172,16 @@ export default function MyPageContent() {
     setAlertMessage(null);
   };
 
-  const handleCurrentPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCurrentPassword(e.target.value);
-  };
-
-  const handleNewPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewPassword(e.target.value);
-  };
-
-  const handleConfirmPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setConfirmPassword(e.target.value);
-  };
-
-  // blur 시 검증
-  const handleConfirmPasswordBlur = () => {
-    if (newPassword !== confirmPassword) {
-      setIsPasswordMismatch(true);
-    } else {
-      setIsPasswordMismatch(false);
-    }
-  };
-
   // 변경 버튼 클릭
-  const handlePasswordChange = async () => {
-    if (!isPasswordFormValid) {
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setIsPasswordMismatch(true);
-      return;
-    }
-
+  const onPasswordSubmit = async (values: PasswordFormValues) => {
     try {
       await changePasswordMutation.mutateAsync({
-        password: currentPassword,
-        newPassword,
+        password: values.currentPassword,
+        newPassword: values.newPassword,
       });
     } catch {
       openAlert('비밀번호 변경에 실패했습니다.');
     }
-  };
-
-  const handleNicknameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setNickname(event.target.value);
   };
 
   const handleProfileImageButtonClick = () => {
@@ -190,7 +204,7 @@ export default function MyPageContent() {
     event.target.value = '';
   };
 
-  const handleProfileSave = async () => {
+  const onProfileSubmit = async ({ nickname }: ProfileFormValues) => {
     if (!isProfileChanged) {
       return;
     }
@@ -205,7 +219,7 @@ export default function MyPageContent() {
       }
 
       await updateMyInfoMutation.mutateAsync({
-        nickname: currentNickname,
+        nickname: nickname.trim(),
         profileImageUrl,
       });
 
@@ -303,17 +317,18 @@ export default function MyPageContent() {
 
               <Input
                 label="닉네임"
-                value={currentNickname}
-                onChange={handleNicknameChange}
                 placeholder="닉네임 입력"
                 maxLength={10}
+                {...registerProfile('nickname')}
+                isError={!!profileErrors.nickname}
+                errorMessage={profileErrors.nickname?.message}
               />
 
               <Button
                 size="lg"
                 className="h-12 w-full"
-                disabled={!isProfileChanged}
-                onClick={handleProfileSave}
+                disabled={!isProfileChanged || isProfileSubmitting}
+                onClick={handleProfileSubmit(onProfileSubmit)}
               >
                 저장
               </Button>
@@ -331,8 +346,9 @@ export default function MyPageContent() {
               label="현재 비밀번호"
               type={showCurrentPassword ? 'text' : 'password'}
               placeholder="비밀번호 입력"
-              value={currentPassword}
-              onChange={handleCurrentPasswordChange}
+              {...registerPassword('currentPassword')}
+              isError={!!passwordErrors.currentPassword}
+              errorMessage={passwordErrors.currentPassword?.message}
               rightIcon={renderPasswordToggleButton(showCurrentPassword, () =>
                 setShowCurrentPassword((prev) => !prev),
               )}
@@ -342,8 +358,9 @@ export default function MyPageContent() {
               label="새 비밀번호"
               type={showNewPassword ? 'text' : 'password'}
               placeholder="새 비밀번호 입력"
-              value={newPassword}
-              onChange={handleNewPasswordChange}
+              {...registerPassword('newPassword')}
+              isError={!!passwordErrors.newPassword}
+              errorMessage={passwordErrors.newPassword?.message}
               rightIcon={renderPasswordToggleButton(showNewPassword, () =>
                 setShowNewPassword((prev) => !prev),
               )}
@@ -354,15 +371,9 @@ export default function MyPageContent() {
                 label="새 비밀번호 확인"
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder="새 비밀번호 입력"
-                value={confirmPassword}
-                onChange={handleConfirmPasswordChange}
-                onBlur={handleConfirmPasswordBlur}
-                isError={isPasswordMismatch}
-                errorMessage={
-                  isPasswordMismatch
-                    ? '비밀번호가 일치하지 않습니다.'
-                    : undefined
-                }
+                {...registerPassword('confirmPassword')}
+                isError={!!passwordErrors.confirmPassword}
+                errorMessage={passwordErrors.confirmPassword?.message}
                 rightIcon={renderPasswordToggleButton(showConfirmPassword, () =>
                   setShowConfirmPassword((prev) => !prev),
                 )}
@@ -374,8 +385,8 @@ export default function MyPageContent() {
             <Button
               size="lg"
               className="h-12 w-full"
-              disabled={!isPasswordFormValid}
-              onClick={handlePasswordChange}
+              disabled={!isPasswordFormValid || isPasswordSubmitting}
+              onClick={handlePasswordSubmit(onPasswordSubmit)}
             >
               변경
             </Button>
