@@ -137,9 +137,9 @@ export default function MyPageContent() {
   });
 
   useEffect(() => {
-    if (!myInfo?.nickname) return;
+    if (!myInfo?.nickname || isProfileNicknameDirty) return;
     resetProfileForm({ nickname: myInfo.nickname });
-  }, [myInfo?.nickname, resetProfileForm]);
+  }, [myInfo?.nickname, resetProfileForm, isProfileNicknameDirty]);
 
   // NOTE: 이미지 미리보기용으로 생성한 object URL이 남지 않도록 정리합니다.
   useEffect(() => {
