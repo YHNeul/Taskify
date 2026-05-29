@@ -6,13 +6,14 @@ import { ConfirmModal } from '@/shared/components/modal';
 import { Member } from '@/shared/types/dashboard';
 import Image from 'next/image';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { deleteMember } from '@/shared/apis/dashboard';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
 import { usePaginationSync } from '@/shared/hooks/usePaginationSync';
 import { useDashboardMembersQuery } from '@/shared/hooks/useDashboardMembersQuery';
 import { useMeQuery } from '@/shared/hooks/useMeQuery';
+import { useDashboardQuery } from '@/shared/hooks/useDashboardQuery';
 import {
   useQueryParamState,
   parsePositiveIntParam,
@@ -33,20 +34,25 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
   });
   const [isImageError, setIsImageError] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   const queryClient = useQueryClient();
+  const dashboardIdNumber = Number(dashboardId);
 
   const dashboardMembers = useDashboardMembersQuery({
-    dashboardId: Number(dashboardId),
+    dashboardId: dashboardIdNumber,
     page: currentPage,
     size: ITEM_PER_PAGE,
   });
+  const { data: dashboard } = useDashboardQuery(dashboardIdNumber);
+  const isDashboardOwner = dashboard?.createdByMe ?? false;
 
   const deleteMutation = useMutation({
     mutationFn: (memberId: number) => deleteMember(memberId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.members(Number(dashboardId)),
+        queryKey: QUERY_KEYS.members(dashboardIdNumber),
       });
+      setToastMessage('구성원이 삭제되었습니다.');
     },
     onError: () => {
       alert('멤버 삭제에 실패했습니다.');
@@ -63,6 +69,18 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
   );
 
   usePaginationSync(totalPages, setCurrentPage);
+
+  useEffect(() => {
+    if (!toastMessage) return;
+
+    const timerId = window.setTimeout(() => {
+      setToastMessage(null);
+    }, 2500);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [toastMessage]);
 
   const handleDeleteConfirm = () => {
     if (selectedMemberId) {
@@ -136,7 +154,7 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
                   </span>
                 </td>
                 <td className="pr-4 text-right md:pr-7">
-                  {!isMe && (
+                  {isDashboardOwner && !isMe && (
                     <Button
                       variant="secondary"
                       size="sm"
@@ -157,13 +175,19 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
       {selectedMemberId !== null && (
         <ModalOverlay onClose={() => setSelectedMemberId(null)}>
           <ConfirmModal
-            message="정말 삭제하시겠습니까?"
-            cancelText="아니요"
-            confirmText="네"
+            message="해당 구성원을 삭제하시겠습니까?"
+            cancelText="취소"
+            confirmText="확인"
             onConfirm={handleDeleteConfirm}
             onCancel={() => setSelectedMemberId(null)}
           />
         </ModalOverlay>
+      )}
+
+      {toastMessage && (
+        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-gray-700 px-4 py-3 text-sm-medium text-white shadow-lg md:bottom-auto md:top-6">
+          {toastMessage}
+        </div>
       )}
     </div>
   );
