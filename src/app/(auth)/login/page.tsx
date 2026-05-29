@@ -57,7 +57,7 @@ function LoginPageContent() {
 
   const isButtonDisabled = !isValid || isSubmitting;
 
-  const onSubmit = async ({ email, password }: LoginFormValues) => {
+  const handleLogin = async ({ email, password }: LoginFormValues) => {
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
@@ -117,7 +117,7 @@ function LoginPageContent() {
           </Link>
 
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(handleLogin)}
             noValidate
             className="w-full flex flex-col gap-4"
           >
