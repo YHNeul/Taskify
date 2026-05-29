@@ -153,7 +153,8 @@ export default function EditCard({
       description: cardData.description,
     },
   });
-  const [title, description] = watch(['title', 'description']);
+  const title = watch('title');
+  const description = watch('description');
 
   /** 변경된 필드만 감지 */
   const getChangedFields = () => {
