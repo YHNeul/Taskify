@@ -298,20 +298,21 @@ export default function EditCard({
                 defaultAssignee={assignee}
                 onSelect={(id) => {
                   setSelectedMemberId(id);
+                  if (id === null) {
+                    setAssignee(null);
+                    return;
+                  }
+                  const selectedMember = members.find(
+                    (member) => member.userId === id,
+                  );
                   setAssignee(
-                    id === null
-                      ? null
-                      : members.find((member) => member.userId === id)
-                        ? {
-                            id,
-                            nickname:
-                              members.find((member) => member.userId === id)
-                                ?.nickname ?? '',
-                            profileImageUrl:
-                              members.find((member) => member.userId === id)
-                                ?.profileImageUrl ?? null,
-                          }
-                        : null,
+                    selectedMember
+                      ? {
+                          id,
+                          nickname: selectedMember.nickname,
+                          profileImageUrl: selectedMember.profileImageUrl,
+                        }
+                      : null,
                   );
                 }}
               />
