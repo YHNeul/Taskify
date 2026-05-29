@@ -25,6 +25,7 @@ import {
   changePassword,
 } from '@/shared/apis/user';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
+import { useLogout } from '@/shared/hooks/useLogout';
 import { useMyInfoQuery } from '@/shared/hooks/useMyInfoQuery';
 
 const profileSchema = z.object({
@@ -53,6 +54,7 @@ export default function MyPageContent() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const queryClient = useQueryClient();
+  const handleLogout = useLogout('/');
 
   const { data: myInfo, isLoading } = useMyInfoQuery();
 
@@ -227,15 +229,6 @@ export default function MyPageContent() {
       setPreviewImageUrl(undefined);
     } catch {
       openAlert('프로필 저장 중 오류가 발생했습니다.');
-    }
-  };
-
-  // NOTE: 로그아웃 처리 (서버 쿠키 삭제 후 메인페이지 이동)
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' });
-    } finally {
-      window.location.href = '/';
     }
   };
 
