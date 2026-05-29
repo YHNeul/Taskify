@@ -14,7 +14,9 @@
 
 import { Textarea } from '@/shared/components/common/Input';
 import { createComments } from '@/shared/apis/dashboard';
-import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 interface CommentsProps {
   cardId: number;
@@ -23,43 +25,60 @@ interface CommentsProps {
   onSuccess: () => void;
 }
 
+const commentsSchema = z.object({
+  content: z
+    .string()
+    .trim()
+    .min(1, '댓글을 입력해 주세요.')
+    .max(500, '댓글은 500자 이하로 입력해 주세요.'),
+});
+
+type CommentsFormValues = z.infer<typeof commentsSchema>;
+
 export default function CommentsForm({
   cardId,
   columnId,
   dashboardId,
   onSuccess,
 }: CommentsProps) {
-  const [content, setContent] = useState('');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting, isValid },
+  } = useForm<CommentsFormValues>({
+    resolver: zodResolver(commentsSchema),
+    mode: 'onChange',
+    defaultValues: {
+      content: '',
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!content.trim()) return;
-
+  const onSubmit = async ({ content }: CommentsFormValues) => {
     try {
       await createComments({
-        content,
+        content: content.trim(),
         cardId,
         columnId,
         dashboardId,
       });
       onSuccess();
-      setContent('');
+      reset();
     } catch (error) {
       console.error('댓글 생성 실패', error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Textarea
-        name="content"
         label="댓글"
         placeholder="댓글 작성하기"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
+        {...register('content')}
+        isError={!!errors.content}
+        errorMessage={errors.content?.message}
         buttonText="입력"
-        buttonDisabled={!content.trim()}
+        buttonDisabled={!isValid || isSubmitting}
       />
     </form>
   );
