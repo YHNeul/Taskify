@@ -149,7 +149,7 @@ export default function CreateCard({
     (isMembersError ? '멤버 조회에 문제가 발생했습니다.' : null);
 
   /** 카드 생성 */
-  const { mutateAsync: submitCard, isPending: isSubmitting } = useMutation({
+  const { mutate: submitCard, isPending: isSubmitting } = useMutation({
     mutationFn: async ({ title, description }: CreateCardFormValues) => {
       const imageUrl = imageFile
         ? (await uploadCardImage(columnId, imageFile)).imageUrl
