@@ -158,8 +158,8 @@ export default function CreateCard({
       return createCard({
         dashboardId,
         columnId,
-        title: title.trim(),
-        description: description.trim(),
+        title,
+        description,
         ...(selectedMemberId && { assigneeUserId: selectedMemberId }),
         ...(formData.tags.length > 0 && { tags: formData.tags }),
         ...(formData.dueDate && { dueDate: formData.dueDate }),
