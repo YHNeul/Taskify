@@ -32,11 +32,11 @@ function SignupPageContent() {
     isSubmitting,
     isAlertOpen,
     alertMessage,
-    handleEmailChange,
-    handleNicknameChange,
-    handlePasswordChange,
-    handlePasswordConfirmChange,
-    handleAgreeChange,
+    setEmail,
+    setNickname,
+    setPassword,
+    setPasswordConfirm,
+    setAgree,
     setShowPassword,
     setShowPasswordConfirm,
     handleSubmit,
@@ -86,7 +86,7 @@ function SignupPageContent() {
                   type="text"
                   placeholder="이메일을 입력해 주세요"
                   value={email}
-                  onChange={handleEmailChange}
+                  onChange={(e) => setEmail(e.target.value)}
                   isError={!!errors.email}
                   errorMessage={errors.email || undefined}
                   className="h-auth-input"
@@ -97,7 +97,7 @@ function SignupPageContent() {
                   type="text"
                   placeholder="닉네임을 입력해 주세요"
                   value={nickname}
-                  onChange={handleNicknameChange}
+                  onChange={(e) => setNickname(e.target.value)}
                   isError={!!errors.nickname}
                   errorMessage={errors.nickname || undefined}
                   className="h-auth-input"
@@ -108,7 +108,7 @@ function SignupPageContent() {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="비밀번호를 입력해 주세요"
                   value={password}
-                  onChange={handlePasswordChange}
+                  onChange={(e) => setPassword(e.target.value)}
                   isError={!!errors.password}
                   errorMessage={errors.password || undefined}
                   className="h-auth-input"
@@ -131,7 +131,7 @@ function SignupPageContent() {
                   type={showPasswordConfirm ? 'text' : 'password'}
                   placeholder="비밀번호를 입력해 주세요"
                   value={passwordConfirm}
-                  onChange={handlePasswordConfirmChange}
+                  onChange={(e) => setPasswordConfirm(e.target.value)}
                   isError={!!errors.passwordConfirm}
                   errorMessage={errors.passwordConfirm || undefined}
                   className="h-auth-input"
@@ -156,7 +156,7 @@ function SignupPageContent() {
                 <Checkbox
                   label="이용약관에 동의합니다."
                   checked={agree}
-                  onChange={handleAgreeChange}
+                  onChange={(e) => setAgree(e.target.checked)}
                 />
                 {errors.agree && (
                   <p className="mt-1 text-xs text-red">{errors.agree}</p>
