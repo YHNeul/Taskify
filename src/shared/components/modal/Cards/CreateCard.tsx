@@ -28,8 +28,11 @@ import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { useDashboardMembersQuery } from '@/shared/hooks/useDashboardMembersQuery';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-interface CreateCardForm {
+interface CreateCardExtraForm {
   title: string;
   description: string;
   tags: string[];
@@ -37,12 +40,19 @@ interface CreateCardForm {
   imageUrl?: string;
 }
 
-const INITIAL_FORM: CreateCardForm = {
+const INITIAL_FORM: CreateCardExtraForm = {
   title: '',
   description: '',
   tags: [],
   dueDate: null,
 };
+
+const createCardSchema = z.object({
+  title: z.string().trim().min(1, '제목을 입력해 주세요.'),
+  description: z.string().trim().min(1, '설명을 입력해 주세요.'),
+});
+
+type CreateCardFormValues = z.infer<typeof createCardSchema>;
 
 interface CreateCardProps {
   dashboardId: number;
@@ -110,12 +120,24 @@ export default function CreateCard({
   onModalClose,
 }: CreateCardProps) {
   const queryClient = useQueryClient();
-  const [formData, setFormData] = useState<CreateCardForm>(INITIAL_FORM);
+  const [formData, setFormData] = useState<CreateCardExtraForm>(INITIAL_FORM);
   const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [tagInput, setTagInput] = useState('');
   const [isTagFocused, setIsTagFocused] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // API 호출 에러 처리
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<CreateCardFormValues>({
+    resolver: zodResolver(createCardSchema),
+    mode: 'onChange',
+    defaultValues: {
+      title: '',
+      description: '',
+    },
+  });
 
   /** 멤버 목록 조회 */
   const {
@@ -133,7 +155,7 @@ export default function CreateCard({
 
   /** 카드 생성 */
   const { mutateAsync: submitCard, isPending: isSubmitting } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async ({ title, description }: CreateCardFormValues) => {
       const imageUrl = imageFile
         ? (await uploadCardImage(columnId, imageFile)).imageUrl
         : undefined;
@@ -141,8 +163,8 @@ export default function CreateCard({
       return createCard({
         dashboardId,
         columnId,
-        title: formData.title,
-        description: formData.description,
+        title: title.trim(),
+        description: description.trim(),
         ...(selectedMemberId && { assigneeUserId: selectedMemberId }),
         ...(formData.tags.length > 0 && { tags: formData.tags }),
         ...(formData.dueDate && { dueDate: formData.dueDate }),
@@ -160,9 +182,8 @@ export default function CreateCard({
     },
   });
 
-  const handleSubmit = async () => {
-    if (!formData.title || !formData.description) return;
-    await submitCard();
+  const onSubmit = async (values: CreateCardFormValues) => {
+    await submitCard(values);
   };
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -199,111 +220,113 @@ export default function CreateCard({
             <h2 className="text-2xl-bold wrap-break-word">할 일 생성</h2>
           </header>
 
-          {/* 담당자 */}
-          <div className="">
-            <p className={`${baseFontStyle}`}>담당자</p>
-            <DropdownAssignee
-              members={members}
-              onSelect={(id) => {
-                setSelectedMemberId(id);
-              }}
-            />
-          </div>
-
-          {/* 제목 */}
-          <Input
-            label="제목"
-            placeholder="제목을 입력해 주세요"
-            required={true}
-            value={formData.title}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, title: e.target.value }))
-            }
-          />
-
-          {/* 설명 */}
-          <Textarea
-            label="설명"
-            placeholder="설명을 입력해 주세요"
-            required={true}
-            value={formData.description}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, description: e.target.value }))
-            }
-          />
-
-          {/* 마감일 */}
-          <DateInput
-            fontStyle={baseFontStyle}
-            onDateChange={(date) => {
-              setFormData((prev) => ({
-                ...prev,
-                dueDate: date ? formatDateTime(date.toISOString()) : null,
-              }));
-            }}
-          />
-
-          {/* 태그 */}
-          <div className="">
-            <p className={`${baseFontStyle}`}>태그</p>
-            <div
-              className={`flex flex-wrap gap-1 items-center w-full min-h-12 px-4 py-2 text-sm rounded-md border cursor-text outline-none transition ${
-                isTagFocused ? 'border-brand-violet' : 'border-gray-300'
-              }`}
-              onClick={() => inputRef.current?.focus()}
-            >
-              {/* 저장된 태그칩 */}
-              {formData.tags.map((tag, index) => (
-                <TagChip
-                  key={index}
-                  label={tag}
-                  onClick={() => handleTagRemove(index)}
-                  className="cursor-pointer"
-                />
-              ))}
-
-              {/* 실제 인풋 */}
-              <input
-                ref={inputRef}
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={handleTagKeyDown}
-                onFocus={() => setIsTagFocused(true)}
-                onBlur={() => setIsTagFocused(false)}
-                className="bg-transparent outline-none flex-1 min-w-20 text-gray-700 text-lg-regular"
-                placeholder={
-                  formData.tags.length === 0 ? '태그 입력 후 Enter' : ''
-                }
+          <form
+            className="contents"
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+          >
+            {/* 담당자 */}
+            <div className="">
+              <p className={`${baseFontStyle}`}>담당자</p>
+              <DropdownAssignee
+                members={members}
+                onSelect={(id) => {
+                  setSelectedMemberId(id);
+                }}
               />
             </div>
-          </div>
 
-          {/* 이미지 */}
-          <div>
-            <p className={`${baseFontStyle}`}>이미지</p>
-            <ImageUploaderInput onUpload={(file) => setImageFile(file)} />
-          </div>
+            {/* 제목 */}
+            <Input
+              label="제목"
+              placeholder="제목을 입력해 주세요"
+              required={true}
+              {...register('title')}
+              isError={!!errors.title}
+              errorMessage={errors.title?.message}
+            />
 
-          {/* 생성,취소 버튼 */}
-          <div className="relative flex items-stretch gap-2 h-14">
-            <Button
-              variant="secondary"
-              className="flex-1"
-              onClick={onModalClose}
-            >
-              취소
-            </Button>
-            <Button
-              variant="primary"
-              className="flex-1"
-              onClick={handleSubmit}
-              disabled={
-                isSubmitting || !formData.title || !formData.description
-              }
-            >
-              {isSubmitting ? '생성 중...' : '생성'}
-            </Button>
-          </div>
+            {/* 설명 */}
+            <Textarea
+              label="설명"
+              placeholder="설명을 입력해 주세요"
+              required={true}
+              {...register('description')}
+              isError={!!errors.description}
+              errorMessage={errors.description?.message}
+            />
+
+            {/* 마감일 */}
+            <DateInput
+              fontStyle={baseFontStyle}
+              onDateChange={(date) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  dueDate: date ? formatDateTime(date.toISOString()) : null,
+                }));
+              }}
+            />
+
+            {/* 태그 */}
+            <div className="">
+              <p className={`${baseFontStyle}`}>태그</p>
+              <div
+                className={`flex flex-wrap gap-1 items-center w-full min-h-12 px-4 py-2 text-sm rounded-md border cursor-text outline-none transition ${
+                  isTagFocused ? 'border-brand-violet' : 'border-gray-300'
+                }`}
+                onClick={() => inputRef.current?.focus()}
+              >
+                {/* 저장된 태그칩 */}
+                {formData.tags.map((tag, index) => (
+                  <TagChip
+                    key={index}
+                    label={tag}
+                    onClick={() => handleTagRemove(index)}
+                    className="cursor-pointer"
+                  />
+                ))}
+
+                {/* 실제 인풋 */}
+                <input
+                  ref={inputRef}
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagKeyDown}
+                  onFocus={() => setIsTagFocused(true)}
+                  onBlur={() => setIsTagFocused(false)}
+                  className="bg-transparent outline-none flex-1 min-w-20 text-gray-700 text-lg-regular"
+                  placeholder={
+                    formData.tags.length === 0 ? '태그 입력 후 Enter' : ''
+                  }
+                />
+              </div>
+            </div>
+
+            {/* 이미지 */}
+            <div>
+              <p className={`${baseFontStyle}`}>이미지</p>
+              <ImageUploaderInput onUpload={(file) => setImageFile(file)} />
+            </div>
+
+            {/* 생성,취소 버튼 */}
+            <div className="relative flex items-stretch gap-2 h-14">
+              <Button
+                variant="secondary"
+                className="flex-1"
+                onClick={onModalClose}
+              >
+                취소
+              </Button>
+              <Button
+                variant="primary"
+                className="flex-1"
+                type="submit"
+                disabled={isSubmitting || !isValid}
+              >
+                {isSubmitting ? '생성 중...' : '생성'}
+              </Button>
+            </div>
+          </form>
         </ModalBase>
 
         {/* API 호출 에러 처리 */}
