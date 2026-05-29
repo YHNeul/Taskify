@@ -33,16 +33,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 interface CreateCardExtraForm {
-  title: string;
-  description: string;
   tags: string[];
   dueDate: string | null;
-  imageUrl?: string;
 }
 
 const INITIAL_FORM: CreateCardExtraForm = {
-  title: '',
-  description: '',
   tags: [],
   dueDate: null,
 };
