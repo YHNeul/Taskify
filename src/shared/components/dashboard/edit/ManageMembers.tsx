@@ -6,7 +6,7 @@ import { ConfirmModal } from '@/shared/components/modal';
 import { Member } from '@/shared/types/dashboard';
 import Image from 'next/image';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { deleteMember } from '@/shared/apis/dashboard';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
@@ -53,7 +53,6 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
         queryKey: QUERY_KEYS.members(dashboardIdNumber),
       });
       setToastMessage('구성원이 삭제되었습니다.');
-      setTimeout(() => setToastMessage(null), 2500);
     },
     onError: () => {
       alert('멤버 삭제에 실패했습니다.');
@@ -70,6 +69,18 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
   );
 
   usePaginationSync(totalPages, setCurrentPage);
+
+  useEffect(() => {
+    if (!toastMessage) return;
+
+    const timerId = window.setTimeout(() => {
+      setToastMessage(null);
+    }, 2500);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [toastMessage]);
 
   const handleDeleteConfirm = () => {
     if (selectedMemberId) {
