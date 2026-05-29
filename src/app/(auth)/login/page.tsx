@@ -18,14 +18,12 @@ import Input from '@/shared/components/common/Input/Input';
 import Button from '@/shared/components/common/Button';
 import AlertModal from '@/shared/components/modal/AlertModal';
 
-// 이메일 정규식
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const loginSchema = z.object({
   email: z
     .string()
     .trim()
     .min(1, '이메일을 입력해 주세요.')
-    .regex(emailRegex, '이메일 형식으로 작성해 주세요.'),
+    .email('이메일 형식으로 작성해 주세요.'),
   password: z
     .string()
     .min(1, '비밀번호를 입력해 주세요.')
