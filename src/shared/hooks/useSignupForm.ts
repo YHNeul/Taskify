@@ -51,12 +51,6 @@ export const useSignupForm = () => {
     ? `/login?next=${encodeURIComponent(nextRaw)}`
     : '/login';
 
-  const [email, setEmailState] = useState('');
-  const [nickname, setNicknameState] = useState('');
-  const [password, setPasswordState] = useState('');
-  const [passwordConfirm, setPasswordConfirmState] = useState('');
-  const [agree, setAgreeState] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
@@ -66,6 +60,7 @@ export const useSignupForm = () => {
   const {
     handleSubmit: submitWithValidation,
     setValue,
+    watch,
     formState: { errors, isSubmitting, isValid },
   } = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
@@ -78,6 +73,12 @@ export const useSignupForm = () => {
       agree: false,
     },
   });
+
+  const email = watch('email') ?? '';
+  const nickname = watch('nickname') ?? '';
+  const password = watch('password') ?? '';
+  const passwordConfirm = watch('passwordConfirm') ?? '';
+  const agree = watch('agree') ?? false;
 
   const normalizedErrors: SignupErrors = {
     email: errors.email?.message ?? '',
@@ -164,22 +165,18 @@ export const useSignupForm = () => {
     alertMessage,
     setEmail: (value: string) => {
       clearTransientErrorState();
-      setEmailState(value);
       setValue('email', value, { shouldDirty: true, shouldValidate: true });
     },
     setNickname: (value: string) => {
       clearTransientErrorState();
-      setNicknameState(value);
       setValue('nickname', value, { shouldDirty: true, shouldValidate: true });
     },
     setPassword: (value: string) => {
       clearTransientErrorState();
-      setPasswordState(value);
       setValue('password', value, { shouldDirty: true, shouldValidate: true });
     },
     setPasswordConfirm: (value: string) => {
       clearTransientErrorState();
-      setPasswordConfirmState(value);
       setValue('passwordConfirm', value, {
         shouldDirty: true,
         shouldValidate: true,
@@ -187,7 +184,6 @@ export const useSignupForm = () => {
     },
     setAgree: (value: boolean) => {
       clearTransientErrorState();
-      setAgreeState(value);
       setValue('agree', value, { shouldDirty: true, shouldValidate: true });
     },
     setShowPassword,
