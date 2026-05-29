@@ -26,6 +26,7 @@ import {
 } from '@/shared/apis/user';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { useMyInfoQuery } from '@/shared/hooks/useMyInfoQuery';
+import { useDashboardStore } from '@/shared/store/useDashboardStore';
 
 const profileSchema = z.object({
   nickname: z
@@ -53,6 +54,9 @@ export default function MyPageContent() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const queryClient = useQueryClient();
+  const setActiveDashboardId = useDashboardStore(
+    (state) => state.setActiveDashboardId,
+  );
 
   const { data: myInfo, isLoading } = useMyInfoQuery();
 
@@ -235,7 +239,10 @@ export default function MyPageContent() {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
     } finally {
+      queryClient.clear();
+      setActiveDashboardId(null);
       router.replace('/');
+      router.refresh();
     }
   };
 

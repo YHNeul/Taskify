@@ -14,9 +14,11 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useQueryClient } from '@tanstack/react-query';
 import Input from '@/shared/components/common/Input/Input';
 import Button from '@/shared/components/common/Button';
 import AlertModal from '@/shared/components/modal/AlertModal';
+import { useDashboardStore } from '@/shared/store/useDashboardStore';
 
 const loginSchema = z.object({
   email: z
@@ -34,6 +36,10 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 function LoginPageContent() {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const setActiveDashboardId = useDashboardStore(
+    (state) => state.setActiveDashboardId,
+  );
   const searchParams = useSearchParams();
   const nextRaw = searchParams.get('next');
   const nextPath = nextRaw?.startsWith('/') ? nextRaw : '/mydashboard';
@@ -83,7 +89,11 @@ function LoginPageContent() {
         return;
       }
 
+      // 계정 전환 직후 이전 사용자 캐시가 보이지 않도록 로그인 성공 시 세션 상태를 초기화한다.
+      queryClient.clear();
+      setActiveDashboardId(null);
       router.push(nextPath);
+      router.refresh();
     } catch {
       setAlertMessage('서버 오류가 발생했습니다.');
       setIsAlertOpen(true);
