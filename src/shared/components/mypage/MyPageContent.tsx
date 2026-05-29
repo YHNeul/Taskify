@@ -75,7 +75,7 @@ export default function MyPageContent() {
 
   const {
     register: registerProfile,
-    handleSubmit: handleProfileSubmit,
+    handleSubmit: onProfileSubmit,
     reset: resetProfileForm,
     formState: {
       errors: profileErrors,
@@ -92,7 +92,7 @@ export default function MyPageContent() {
 
   const {
     register: registerPassword,
-    handleSubmit: handlePasswordSubmit,
+    handleSubmit: onPasswordSubmit,
     reset: resetPasswordForm,
     formState: {
       errors: passwordErrors,
@@ -173,7 +173,7 @@ export default function MyPageContent() {
   };
 
   // 변경 버튼 클릭
-  const onPasswordSubmit = async (values: PasswordFormValues) => {
+  const handlePasswordSubmit = async (values: PasswordFormValues) => {
     try {
       await changePasswordMutation.mutateAsync({
         password: values.currentPassword,
@@ -204,7 +204,7 @@ export default function MyPageContent() {
     event.target.value = '';
   };
 
-  const onProfileSubmit = async ({ nickname }: ProfileFormValues) => {
+  const handleProfileSubmit = async ({ nickname }: ProfileFormValues) => {
     if (!isProfileChanged) {
       return;
     }
@@ -328,7 +328,7 @@ export default function MyPageContent() {
                 size="lg"
                 className="h-12 w-full"
                 disabled={!isProfileChanged || isProfileSubmitting}
-                onClick={handleProfileSubmit(onProfileSubmit)}
+                onClick={onProfileSubmit(handleProfileSubmit)}
               >
                 저장
               </Button>
@@ -386,7 +386,7 @@ export default function MyPageContent() {
               size="lg"
               className="h-12 w-full"
               disabled={!isPasswordFormValid || isPasswordSubmitting}
-              onClick={handlePasswordSubmit(onPasswordSubmit)}
+              onClick={onPasswordSubmit(handlePasswordSubmit)}
             >
               변경
             </Button>
