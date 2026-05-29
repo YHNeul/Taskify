@@ -177,8 +177,8 @@ export default function CreateCard({
     },
   });
 
-  const onSubmit = async (values: CreateCardFormValues) => {
-    await submitCard(values);
+  const onSubmit = (values: CreateCardFormValues) => {
+    submitCard(values);
   };
 
   const inputRef = useRef<HTMLInputElement>(null);
