@@ -27,6 +27,7 @@ import clsx from 'clsx';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  labelClassName?: string;
   isError?: boolean;
   errorMessage?: string;
   rightIcon?: ReactNode;
@@ -37,6 +38,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export default function Input({
   label,
+  labelClassName,
   isError = false,
   errorMessage,
   className,
@@ -57,7 +59,7 @@ export default function Input({
       {label && !floatingLabel && (
         <label
           htmlFor={inputId}
-          className="mb-2 block text-2lg-medium text-gray-700"
+          className={clsx('mb-2 block text-2lg-medium text-gray-700', labelClassName)}
         >
           {label}
           {required && <span className="text-brand-violet pl-0.5">*</span>}

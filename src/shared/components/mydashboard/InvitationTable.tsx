@@ -2,6 +2,7 @@ import { Invitation } from '@/shared/types/dashboard';
 import ConfirmButton from '@/shared/components/common/ConfirmButton';
 import SearchIcon from '@/shared/components/common/Icon/SearchIcon';
 import { Input } from '@/shared/components/common/Input';
+import UserProfileImage from '@/shared/components/common/User/UserProfileImage';
 import { RefObject, useMemo, useRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { respondToInvitation } from '@/shared/apis/dashboard';
@@ -76,9 +77,9 @@ export default function InvitationTable({
   };
 
   return (
-    <div className="py-6 bg-white md:py-4.5 lg:py-8">
+    <div className="py-6 bg-white rounded-card-sm md:py-4.5 md:rounded-card-md lg:py-8 lg:rounded-card-lg">
       <div>
-        <h2 className="px-5 text-gray-700 text-lg-bold md:px-10 md:text-2xl-bold">
+        <h2 className="px-5 text-gray-700 text-md-bold md:px-10 md:text-lg-bold lg:text-xl-bold">
           초대받은 대시보드
         </h2>
       </div>
@@ -94,7 +95,7 @@ export default function InvitationTable({
             value={titleSearch}
             aria-label="대시보드 이름으로 검색"
             onChange={(e) => setTitleSearch(e.target.value)}
-            className="w-full px-11 border border-gray-300 rounded-md"
+            className="w-full px-11 border border-gray-300 rounded-xl"
           />
         </div>
       </div>
@@ -102,8 +103,13 @@ export default function InvitationTable({
       <div className="flex-1 max-h-screen overflow-y-auto custom-scrollbar mt-3 md:mt-6">
         {/** --- 1. 모바일 카드 레이아웃 (768px 미만) --- */}
         <div className="md:hidden px-4 flex flex-col">
-          {filteredData.map((item) => (
-            <div key={item.id} className="py-3.5 border-b border-gray-200">
+          {filteredData.map((item, index) => (
+            <div
+              key={item.id}
+              className={`py-3.5 ${
+                index !== filteredData.length - 1 ? 'border-b border-gray-200' : ''
+              }`}
+            >
               <div className="flex flex-col gap-1 mb-3.5">
                 <div className="flex items-center">
                   <span className="w-15 shrink-0 text-md-regular text-gray-400">
@@ -117,9 +123,18 @@ export default function InvitationTable({
                   <span className="w-15 shrink-0 text-md-regular text-gray-400">
                     초대자
                   </span>
-                  <span className="text-md-regular text-gray-700 truncate">
-                    {item.inviter.nickname}
-                  </span>
+                  <div className="flex min-w-0 items-center gap-1">
+                    <div className="shrink-0">
+                      <UserProfileImage
+                        profile={item.inviter}
+                        size={24}
+                        index={item.inviter.id}
+                      />
+                    </div>
+                    <span className="text-md-regular text-gray-700 truncate">
+                      {item.inviter.nickname}
+                    </span>
+                  </div>
                 </div>
               </div>
               <ConfirmButton
@@ -134,40 +149,58 @@ export default function InvitationTable({
           ))}
         </div>
         {/** --- 2. pc 테이블 레이아웃 (768px 이상) --- */}
-        <div className="hidden md:block">
+        <div className="hidden md:block md:px-7 lg:px-10">
           <table className="w-full table-fixed text-lg-regular text-gray-500">
             <thead className="sticky top-0 bg-white z-10 text-lg-regular text-gray-400">
               <tr>
-                <th className="pl-7 font-normal text-left lg:pl-20 w-2/5">
+                <th className="pl-0 font-normal text-left w-2/5">
                   이름
                 </th>
-                <th className="font-normal text-left w-1/5">초대자</th>
-                <th className="px-7 font-normal text-center">수락 여부</th>
+                <th className="pl-12 font-normal text-left w-1/4">초대자</th>
+                <th className="pr-3 font-normal text-right">
+                  <span className="ml-auto inline-block w-40 lg:w-44 text-center">
+                    수락 여부
+                  </span>
+                </th>
               </tr>
             </thead>
 
             <tbody>
-              {filteredData.map((item) => (
-                <tr key={item.id} className="border-gray-200 border-b">
-                  <td className="pl-7 pr-2.5 py-5 font-normal text-left lg:pl-20 lg:pr-5 text-gray-700">
+              {filteredData.map((item, index) => (
+                <tr
+                  key={item.id}
+                  className={index !== filteredData.length - 1 ? 'border-gray-200 border-b' : ''}
+                >
+                  <td className="pl-0 pr-2.5 py-5 font-normal text-left lg:pr-5 text-gray-700">
                     <div className="truncate max-w-60 lg:max-w-sm">
                       {item.dashboard.title}
                     </div>
                   </td>
-                  <td className="py-5 font-normal text-left">
-                    <div className="truncate md:max-w-48">
-                      {item.inviter.nickname}
+                  <td className="pl-12 py-5 font-normal text-left">
+                    <div className="flex items-center gap-1 min-w-0">
+                      <div className="shrink-0">
+                        <UserProfileImage
+                          profile={item.inviter}
+                          size={24}
+                          index={item.inviter.id}
+                        />
+                      </div>
+                      <div className="truncate">
+                        {item.inviter.nickname}
+                      </div>
                     </div>
                   </td>
-                  <td className="px-7 text-center">
-                    <ConfirmButton
-                      onAccept={() =>
-                        handleInvitation({ id: item.id, accepted: true })
-                      }
-                      onReject={() =>
-                        handleInvitation({ id: item.id, accepted: false })
-                      }
-                    />
+                  <td className="pr-3">
+                    <div className="flex justify-end">
+                      <ConfirmButton
+                        onAccept={() =>
+                          handleInvitation({ id: item.id, accepted: true })
+                        }
+                        onReject={() =>
+                          handleInvitation({ id: item.id, accepted: false })
+                        }
+                      />
+                    </div>
                   </td>
                 </tr>
               ))}

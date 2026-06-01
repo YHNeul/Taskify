@@ -60,7 +60,7 @@ export default function UserProfileImage({
           height: size,
           backgroundColor: CHIP_COLORS[index % CHIP_COLORS.length],
         }}
-        className="rounded-full border-white border-2 overflow-hidden flex items-center justify-center"
+        className="rounded-full border-white border-2 overflow-hidden flex items-center justify-center cursor-default select-none"
       >
         {hasImage ? (
           <Image
@@ -72,7 +72,9 @@ export default function UserProfileImage({
             unoptimized
           />
         ) : (
-          <span className="text-white text-xs-semibold">{initial}</span>
+          <span className="text-white text-xs-semibold select-none cursor-default">
+            {initial}
+          </span>
         )}
       </div>
     </>

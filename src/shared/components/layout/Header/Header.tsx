@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import CrownIcon from '@/shared/components/common/Icon/CrownIcon';
 import SettingIcon from '@/shared/components/common/Icon/SettingIcon';
-import AddBoxIcon from '@/shared/components/common/Icon/AddBoxIcon';
+import AddIcon from '@/shared/components/common/Icon/AddIcon';
 import { useDashboardStore } from '@/shared/store/useDashboardStore';
 import { CHIP_COLORS } from '@/shared/components/common/User/UserProfileImage';
 import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
@@ -87,40 +87,54 @@ export default function Header() {
 
         <div className="flex min-w-0 items-center gap-2 md:gap-3 lg:gap-4">
           {isDashboardLoading && dashboardId ? (
-            <>
-              <Skeleton className="h-10 w-18 rounded-lg" />
-              <Skeleton className="h-10 w-22 rounded-lg" />
-            </>
+            <Skeleton className="h-10 w-18 rounded-lg" />
           ) : (
             <>
               {dashboardId && dashboard?.createdByMe && (
                 <button
                   type="button"
                   onClick={() => router.push(`/dashboard/${dashboardId}/edit`)}
-                  className="flex h-8 md:h-9 lg:h-10 items-center gap-1.5 md:gap-2 rounded-lg border border-gray-300 bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
+                  className="flex h-8 md:h-9 lg:h-10 items-center gap-1.5 md:gap-2 rounded-lg bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
                 >
-                  <SettingIcon className="h-4 w-4 md:h-4.5 md:w-4.5 lg:h-5 lg:w-5" />
-                  <span className="hidden md:inline">관리</span>
+                  <SettingIcon className="h-4.5 w-4.5 md:h-5 md:w-5 lg:h-5 lg:w-5" />
+                  <span className="hidden md:inline md:text-lg-medium lg:text-lg-medium">
+                    관리
+                  </span>
                 </button>
               )}
-              <button
-                type="button"
-                onClick={invite.open}
-                className="flex h-8 md:h-9 lg:h-10 items-center gap-1.5 md:gap-2 rounded-lg border border-gray-300 bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
-              >
-                <AddBoxIcon className="h-4 w-4 md:h-4.5 md:w-4.5 lg:h-5 lg:w-5" />
-                <span className="hidden md:inline">초대하기</span>
-              </button>
             </>
           )}
 
-          <div className="ml-1 flex min-w-0 items-center gap-0">
+          <div
+            className={`ml-1 flex min-w-0 items-center gap-0 ${
+              dashboardId && dashboard?.createdByMe
+                ? 'pl-3 md:pl-4 border-l border-gray-300'
+                : ''
+            }`}
+          >
             <MemberAvatars
               members={members}
               maxVisibleMembers={maxVisibleMembers}
               isLoading={isMembersLoading}
               hasDashboard={!!dashboardId}
             />
+            {dashboardId && isDashboardLoading ? (
+              <Skeleton className="ml-2 h-profile-desktop w-profile-desktop rounded-full shrink-0" />
+            ) : (
+              dashboardId && (
+              <button
+                type="button"
+                onClick={invite.open}
+                aria-label="멤버 초대"
+                className="group relative ml-2 flex h-profile-desktop w-profile-desktop items-center justify-center rounded-full bg-white hover:bg-gray-200 transition-colors shrink-0 cursor-pointer"
+              >
+                <AddIcon className="h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
+                <span className="pointer-events-none absolute left-1/2 top-full z-10 mt-1 -translate-x-1/2 whitespace-nowrap rounded-xl bg-gray-600 px-2 py-1 text-xs-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  멤버 초대
+                </span>
+              </button>
+              )
+            )}
 
             {isMeLoading ? (
               <div className="ml-2 md:ml-4 lg:ml-6 flex items-center gap-2 md:gap-3 border-l border-gray-300 pl-2 md:pl-4 lg:pl-6 shrink-0">

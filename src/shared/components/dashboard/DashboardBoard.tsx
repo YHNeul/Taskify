@@ -204,6 +204,9 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
 
   return (
     <div className="flex flex-col h-full">
+      <div className="lg:hidden border-b border-gray-200 bg-white px-4 py-3 md:px-5">
+        <h1 className="truncate text-2lg-bold text-gray-700">{dashboard.title}</h1>
+      </div>
       <div className="flex-1 overflow-hidden bg-gray-100">
         <DndContext
           sensors={sensors}
@@ -238,7 +241,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
               />
             ))}
 
-            <div className="flex items-start pt-4 lg:pt-16 px-4 md:px-5 pb-8 lg:pb-0 shrink-0">
+            <div className="flex items-start pt-4 lg:pt-space-26 px-4 md:px-5 pb-8 lg:pb-0 shrink-0">
               <Button
                 variant="secondary"
                 size="lg"

@@ -100,7 +100,7 @@ export default function DashboardList() {
       {!isPending && dashboards.length > 0 && (
         <div className="mt-2 flex justify-end items-center gap-4">
           <span className="text-xs-regular text-gray-500 md:text-md-regular">
-            {totalPages} 페이지 중 {currentPage}
+            {currentPage} / {totalPages}
           </span>
           <Pagination
             size="sm"

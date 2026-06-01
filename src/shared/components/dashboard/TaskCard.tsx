@@ -66,7 +66,7 @@ export default function TaskCard({
       type="button"
       style={style}
       onClick={() => onClick(card)}
-      className="w-full text-left bg-white rounded-lg border border-gray-300 p-4 hover:border-brand-violet transition-colors group cursor-grab active:cursor-grabbing"
+      className="w-full text-left bg-white rounded-card-sm border border-gray-300 p-4 hover:border-brand-violet transition-colors group cursor-grab active:cursor-grabbing"
       {...attributes}
       {...listeners}
     >
