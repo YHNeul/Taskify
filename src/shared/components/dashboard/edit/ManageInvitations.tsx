@@ -184,7 +184,7 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
 
         <div className="pr-4 flex items-center gap-3 md:pr-7 md:gap-4">
           <span className="text-xs-regular text-gray-500 md:text-md-regular">
-            {totalPages} 페이지 중 {currentPage}
+            {currentPage} / {totalPages}
           </span>
 
           <Pagination

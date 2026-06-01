@@ -97,7 +97,7 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
         </span>
         <div className="pr-4 flex justify-end items-center gap-4 md:pr-7">
           <span className="text-xs-regular text-gray-500 md:text-md-regular">
-            {totalPages} 페이지 중 {currentPage}
+            {currentPage} / {totalPages}
           </span>
           <Pagination
             size="sm"
@@ -108,69 +108,69 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
           />
         </div>
       </div>
-      <table className="mt-5 w-full table-fixed text-lg-regular text-gray-500 md:mt-7">
-        <thead className="text-lg-regular text-gray-400">
-          <tr>
-            <th className="w-2/3 pl-4 font-normal text-left md:pl-7">
-              이름
-            </th>
-            <th className="w-1/3"></th>
-          </tr>
-        </thead>
+      <div className="mt-5 px-4 md:mt-7 md:px-7">
+        <table className="w-full table-fixed text-lg-regular text-gray-500">
+          <thead className="text-lg-regular text-gray-400">
+            <tr>
+              <th className="w-2/3 font-normal text-left">이름</th>
+              <th className="w-1/3"></th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {members.map((item, index) => {
-            const isLastRow = index === members.length - 1;
-            const isMe = item.userId === me?.id;
+          <tbody>
+            {members.map((item, index) => {
+              const isLastRow = index === members.length - 1;
+              const isMe = item.userId === me?.id;
 
-            return (
-              <tr
-                key={item.id}
-                className={`border-gray-200 border-b ${isLastRow ? 'border-b-0' : ''}`}
-              >
-                <td
-                  className="flex items-center gap-2 pl-4 py-3 
-                  font-normal text-left text-md-regular text-gray-700 
-                  md:pl-7 md:py-4 md:gap-3 md:text-lg-regular"
+              return (
+                <tr
+                  key={item.id}
+                  className={`border-gray-200 border-b ${isLastRow ? 'border-b-0' : ''}`}
                 >
-                  <div className="shrink-0 relative w-profile-mobile h-profile-mobile md:w-profile-desktop md:h-profile-desktop rounded-full overflow-hidden">
-                    {item.profileImageUrl && !isImageError ? (
-                      <Image
-                        src={item.profileImageUrl}
-                        alt={item.nickname}
-                        fill
-                        unoptimized
-                        className="object-cover"
-                        onError={() => setIsImageError(true)}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-green text-white">
-                        {(item.nickname?.[0] ?? '?').toUpperCase()}
-                      </div>
+                  <td
+                    className="flex items-center gap-2 py-3 
+                    font-normal text-left text-md-regular text-gray-700 
+                    md:py-4 md:gap-3 md:text-lg-regular"
+                  >
+                    <div className="shrink-0 relative w-profile-mobile h-profile-mobile md:w-profile-desktop md:h-profile-desktop rounded-full overflow-hidden">
+                      {item.profileImageUrl && !isImageError ? (
+                        <Image
+                          src={item.profileImageUrl}
+                          alt={item.nickname}
+                          fill
+                          unoptimized
+                          className="object-cover"
+                          onError={() => setIsImageError(true)}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-green text-white">
+                          {(item.nickname?.[0] ?? '?').toUpperCase()}
+                        </div>
+                      )}
+                    </div>
+                    <span className="truncate min-w-0 flex-1">
+                      {item.nickname}
+                    </span>
+                  </td>
+                  <td className="text-right">
+                    {isDashboardOwner && !isMe && (
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        className="px-3.5 py-2 w-action-button-mobile h-8 text-xs-medium
+                                md:px-5 md:py-1 md:w-action-button-desktop md:h-8 md:text-md-medium"
+                        onClick={() => setSelectedMemberId(item.id)}
+                      >
+                        삭제
+                      </Button>
                     )}
-                  </div>
-                  <span className="truncate min-w-0 flex-1">
-                    {item.nickname}
-                  </span>
-                </td>
-                <td className="pr-4 text-right md:pr-7">
-                  {isDashboardOwner && !isMe && (
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="px-3.5 py-2 w-action-button-mobile h-8 text-xs-medium
-                              md:px-5 md:py-1 md:w-action-button-desktop md:h-8 md:text-md-medium"
-                      onClick={() => setSelectedMemberId(item.id)}
-                    >
-                      삭제
-                    </Button>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
 
       {selectedMemberId !== null && (
         <ModalOverlay onClose={() => setSelectedMemberId(null)}>
