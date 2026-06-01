@@ -241,7 +241,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
               />
             ))}
 
-            <div className="flex items-start pt-4 lg:pt-6.5 px-4 md:px-5 pb-8 lg:pb-0 shrink-0">
+            <div className="flex items-start pt-4 lg:pt-space-26 px-4 md:px-5 pb-8 lg:pb-0 shrink-0">
               <Button
                 variant="secondary"
                 size="lg"
