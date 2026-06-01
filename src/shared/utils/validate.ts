@@ -11,7 +11,7 @@ export const validateDashboardName = (name: string): boolean => {
   return isValidPattern;
 };
 
-const passwordLetterAndNumberRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/;
+const passwordLetterAndNumberRegex = /^(?=.*[A-Za-z])(?=.*\d)\S+$/;
 const passwordTripleRepeatRegex = /(.)\1\1/;
 export const PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE =
   '동일 문자를 3회 이상 연속 사용할 수 없습니다.';
