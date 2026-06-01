@@ -181,7 +181,7 @@ function SignupPageContent() {
                 variant="primary"
                 size="lg"
                 disabled={isButtonDisabled}
-                className="h-auth-input w-full rounded-full"
+                className="h-auth-input w-full"
               >
                 {isSubmitting ? '가입 중...' : '가입하기'}
               </Button>

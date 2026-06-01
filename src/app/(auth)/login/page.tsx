@@ -199,7 +199,7 @@ function LoginPageContent() {
               type="submit"
               size="lg"
               disabled={isButtonDisabled}
-              className="mt-4 h-auth-input w-full rounded-full"
+              className="mt-4 h-auth-input w-full"
             >
               {isSubmitting ? '로그인 중...' : '로그인'}
             </Button>
