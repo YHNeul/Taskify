@@ -34,6 +34,7 @@ export default function MemberAvatars({
   hasDashboard,
 }: MemberAvatarsProps) {
   const visibleMembers = members.slice(0, maxVisibleMembers);
+  const hiddenMembers = members.slice(maxVisibleMembers);
   const extraCount = Math.max(0, members.length - maxVisibleMembers);
 
   if (isLoading && hasDashboard) {
@@ -57,21 +58,27 @@ export default function MemberAvatars({
       {visibleMembers.map((member, index) => (
         <div
           key={member.id}
-          title={member.nickname}
+          className="group relative shrink-0"
           style={{
             marginLeft: index !== 0 ? '-8px' : undefined,
             zIndex: index + 1,
           }}
         >
           <UserProfileImage profile={member} index={index} size={38} />
+          <span className="pointer-events-none absolute left-1/2 top-full z-20 mt-1 -translate-x-1/2 whitespace-nowrap rounded-xl bg-gray-600 px-2 py-1 text-xs-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
+            {member.nickname}
+          </span>
         </div>
       ))}
       {extraCount > 0 && (
         <div
-          className="-ml-2 flex h-profile-desktop min-w-profile-desktop items-center justify-center rounded-full border-2 border-white bg-gray-200 px-2 text-xs-semibold text-red"
+          className="group relative -ml-2 flex h-profile-desktop w-profile-desktop shrink-0 items-center justify-center rounded-full border-2 border-white bg-gray-200 px-2 text-xs-semibold text-gray-600 cursor-default select-none"
           style={{ zIndex: visibleMembers.length + 1 }}
         >
           +{extraCount}
+          <span className="pointer-events-none absolute left-1/2 top-full z-20 mt-1 -translate-x-1/2 whitespace-nowrap rounded-xl bg-gray-600 px-2 py-1 text-xs-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
+            {hiddenMembers.map((member) => member.nickname).join(', ')}
+          </span>
         </div>
       )}
     </div>

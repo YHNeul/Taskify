@@ -14,7 +14,7 @@ import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
 /** 칸반 카드 1개의 스켈레톤 */
 function TaskCardSkeleton() {
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 flex flex-col gap-2">
+    <div className="bg-white rounded-card-sm border border-gray-200 p-4 flex flex-col gap-2">
       <Skeleton className="h-5 w-3/4 rounded" />
       <div className="flex gap-1.5">
         <Skeleton className="h-5 w-16 rounded-full" />
@@ -52,7 +52,7 @@ function ColumnSkeleton({ cardCount = 3 }: { cardCount?: number }) {
         <Skeleton className="w-6 h-6 rounded" />
       </div>
       <div className="px-4 md:px-5 mb-4 shrink-0">
-        <Skeleton className="h-10 w-full lg:w-dashboard-column-inner rounded-md" />
+        <Skeleton className="h-10 w-full lg:w-dashboard-column-inner rounded-full" />
       </div>
       <div className="flex-1 px-4 md:px-5 flex flex-col gap-2 pb-4">
         {Array.from({ length: cardCount }).map((_, i) => (

@@ -90,6 +90,11 @@ module.exports = {
       lineHeight: {
         19: '19px',
       },
+      borderRadius: {
+        'card-sm': '20px',
+        'card-md': '24px',
+        'card-lg': '30px',
+      },
       spacing: {
         17: '17px',
         53: '53px',

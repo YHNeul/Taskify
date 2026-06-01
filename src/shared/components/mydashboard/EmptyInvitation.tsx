@@ -2,8 +2,8 @@ import Image from 'next/image';
 
 export default function EmptyInvitation() {
   return (
-    <div className="relative flex flex-col min-h-80 rounded-2xl bg-white md:min-h-96">
-      <h2 className="absolute pt-6 px-5 text-gray-700 text-lg-bold md:px-10 md:text-2xl-bold">
+    <div className="relative flex flex-col min-h-80 rounded-card-sm bg-white md:min-h-96 md:rounded-card-md lg:rounded-card-lg">
+      <h2 className="absolute pt-6 px-5 text-gray-700 text-md-bold md:px-10 md:text-lg-bold lg:text-xl-bold">
         초대받은 대시보드
       </h2>
       <div className="flex-1 flex flex-col justify-center items-center">

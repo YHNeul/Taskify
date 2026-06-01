@@ -31,7 +31,7 @@ export default function DropdownMenu({ onEdit, onDelete }: DropdownMenuProps) {
     if (action === 'delete') onDelete();
   };
   return (
-    <ul className="flex flex-col gap-1 rounded-md bg-white border-2 border-gray-300 px-2 py-2 w-max">
+    <ul className="flex flex-col gap-1 rounded-xl bg-white border-2 border-gray-300 px-2 py-2 w-max">
       {MENUS.map((menu) => (
         <li key={menu.id}>
           <button

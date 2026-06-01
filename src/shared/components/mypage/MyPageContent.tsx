@@ -91,6 +91,9 @@ export default function MyPageContent() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [currentPasswordServerError, setCurrentPasswordServerError] = useState<
+    string | null
+  >(null);
 
   const {
     register: registerProfile,
@@ -111,8 +114,11 @@ export default function MyPageContent() {
 
   const {
     register: registerPassword,
+    watch: watchPassword,
     handleSubmit: onPasswordSubmit,
     reset: resetPasswordForm,
+    setError: setPasswordFormError,
+    clearErrors: clearPasswordFormErrors,
     formState: {
       errors: passwordErrors,
       isValid: isPasswordFormValid,
@@ -131,6 +137,21 @@ export default function MyPageContent() {
   const isNicknameChanged = isProfileNicknameDirty;
   const isImageChanged = selectedImageFile !== null;
   const isProfileChanged = isNicknameChanged || isImageChanged;
+  const currentPasswordRegister = registerPassword('currentPassword');
+
+  const currentPasswordValue = watchPassword('currentPassword');
+  const newPasswordValue = watchPassword('newPassword');
+  const confirmPasswordValue = watchPassword('confirmPassword');
+
+  const currentPasswordErrorMessage = currentPasswordValue
+    ? (currentPasswordServerError ?? passwordErrors.currentPassword?.message)
+    : undefined;
+  const newPasswordErrorMessage = newPasswordValue
+    ? passwordErrors.newPassword?.message
+    : undefined;
+  const confirmPasswordErrorMessage = confirmPasswordValue
+    ? passwordErrors.confirmPassword?.message
+    : undefined;
 
   // NOTE: 이미지 업로드와 프로필 수정은 요청 흐름이 달라 mutation을 분리했습니다.
   const uploadProfileImageMutation = useMutation({
@@ -179,7 +200,7 @@ export default function MyPageContent() {
       aria-label="비밀번호 표시 전환"
       className="flex items-center justify-center h-full"
     >
-      {isVisible ? <EyeOff size={24} /> : <Eye size={24} />}
+      {isVisible ? <EyeOff size={20} /> : <Eye size={20} />}
     </button>
   );
 
@@ -191,15 +212,79 @@ export default function MyPageContent() {
     setAlertMessage(null);
   };
 
+  const handleCurrentPasswordBlur = async (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed || !initialEmail) return;
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: initialEmail,
+          password: trimmed,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = (await response.json().catch(() => null)) as
+          | { message?: string }
+          | null;
+        const message = data?.message ?? '현재 비밀번호가 일치하지 않습니다.';
+        setCurrentPasswordServerError(message);
+        setPasswordFormError('currentPassword', {
+          type: 'server',
+          message,
+        });
+        return;
+      }
+
+      setCurrentPasswordServerError(null);
+      clearPasswordFormErrors('currentPassword');
+    } catch {
+      // blur 검증 실패는 입력 UX를 방해하지 않기 위해 무시
+    }
+  };
+
   // 변경 버튼 클릭
   const handlePasswordSubmit = async (values: PasswordFormValues) => {
+    setCurrentPasswordServerError(null);
     try {
       await changePasswordMutation.mutateAsync({
         password: values.currentPassword,
         newPassword: values.newPassword,
       });
-    } catch {
-      openAlert('비밀번호 변경에 실패했습니다.');
+    } catch (error) {
+      const unknownError = error as
+        | {
+            response?: {
+              status?: number;
+              data?: {
+                message?: string;
+              };
+            };
+          }
+        | undefined;
+      const statusCode = unknownError?.response?.status;
+      const serverMessage = unknownError?.response?.data?.message;
+
+      if (
+        statusCode === 400 ||
+        statusCode === 401 ||
+        statusCode === 403 ||
+        serverMessage?.includes('비밀번호')
+      ) {
+        const fieldErrorMessage =
+          serverMessage ?? '현재 비밀번호가 일치하지 않습니다.';
+        setCurrentPasswordServerError(fieldErrorMessage);
+        setPasswordFormError('currentPassword', {
+          type: 'server',
+          message: fieldErrorMessage,
+        });
+        return;
+      }
+
+      openAlert(serverMessage ?? '비밀번호 변경에 실패했습니다.');
     }
   };
 
@@ -272,14 +357,14 @@ export default function MyPageContent() {
           />
         </svg>
 
-        <span className="text-md-medium md:text-lg-medium mt-px text-gray-700">
+        <span className="text-sm-medium md:text-md-medium mt-px text-gray-700">
           돌아가기
         </span>
       </button>
 
       <div className="flex w-full max-w-2xl flex-col mt-4 gap-4 md:gap-6">
         <section className="rounded-2xl bg-white px-4 py-5 md:p-6">
-          <h2 className="mb-6 text-2xl-bold leading-none text-gray-900">
+          <h2 className="mb-6 text-lg-bold leading-none text-gray-900">
             프로필
           </h2>
 
@@ -310,7 +395,7 @@ export default function MyPageContent() {
                     />
                   </div>
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-3xl-semibold text-brand-violet">
+                  <div className="flex h-full w-full items-center justify-center text-2xl-semibold text-brand-violet">
                     +
                   </div>
                 )}
@@ -320,18 +405,21 @@ export default function MyPageContent() {
             <div className="flex w-full min-w-0 flex-col gap-4">
               <Input
                 label="이메일"
+                labelClassName="text-md-medium"
                 value={initialEmail}
                 readOnly
-                className="bg-white"
+                className="bg-white text-md-regular md:text-lg-regular"
               />
 
               <Input
                 label="닉네임"
+                labelClassName="text-md-medium"
                 placeholder="닉네임 입력"
                 maxLength={10}
                 {...registerProfile('nickname')}
                 isError={!!profileErrors.nickname}
                 errorMessage={profileErrors.nickname?.message}
+                className="text-md-regular md:text-lg-regular"
               />
 
               <Button
@@ -347,18 +435,31 @@ export default function MyPageContent() {
         </section>
 
         <section className="rounded-2xl bg-white px-4 py-5 md:p-6">
-          <h2 className="mb-6 text-2xl-bold leading-none text-gray-700">
+          <h2 className="mb-6 text-lg-bold leading-none text-gray-700">
             비밀번호 변경
           </h2>
 
           <div className="flex flex-col gap-4">
             <Input
               label="현재 비밀번호"
+              labelClassName="text-md-medium"
               type={showCurrentPassword ? 'text' : 'password'}
               placeholder="비밀번호 입력"
-              {...registerPassword('currentPassword')}
-              isError={!!passwordErrors.currentPassword}
-              errorMessage={passwordErrors.currentPassword?.message}
+              {...currentPasswordRegister}
+              onChange={(event) => {
+                currentPasswordRegister.onChange(event);
+                if (currentPasswordServerError) {
+                  setCurrentPasswordServerError(null);
+                  clearPasswordFormErrors('currentPassword');
+                }
+              }}
+              onBlur={(event) => {
+                currentPasswordRegister.onBlur(event);
+                void handleCurrentPasswordBlur(event.target.value);
+              }}
+              isError={!!currentPasswordErrorMessage}
+              errorMessage={currentPasswordErrorMessage}
+              className="text-md-regular md:text-lg-regular"
               rightIcon={renderPasswordToggleButton(showCurrentPassword, () =>
                 setShowCurrentPassword((prev) => !prev),
               )}
@@ -366,11 +467,13 @@ export default function MyPageContent() {
 
             <Input
               label="새 비밀번호"
+              labelClassName="text-md-medium"
               type={showNewPassword ? 'text' : 'password'}
               placeholder="새 비밀번호 입력"
               {...registerPassword('newPassword')}
-              isError={!!passwordErrors.newPassword}
-              errorMessage={passwordErrors.newPassword?.message}
+              isError={!!newPasswordErrorMessage}
+              errorMessage={newPasswordErrorMessage}
+              className="text-md-regular md:text-lg-regular"
               rightIcon={renderPasswordToggleButton(showNewPassword, () =>
                 setShowNewPassword((prev) => !prev),
               )}
@@ -379,11 +482,13 @@ export default function MyPageContent() {
             <div>
               <Input
                 label="새 비밀번호 확인"
+                labelClassName="text-md-medium"
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder="새 비밀번호 입력"
                 {...registerPassword('confirmPassword')}
-                isError={!!passwordErrors.confirmPassword}
-                errorMessage={passwordErrors.confirmPassword?.message}
+                isError={!!confirmPasswordErrorMessage}
+                errorMessage={confirmPasswordErrorMessage}
+                className="text-md-regular md:text-lg-regular"
                 rightIcon={renderPasswordToggleButton(showConfirmPassword, () =>
                   setShowConfirmPassword((prev) => !prev),
                 )}

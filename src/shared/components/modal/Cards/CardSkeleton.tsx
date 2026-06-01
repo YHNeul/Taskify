@@ -13,12 +13,41 @@ export default function CardSkeleton({
 }) {
   return (
     <ModalOverlay onClose={onModalClose}>
-      <ModalBase className="relative w-full md:w-fit md:min-w-card-detail-content max-h-screen-minus-110 overflow-y-auto flex flex-col-reverse md:flex-row md:gap-3.5 gap-4 text-gray-700 rounded-lg px-8 py-6 mx-6 md:m-0">
+      <ModalBase className="relative w-full md:w-fit md:min-w-card-detail-content max-h-screen-minus-110 overflow-y-auto flex flex-col md:flex-row gap-4 md:gap-0 text-gray-700 rounded-card-sm px-4 mobile:px-8 py-6 mx-6 md:m-0">
+        {/* 우측 영역 */}
+        <aside className="order-1 md:order-2 flex flex-col items-start gap-6 min-w-50 w-full md:w-52 md:pl-4 md:border-l md:border-gray-200 animate-pulse">
+          {/* 메뉴, 닫기 버튼 */}
+          <div className="self-end flex gap-1 md:gap-3">
+            <Skeleton className="w-7 h-7 rounded" />
+            <Skeleton className="w-7 h-7 rounded" />
+          </div>
+
+          {/* 담당자/마감일 */}
+          <div className="hidden md:flex flex-col gap-4 w-full">
+            <div className="pb-4 border-b border-gray-200">
+              <Skeleton className="h-4 w-14 rounded mb-2" />
+              <div className="flex items-center gap-2">
+                <Skeleton className="w-7 h-7 rounded-full shrink-0" />
+                <Skeleton className="h-4 w-20 rounded" />
+              </div>
+            </div>
+            <div>
+              <Skeleton className="h-4 w-12 rounded mb-2" />
+              <Skeleton className="h-4 w-28 rounded" />
+            </div>
+          </div>
+        </aside>
+
         {/* 좌측 영역 */}
-        <div className="flex flex-col md:w-content-450 md:shrink-0 animate-pulse">
+        <div className="order-2 md:order-1 flex flex-col md:w-content-450 md:shrink-0 md:pr-4 animate-pulse">
           {/* 제목 */}
           <div className="mb-2 md:mb-6">
             <Skeleton className="h-8 w-3/4 rounded-md" />
+          </div>
+
+          {/* 모바일 담당자/마감일 */}
+          <div className="md:hidden mb-4">
+            <Skeleton className="h-16 w-full rounded-xl" />
           </div>
 
           {/* 진행 상태 및 태그 */}
@@ -60,26 +89,6 @@ export default function CardSkeleton({
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* 우측 영역 */}
-        <div className="flex flex-col items-end gap-6 min-w-50 w-full md:w-auto animate-pulse">
-          {/* 메뉴, 닫기 버튼 */}
-          <div className="flex gap-6">
-            <Skeleton className="w-7 h-7 rounded" />
-            <Skeleton className="w-7 h-7 rounded" />
-          </div>
-
-          {/* 담당자 */}
-          <div className="hidden md:flex flex-col gap-3 w-full">
-            <Skeleton className="h-4 w-16 rounded" />
-            <div className="flex items-center gap-2">
-              <Skeleton className="w-8 h-8 rounded-full" />
-              <Skeleton className="h-4 w-20 rounded" />
-            </div>
-            <Skeleton className="h-4 w-16 rounded mt-2" />
-            <Skeleton className="h-4 w-24 rounded" />
           </div>
         </div>
       </ModalBase>

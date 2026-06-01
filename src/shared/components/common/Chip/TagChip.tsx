@@ -50,7 +50,7 @@ export default function TagChip({ label, onClick, className }: TagChipProps) {
   const { bg, text } = TAG_COLORS[colorIndex];
   return (
     <div
-      className={`inline-flex rounded-md ${bg} ${className}`}
+      className={`inline-flex rounded-2xl ${bg} ${className}`}
       onClick={onClick}
     >
       <p className={`px-2 py-1 text-md-regular ${text}`}>{label}</p>

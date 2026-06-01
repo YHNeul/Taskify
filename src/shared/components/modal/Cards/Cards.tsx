@@ -167,11 +167,11 @@ export default function Cards({
       <ModalOverlay onClose={onModalClose}>
         <ModalBase
           ref={modalRef}
-          className="px-4 mobile:px-8 py-6 relative w-full md:w-fit md:min-w-card-detail-content max-h-screen-minus-160 overflow-y-auto flex flex-col md:flex-row-reverse md:gap-3.5 gap-4 text-gray-700 rounded-lg"
+          className="px-4 mobile:px-8 py-6 relative w-full md:w-fit md:min-w-card-detail-content max-h-screen-minus-160 overflow-y-auto flex flex-col md:flex-row gap-4 md:gap-0 text-gray-700 rounded-card-sm"
         >
-          {/* 우측 영역 - 메뉴, 닫기 버튼, 담당자 */}
-          <div className="flex flex-col items-end gap-6 min-w-50 w-full md:w-auto">
-            <div className="flex gap-2 md:gap-6 relative">
+          {/* 우측 영역 - 메뉴, 닫기 버튼, 담당자/마감일 */}
+          <aside className="order-1 md:order-2 flex flex-col items-start gap-6 min-w-50 w-full md:w-52 md:pl-4 md:border-l md:border-gray-200">
+            <div className="self-end flex gap-1 md:gap-3 relative">
               {/* 메뉴 */}
               <button
                 type="button"
@@ -223,13 +223,13 @@ export default function Cards({
             </div>
 
             {/* 담당자 컴포넌트 - 데스크탑 */}
-            <div className="hidden md:block">
+            <div className="hidden md:block w-full">
               <AssigneeItem assignee={assignee} dueDate={dueDate} />
             </div>
-          </div>
+          </aside>
 
           {/* 좌측 영역 - 제목, 진행 상태 및 태그, 내용, 댓글 */}
-          <div className="flex flex-col md:w-content-450 md:shrink-0">
+          <div className="order-2 md:order-1 flex flex-col md:w-content-450 md:shrink-0 md:pr-4">
             {/* 제목 */}
             <header className="mb-2 md:mb-6">
               <h2 className="text-2xl-bold wrap-break-word">{title}</h2>
