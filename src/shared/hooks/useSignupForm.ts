@@ -5,6 +5,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import {
+  PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE,
+  PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE,
+  validatePasswordHasLetterAndNumber,
+  validatePasswordNoTripleRepeat,
+} from '@/shared/utils/validate';
 
 type SignupErrors = {
   email: string;
@@ -30,7 +36,15 @@ const signupSchema = z
     password: z
       .string()
       .min(1, '비밀번호를 입력해 주세요.')
-      .min(8, '8자 이상 입력해 주세요.'),
+      .refine(
+        (value) => validatePasswordNoTripleRepeat(value),
+        PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE,
+      )
+      .min(8, '8자 이상 입력해 주세요.')
+      .refine(
+        (value) => validatePasswordHasLetterAndNumber(value),
+        PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE,
+      ),
     passwordConfirm: z.string().min(1, '비밀번호를 한 번 더 입력해 주세요.'),
     agree: z.boolean().refine((value) => value, {
       message: '이용약관에 동의해 주세요.',
@@ -53,6 +67,8 @@ export const useSignupForm = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const [focusedField, setFocusedField] =
+    useState<keyof SignupFormValues | null>(null);
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -61,7 +77,7 @@ export const useSignupForm = () => {
     handleSubmit: submitWithValidation,
     setValue,
     watch,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, touchedFields, isSubmitting, isValid },
   } = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
@@ -81,10 +97,29 @@ export const useSignupForm = () => {
   const agree = watch('agree') ?? false;
 
   const normalizedErrors: SignupErrors = {
-    email: errors.email?.message ?? '',
-    nickname: errors.nickname?.message ?? '',
-    password: errors.password?.message ?? '',
-    passwordConfirm: errors.passwordConfirm?.message ?? '',
+    email:
+      focusedField !== 'email' && touchedFields.email
+        ? (errors.email?.message ?? '')
+        : '',
+    nickname:
+      focusedField !== 'nickname' && touchedFields.nickname
+        ? (errors.nickname?.message ?? '')
+        : '',
+    password: (() => {
+      const passwordError = errors.password?.message ?? '';
+
+      if (passwordError === PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE) {
+        return passwordError;
+      }
+
+      return focusedField !== 'password' && touchedFields.password
+        ? passwordError
+        : '';
+    })(),
+    passwordConfirm:
+      focusedField !== 'passwordConfirm' && touchedFields.passwordConfirm
+        ? (errors.passwordConfirm?.message ?? '')
+        : '',
     agree: errors.agree?.message ?? '',
   };
 
@@ -188,6 +223,7 @@ export const useSignupForm = () => {
     },
     setShowPassword,
     setShowPasswordConfirm,
+    setFocusedField,
     handleSubmit,
     handleAlertConfirm,
   };

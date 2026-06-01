@@ -27,6 +27,12 @@ import {
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { useLogout } from '@/shared/hooks/useLogout';
 import { useMyInfoQuery } from '@/shared/hooks/useMyInfoQuery';
+import {
+  PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE,
+  PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE,
+  validatePasswordHasLetterAndNumber,
+  validatePasswordNoTripleRepeat,
+} from '@/shared/utils/validate';
 
 const profileSchema = z.object({
   nickname: z
@@ -39,7 +45,18 @@ const profileSchema = z.object({
 const passwordSchema = z
   .object({
     currentPassword: z.string().min(1, '현재 비밀번호를 입력해 주세요.'),
-    newPassword: z.string().min(1, '새 비밀번호를 입력해 주세요.'),
+    newPassword: z
+      .string()
+      .min(1, '새 비밀번호를 입력해 주세요.')
+      .refine(
+        (value) => validatePasswordNoTripleRepeat(value),
+        PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE,
+      )
+      .min(8, '8자 이상 입력해 주세요.')
+      .refine(
+        (value) => validatePasswordHasLetterAndNumber(value),
+        PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE,
+      ),
     confirmPassword: z.string().min(1, '새 비밀번호를 한 번 더 입력해 주세요.'),
   })
   .refine((value) => value.newPassword === value.confirmPassword, {

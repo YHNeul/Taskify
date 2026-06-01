@@ -10,3 +10,27 @@ export const validateDashboardName = (name: string): boolean => {
   const isValidPattern = /^[a-zA-Z0-9가-힣\s]+$/.test(trimmedName);
   return isValidPattern;
 };
+
+const passwordLetterAndNumberRegex = /^(?=.*[A-Za-z])(?=.*\d)\S+$/;
+const passwordTripleRepeatRegex = /(.)\1\1/;
+export const PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE =
+  '동일 문자를 3회 이상 연속 사용할 수 없습니다.';
+export const PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE =
+  '영문과 숫자를 모두 포함해 주세요.';
+
+export const validatePasswordHasLetterAndNumber = (
+  password: string,
+): boolean => {
+  return passwordLetterAndNumberRegex.test(password);
+};
+
+export const validatePasswordNoTripleRepeat = (password: string): boolean => {
+  return !passwordTripleRepeatRegex.test(password);
+};
+
+export const validatePasswordPolicy = (password: string): boolean => {
+  return (
+    validatePasswordHasLetterAndNumber(password) &&
+    validatePasswordNoTripleRepeat(password)
+  );
+};
