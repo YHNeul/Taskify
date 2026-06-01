@@ -19,12 +19,9 @@
  */
 
 import {
-  ChangeEvent,
-  FocusEvent,
   InputHTMLAttributes,
   ReactNode,
   useId,
-  useState,
 } from 'react';
 import clsx from 'clsx';
 
@@ -48,41 +45,12 @@ export default function Input({
   required = false,
   floatingLabel = false,
   showErrorStyle = true,
-  value,
-  defaultValue,
-  onFocus,
-  onBlur,
-  onChange,
   ...props
 }: InputProps) {
   const autoId = useId();
   const inputId = id ?? autoId;
   const hasError = isError || !!errorMessage;
   const shouldShowErrorStyle = hasError && showErrorStyle;
-  const isControlled = value !== undefined;
-  const [internalValue, setInternalValue] = useState(
-    String(defaultValue ?? ''),
-  );
-  const [isFocused, setIsFocused] = useState(false);
-  const currentValue = isControlled ? String(value ?? '') : internalValue;
-  const shouldFloatLabel = isFocused || currentValue.length > 0;
-
-  const handleFocus = (event: FocusEvent<HTMLInputElement>) => {
-    setIsFocused(true);
-    onFocus?.(event);
-  };
-
-  const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
-    setIsFocused(false);
-    onBlur?.(event);
-  };
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (!isControlled) {
-      setInternalValue(event.target.value);
-    }
-    onChange?.(event);
-  };
 
   return (
     <div className="w-full">
@@ -99,14 +67,9 @@ export default function Input({
         <input
           id={inputId}
           {...props}
-          value={value}
-          defaultValue={defaultValue}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          onChange={handleChange}
           placeholder={floatingLabel ? ' ' : props.placeholder}
           className={clsx(
-            'w-full rounded-2xl border outline-none transition',
+            'peer w-full rounded-2xl border outline-none transition',
             floatingLabel ? 'h-13' : 'h-12',
             floatingLabel
               ? 'px-4 pb-2 pt-6 text-lg-regular placeholder:text-transparent'
@@ -127,9 +90,9 @@ export default function Input({
             htmlFor={inputId}
             className={clsx(
               'pointer-events-none absolute left-4 origin-left bg-transparent px-1 text-gray-400 transition-all duration-200',
-              shouldFloatLabel
-                ? 'top-0.5 translate-y-0 scale-[0.68]'
-                : 'top-1/2 -translate-y-1/2 scale-100',
+              'top-0.5 translate-y-0 scale-[0.68]',
+              'peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100',
+              'peer-focus:top-0.5 peer-focus:translate-y-0 peer-focus:scale-[0.68]',
               shouldShowErrorStyle && 'text-red',
             )}
           >
