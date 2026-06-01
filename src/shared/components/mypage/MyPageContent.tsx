@@ -27,6 +27,10 @@ import {
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { useLogout } from '@/shared/hooks/useLogout';
 import { useMyInfoQuery } from '@/shared/hooks/useMyInfoQuery';
+import {
+  validatePasswordHasLetterAndNumber,
+  validatePasswordNoTripleRepeat,
+} from '@/shared/utils/validate';
 
 const profileSchema = z.object({
   nickname: z
@@ -39,7 +43,18 @@ const profileSchema = z.object({
 const passwordSchema = z
   .object({
     currentPassword: z.string().min(1, '현재 비밀번호를 입력해 주세요.'),
-    newPassword: z.string().min(1, '새 비밀번호를 입력해 주세요.'),
+    newPassword: z
+      .string()
+      .min(1, '새 비밀번호를 입력해 주세요.')
+      .refine(
+        (value) => validatePasswordNoTripleRepeat(value),
+        '동일 문자를 3회 이상 연속 사용할 수 없습니다.',
+      )
+      .min(8, '8자 이상 입력해 주세요.')
+      .refine(
+        (value) => validatePasswordHasLetterAndNumber(value),
+        '영문과 숫자를 모두 포함해 주세요.',
+      ),
     confirmPassword: z.string().min(1, '새 비밀번호를 한 번 더 입력해 주세요.'),
   })
   .refine((value) => value.newPassword === value.confirmPassword, {

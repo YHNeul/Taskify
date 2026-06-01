@@ -10,3 +10,23 @@ export const validateDashboardName = (name: string): boolean => {
   const isValidPattern = /^[a-zA-Z0-9가-힣\s]+$/.test(trimmedName);
   return isValidPattern;
 };
+
+const passwordLetterAndNumberRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/;
+const passwordTripleRepeatRegex = /(.)\1\1/;
+
+export const validatePasswordHasLetterAndNumber = (
+  password: string,
+): boolean => {
+  return passwordLetterAndNumberRegex.test(password);
+};
+
+export const validatePasswordNoTripleRepeat = (password: string): boolean => {
+  return !passwordTripleRepeatRegex.test(password);
+};
+
+export const validatePasswordPolicy = (password: string): boolean => {
+  return (
+    validatePasswordHasLetterAndNumber(password) &&
+    validatePasswordNoTripleRepeat(password)
+  );
+};

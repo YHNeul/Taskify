@@ -5,6 +5,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import {
+  validatePasswordHasLetterAndNumber,
+  validatePasswordNoTripleRepeat,
+} from '@/shared/utils/validate';
 
 type SignupErrors = {
   email: string;
@@ -30,7 +34,15 @@ const signupSchema = z
     password: z
       .string()
       .min(1, '비밀번호를 입력해 주세요.')
-      .min(8, '8자 이상 입력해 주세요.'),
+      .refine(
+        (value) => validatePasswordNoTripleRepeat(value),
+        '동일 문자를 3회 이상 연속 사용할 수 없습니다.',
+      )
+      .min(8, '8자 이상 입력해 주세요.')
+      .refine(
+        (value) => validatePasswordHasLetterAndNumber(value),
+        '영문과 숫자를 모두 포함해 주세요.',
+      ),
     passwordConfirm: z.string().min(1, '비밀번호를 한 번 더 입력해 주세요.'),
     agree: z.boolean().refine((value) => value, {
       message: '이용약관에 동의해 주세요.',
