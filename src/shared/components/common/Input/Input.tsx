@@ -106,7 +106,7 @@ export default function Input({
           onChange={handleChange}
           placeholder={floatingLabel ? ' ' : props.placeholder}
           className={clsx(
-            'w-full rounded-md border outline-none transition',
+            'w-full rounded-2xl border outline-none transition',
             floatingLabel ? 'h-13' : 'h-12',
             floatingLabel
               ? 'px-4 pb-2 pt-6 text-lg-regular placeholder:text-transparent'
@@ -126,7 +126,7 @@ export default function Input({
           <label
             htmlFor={inputId}
             className={clsx(
-              'pointer-events-none absolute left-4 origin-left bg-white px-1 text-gray-400 transition-all duration-200',
+              'pointer-events-none absolute left-4 origin-left bg-transparent px-1 text-gray-400 transition-all duration-200',
               shouldFloatLabel
                 ? 'top-0.5 translate-y-0 scale-[0.68]'
                 : 'top-1/2 -translate-y-1/2 scale-100',

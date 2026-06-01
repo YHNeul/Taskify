@@ -197,8 +197,9 @@ function LoginPageContent() {
 
             <Button
               type="submit"
+              size="lg"
               disabled={isButtonDisabled}
-              className="mt-4 w-full"
+              className="mt-4 h-auth-input w-full rounded-full"
             >
               {isSubmitting ? '로그인 중...' : '로그인'}
             </Button>
