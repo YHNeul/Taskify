@@ -140,6 +140,7 @@ export default function MyPageContent() {
   const currentPasswordRegister = registerPassword('currentPassword');
 
   const currentPasswordValue = watchPassword('currentPassword');
+
   const newPasswordValue = watchPassword('newPassword');
   const confirmPasswordValue = watchPassword('confirmPassword');
 
@@ -213,8 +214,7 @@ export default function MyPageContent() {
   };
 
   const handleCurrentPasswordBlur = async (value: string) => {
-    const trimmed = value.trim();
-    if (!trimmed || !initialEmail) return;
+    if (!value || !initialEmail) return;
 
     try {
       const response = await fetch('/api/auth/login', {
@@ -222,7 +222,7 @@ export default function MyPageContent() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: initialEmail,
-          password: trimmed,
+          password: value,
         }),
       });
 
