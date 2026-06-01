@@ -28,6 +28,8 @@ import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { useLogout } from '@/shared/hooks/useLogout';
 import { useMyInfoQuery } from '@/shared/hooks/useMyInfoQuery';
 import {
+  PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE,
+  PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE,
   validatePasswordHasLetterAndNumber,
   validatePasswordNoTripleRepeat,
 } from '@/shared/utils/validate';
@@ -48,12 +50,12 @@ const passwordSchema = z
       .min(1, '새 비밀번호를 입력해 주세요.')
       .refine(
         (value) => validatePasswordNoTripleRepeat(value),
-        '동일 문자를 3회 이상 연속 사용할 수 없습니다.',
+        PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE,
       )
       .min(8, '8자 이상 입력해 주세요.')
       .refine(
         (value) => validatePasswordHasLetterAndNumber(value),
-        '영문과 숫자를 모두 포함해 주세요.',
+        PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE,
       ),
     confirmPassword: z.string().min(1, '새 비밀번호를 한 번 더 입력해 주세요.'),
   })

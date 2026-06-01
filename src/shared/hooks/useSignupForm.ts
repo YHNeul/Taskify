@@ -67,16 +67,8 @@ export const useSignupForm = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  const [isEmailFocused, setIsEmailFocused] = useState(false);
-  const [isEmailBlurred, setIsEmailBlurred] = useState(false);
-  const [isNicknameFocused, setIsNicknameFocused] = useState(false);
-  const [isNicknameBlurred, setIsNicknameBlurred] = useState(false);
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
-  const [isPasswordBlurred, setIsPasswordBlurred] = useState(false);
-  const [isPasswordConfirmFocused, setIsPasswordConfirmFocused] =
-    useState(false);
-  const [isPasswordConfirmBlurred, setIsPasswordConfirmBlurred] =
-    useState(false);
+  const [focusedField, setFocusedField] =
+    useState<keyof SignupFormValues | null>(null);
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -85,7 +77,7 @@ export const useSignupForm = () => {
     handleSubmit: submitWithValidation,
     setValue,
     watch,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, touchedFields, isSubmitting, isValid },
   } = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
@@ -106,9 +98,11 @@ export const useSignupForm = () => {
 
   const normalizedErrors: SignupErrors = {
     email:
-      !isEmailFocused && isEmailBlurred ? (errors.email?.message ?? '') : '',
+      focusedField !== 'email' && touchedFields.email
+        ? (errors.email?.message ?? '')
+        : '',
     nickname:
-      !isNicknameFocused && isNicknameBlurred
+      focusedField !== 'nickname' && touchedFields.nickname
         ? (errors.nickname?.message ?? '')
         : '',
     password: (() => {
@@ -118,10 +112,12 @@ export const useSignupForm = () => {
         return passwordError;
       }
 
-      return !isPasswordFocused && isPasswordBlurred ? passwordError : '';
+      return focusedField !== 'password' && touchedFields.password
+        ? passwordError
+        : '';
     })(),
     passwordConfirm:
-      !isPasswordConfirmFocused && isPasswordConfirmBlurred
+      focusedField !== 'passwordConfirm' && touchedFields.passwordConfirm
         ? (errors.passwordConfirm?.message ?? '')
         : '',
     agree: errors.agree?.message ?? '',
@@ -204,30 +200,18 @@ export const useSignupForm = () => {
     alertMessage,
     setEmail: (value: string) => {
       clearTransientErrorState();
-      if (isEmailBlurred) {
-        setIsEmailBlurred(false);
-      }
       setValue('email', value, { shouldDirty: true, shouldValidate: true });
     },
     setNickname: (value: string) => {
       clearTransientErrorState();
-      if (isNicknameBlurred) {
-        setIsNicknameBlurred(false);
-      }
       setValue('nickname', value, { shouldDirty: true, shouldValidate: true });
     },
     setPassword: (value: string) => {
       clearTransientErrorState();
-      if (isPasswordBlurred) {
-        setIsPasswordBlurred(false);
-      }
       setValue('password', value, { shouldDirty: true, shouldValidate: true });
     },
     setPasswordConfirm: (value: string) => {
       clearTransientErrorState();
-      if (isPasswordConfirmBlurred) {
-        setIsPasswordConfirmBlurred(false);
-      }
       setValue('passwordConfirm', value, {
         shouldDirty: true,
         shouldValidate: true,
@@ -239,38 +223,7 @@ export const useSignupForm = () => {
     },
     setShowPassword,
     setShowPasswordConfirm,
-    setEmailFocus: (isFocused: boolean) => {
-      setIsEmailFocused(isFocused);
-      if (isFocused) {
-        setIsEmailBlurred(false);
-      } else {
-        setIsEmailBlurred(true);
-      }
-    },
-    setNicknameFocus: (isFocused: boolean) => {
-      setIsNicknameFocused(isFocused);
-      if (isFocused) {
-        setIsNicknameBlurred(false);
-      } else {
-        setIsNicknameBlurred(true);
-      }
-    },
-    setPasswordFocus: (isFocused: boolean) => {
-      setIsPasswordFocused(isFocused);
-      if (isFocused) {
-        setIsPasswordBlurred(false);
-      } else {
-        setIsPasswordBlurred(true);
-      }
-    },
-    setPasswordConfirmFocus: (isFocused: boolean) => {
-      setIsPasswordConfirmFocused(isFocused);
-      if (isFocused) {
-        setIsPasswordConfirmBlurred(false);
-      } else {
-        setIsPasswordConfirmBlurred(true);
-      }
-    },
+    setFocusedField,
     handleSubmit,
     handleAlertConfirm,
   };

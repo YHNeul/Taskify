@@ -39,10 +39,7 @@ function SignupPageContent() {
     setAgree,
     setShowPassword,
     setShowPasswordConfirm,
-    setEmailFocus,
-    setNicknameFocus,
-    setPasswordFocus,
-    setPasswordConfirmFocus,
+    setFocusedField,
     handleSubmit,
     handleAlertConfirm,
   } = useSignupForm();
@@ -92,8 +89,8 @@ function SignupPageContent() {
                   showErrorStyle={false}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  onFocus={() => setEmailFocus(true)}
-                  onBlur={() => setEmailFocus(false)}
+                  onFocus={() => setFocusedField('email')}
+                  onBlur={() => setFocusedField(null)}
                   isError={!!errors.email}
                   errorMessage={errors.email || undefined}
                   className="h-auth-input"
@@ -106,8 +103,8 @@ function SignupPageContent() {
                   showErrorStyle={false}
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  onFocus={() => setNicknameFocus(true)}
-                  onBlur={() => setNicknameFocus(false)}
+                  onFocus={() => setFocusedField('nickname')}
+                  onBlur={() => setFocusedField(null)}
                   isError={!!errors.nickname}
                   errorMessage={errors.nickname || undefined}
                   className="h-auth-input"
@@ -120,8 +117,8 @@ function SignupPageContent() {
                   showErrorStyle={false}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setPasswordFocus(true)}
-                  onBlur={() => setPasswordFocus(false)}
+                  onFocus={() => setFocusedField('password')}
+                  onBlur={() => setFocusedField(null)}
                   isError={!!errors.password}
                   errorMessage={errors.password || undefined}
                   className="h-auth-input"
@@ -146,8 +143,8 @@ function SignupPageContent() {
                   showErrorStyle={false}
                   value={passwordConfirm}
                   onChange={(e) => setPasswordConfirm(e.target.value)}
-                  onFocus={() => setPasswordConfirmFocus(true)}
-                  onBlur={() => setPasswordConfirmFocus(false)}
+                  onFocus={() => setFocusedField('passwordConfirm')}
+                  onBlur={() => setFocusedField(null)}
                   isError={!!errors.passwordConfirm}
                   errorMessage={errors.passwordConfirm || undefined}
                   className="h-auth-input"
