@@ -6,6 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {
+  PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE,
+  PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE,
   validatePasswordHasLetterAndNumber,
   validatePasswordNoTripleRepeat,
 } from '@/shared/utils/validate';
@@ -36,12 +38,12 @@ const signupSchema = z
       .min(1, '비밀번호를 입력해 주세요.')
       .refine(
         (value) => validatePasswordNoTripleRepeat(value),
-        '동일 문자를 3회 이상 연속 사용할 수 없습니다.',
+        PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE,
       )
       .min(8, '8자 이상 입력해 주세요.')
       .refine(
         (value) => validatePasswordHasLetterAndNumber(value),
-        '영문과 숫자를 모두 포함해 주세요.',
+        PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE,
       ),
     passwordConfirm: z.string().min(1, '비밀번호를 한 번 더 입력해 주세요.'),
     agree: z.boolean().refine((value) => value, {
@@ -65,6 +67,16 @@ export const useSignupForm = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isEmailBlurred, setIsEmailBlurred] = useState(false);
+  const [isNicknameFocused, setIsNicknameFocused] = useState(false);
+  const [isNicknameBlurred, setIsNicknameBlurred] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [isPasswordBlurred, setIsPasswordBlurred] = useState(false);
+  const [isPasswordConfirmFocused, setIsPasswordConfirmFocused] =
+    useState(false);
+  const [isPasswordConfirmBlurred, setIsPasswordConfirmBlurred] =
+    useState(false);
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -93,10 +105,25 @@ export const useSignupForm = () => {
   const agree = watch('agree') ?? false;
 
   const normalizedErrors: SignupErrors = {
-    email: errors.email?.message ?? '',
-    nickname: errors.nickname?.message ?? '',
-    password: errors.password?.message ?? '',
-    passwordConfirm: errors.passwordConfirm?.message ?? '',
+    email:
+      !isEmailFocused && isEmailBlurred ? (errors.email?.message ?? '') : '',
+    nickname:
+      !isNicknameFocused && isNicknameBlurred
+        ? (errors.nickname?.message ?? '')
+        : '',
+    password: (() => {
+      const passwordError = errors.password?.message ?? '';
+
+      if (passwordError === PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE) {
+        return passwordError;
+      }
+
+      return !isPasswordFocused && isPasswordBlurred ? passwordError : '';
+    })(),
+    passwordConfirm:
+      !isPasswordConfirmFocused && isPasswordConfirmBlurred
+        ? (errors.passwordConfirm?.message ?? '')
+        : '',
     agree: errors.agree?.message ?? '',
   };
 
@@ -177,18 +204,30 @@ export const useSignupForm = () => {
     alertMessage,
     setEmail: (value: string) => {
       clearTransientErrorState();
+      if (isEmailBlurred) {
+        setIsEmailBlurred(false);
+      }
       setValue('email', value, { shouldDirty: true, shouldValidate: true });
     },
     setNickname: (value: string) => {
       clearTransientErrorState();
+      if (isNicknameBlurred) {
+        setIsNicknameBlurred(false);
+      }
       setValue('nickname', value, { shouldDirty: true, shouldValidate: true });
     },
     setPassword: (value: string) => {
       clearTransientErrorState();
+      if (isPasswordBlurred) {
+        setIsPasswordBlurred(false);
+      }
       setValue('password', value, { shouldDirty: true, shouldValidate: true });
     },
     setPasswordConfirm: (value: string) => {
       clearTransientErrorState();
+      if (isPasswordConfirmBlurred) {
+        setIsPasswordConfirmBlurred(false);
+      }
       setValue('passwordConfirm', value, {
         shouldDirty: true,
         shouldValidate: true,
@@ -200,6 +239,38 @@ export const useSignupForm = () => {
     },
     setShowPassword,
     setShowPasswordConfirm,
+    setEmailFocus: (isFocused: boolean) => {
+      setIsEmailFocused(isFocused);
+      if (isFocused) {
+        setIsEmailBlurred(false);
+      } else {
+        setIsEmailBlurred(true);
+      }
+    },
+    setNicknameFocus: (isFocused: boolean) => {
+      setIsNicknameFocused(isFocused);
+      if (isFocused) {
+        setIsNicknameBlurred(false);
+      } else {
+        setIsNicknameBlurred(true);
+      }
+    },
+    setPasswordFocus: (isFocused: boolean) => {
+      setIsPasswordFocused(isFocused);
+      if (isFocused) {
+        setIsPasswordBlurred(false);
+      } else {
+        setIsPasswordBlurred(true);
+      }
+    },
+    setPasswordConfirmFocus: (isFocused: boolean) => {
+      setIsPasswordConfirmFocused(isFocused);
+      if (isFocused) {
+        setIsPasswordConfirmBlurred(false);
+      } else {
+        setIsPasswordConfirmBlurred(true);
+      }
+    },
     handleSubmit,
     handleAlertConfirm,
   };

@@ -39,6 +39,10 @@ function SignupPageContent() {
     setAgree,
     setShowPassword,
     setShowPasswordConfirm,
+    setEmailFocus,
+    setNicknameFocus,
+    setPasswordFocus,
+    setPasswordConfirmFocus,
     handleSubmit,
     handleAlertConfirm,
   } = useSignupForm();
@@ -84,9 +88,12 @@ function SignupPageContent() {
                 <Input
                   label="이메일"
                   type="text"
-                  placeholder="이메일을 입력해 주세요"
+                  floatingLabel
+                  showErrorStyle={false}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onFocus={() => setEmailFocus(true)}
+                  onBlur={() => setEmailFocus(false)}
                   isError={!!errors.email}
                   errorMessage={errors.email || undefined}
                   className="h-auth-input"
@@ -95,9 +102,12 @@ function SignupPageContent() {
                 <Input
                   label="닉네임"
                   type="text"
-                  placeholder="닉네임을 입력해 주세요"
+                  floatingLabel
+                  showErrorStyle={false}
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
+                  onFocus={() => setNicknameFocus(true)}
+                  onBlur={() => setNicknameFocus(false)}
                   isError={!!errors.nickname}
                   errorMessage={errors.nickname || undefined}
                   className="h-auth-input"
@@ -106,9 +116,12 @@ function SignupPageContent() {
                 <Input
                   label="비밀번호"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="비밀번호를 입력해 주세요"
+                  floatingLabel
+                  showErrorStyle={false}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => setPasswordFocus(true)}
+                  onBlur={() => setPasswordFocus(false)}
                   isError={!!errors.password}
                   errorMessage={errors.password || undefined}
                   className="h-auth-input"
@@ -129,9 +142,12 @@ function SignupPageContent() {
                 <Input
                   label="비밀번호 확인"
                   type={showPasswordConfirm ? 'text' : 'password'}
-                  placeholder="비밀번호를 입력해 주세요"
+                  floatingLabel
+                  showErrorStyle={false}
                   value={passwordConfirm}
                   onChange={(e) => setPasswordConfirm(e.target.value)}
+                  onFocus={() => setPasswordConfirmFocus(true)}
+                  onBlur={() => setPasswordConfirmFocus(false)}
                   isError={!!errors.passwordConfirm}
                   errorMessage={errors.passwordConfirm || undefined}
                   className="h-auth-input"

@@ -39,6 +39,10 @@ function LoginPageContent() {
   const nextPath = nextRaw?.startsWith('/') ? nextRaw : '/mydashboard';
 
   const [showPassword, setShowPassword] = useState(false);
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isEmailBlurred, setIsEmailBlurred] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [isPasswordBlurred, setIsPasswordBlurred] = useState(false);
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -56,6 +60,12 @@ function LoginPageContent() {
   });
 
   const isButtonDisabled = !isValid || isSubmitting;
+  const emailRegistration = register('email');
+  const passwordRegistration = register('password');
+  const shouldShowEmailError =
+    !isEmailFocused && isEmailBlurred && !!errors.email?.message;
+  const shouldShowPasswordError =
+    !isPasswordFocused && isPasswordBlurred && !!errors.password?.message;
 
   const handleLogin = async ({ email, password }: LoginFormValues) => {
     try {
@@ -124,19 +134,53 @@ function LoginPageContent() {
             <Input
               label="이메일"
               type="text"
-              placeholder="이메일을 입력해 주세요"
-              {...register('email')}
-              isError={!!errors.email}
-              errorMessage={errors.email?.message}
+              floatingLabel
+              showErrorStyle={false}
+              {...emailRegistration}
+              onFocus={(event) => {
+                setIsEmailFocused(true);
+                setIsEmailBlurred(false);
+              }}
+              onBlur={(event) => {
+                setIsEmailFocused(false);
+                setIsEmailBlurred(true);
+                emailRegistration.onBlur(event);
+              }}
+              onChange={(event) => {
+                if (isEmailBlurred) {
+                  setIsEmailBlurred(false);
+                }
+                emailRegistration.onChange(event);
+              }}
+              isError={shouldShowEmailError}
+              errorMessage={shouldShowEmailError ? errors.email?.message : undefined}
             />
 
             <Input
               label="비밀번호"
               type={showPassword ? 'text' : 'password'}
-              placeholder="비밀번호를 입력해 주세요"
-              {...register('password')}
-              isError={!!errors.password}
-              errorMessage={errors.password?.message}
+              floatingLabel
+              showErrorStyle={false}
+              {...passwordRegistration}
+              onFocus={() => {
+                setIsPasswordFocused(true);
+                setIsPasswordBlurred(false);
+              }}
+              onBlur={(event) => {
+                setIsPasswordFocused(false);
+                setIsPasswordBlurred(true);
+                passwordRegistration.onBlur(event);
+              }}
+              onChange={(event) => {
+                if (isPasswordBlurred) {
+                  setIsPasswordBlurred(false);
+                }
+                passwordRegistration.onChange(event);
+              }}
+              isError={shouldShowPasswordError}
+              errorMessage={
+                shouldShowPasswordError ? errors.password?.message : undefined
+              }
               rightIcon={
                 <button
                   type="button"
