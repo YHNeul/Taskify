@@ -38,6 +38,7 @@ export const useDashboardsPageQuery = <TData = DashboardsPageQueryData>({
     queryKey: QUERY_KEYS.dashboardsPage(page, size),
     queryFn: () => getDashboards(page, size),
     enabled,
-    placeholderData: (previousData) => previousData,
+    placeholderData:
+      queryOptions?.placeholderData ?? ((previousData) => previousData),
   });
 };
