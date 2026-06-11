@@ -173,7 +173,7 @@ export const useMyPageForm = () => {
     setAlertMessage(null);
   };
 
-  const handleCurrentPasswordBlur = async (value: string) => {
+  const validateCurrentPassword = async (value: string) => {
     if (!value || !initialEmail) return;
 
     try {
@@ -305,7 +305,7 @@ export const useMyPageForm = () => {
 
   const onCurrentPasswordBlur = (event: FocusEvent<HTMLInputElement>) => {
     currentPasswordRegister.onBlur(event);
-    void handleCurrentPasswordBlur(event.target.value);
+    void validateCurrentPassword(event.target.value);
   };
 
   return {
