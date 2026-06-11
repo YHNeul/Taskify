@@ -139,6 +139,7 @@ export const useMyPageForm = () => {
     mutationFn: updateMyInfo,
     onSuccess: (updatedMyInfo) => {
       queryClient.setQueryData(QUERY_KEYS.me(), updatedMyInfo);
+      resetProfileForm({ nickname: updatedMyInfo.nickname });
       queryClient.invalidateQueries({ queryKey: ['members'] });
       openAlert('프로필이 업데이트되었습니다.');
     },
