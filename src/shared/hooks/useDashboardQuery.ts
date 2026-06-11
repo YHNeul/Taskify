@@ -14,7 +14,7 @@ export const useDashboardQuery = <TData = DashboardQueryData>(
   queryOptions?: UseDashboardQueryOptions<TData>,
 ) => {
   const isDashboardIdValid = Number.isFinite(dashboardId) && dashboardId > 0;
-  const isQueryEnabled = queryOptions?.enabled !== false;
+  const isQueryEnabled = queryOptions?.enabled ?? true;
 
   return useQuery<DashboardQueryData, Error, TData, DashboardQueryKey>({
     ...queryOptions,
