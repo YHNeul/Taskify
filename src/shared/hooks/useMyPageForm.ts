@@ -54,6 +54,7 @@ export type PasswordFormValues = z.infer<typeof passwordSchema>;
 export const useMyPageForm = () => {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
   const { data: myInfo, isLoading } = useMyInfoQuery();
 
   const initialEmail = myInfo?.email ?? '';
@@ -166,6 +167,12 @@ export const useMyPageForm = () => {
     };
   }, [previewImageUrl]);
 
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, []);
+
   const openAlert = (message: string) => {
     setAlertMessage(message);
   };
@@ -177,6 +184,12 @@ export const useMyPageForm = () => {
   const validateCurrentPassword = async (value: string) => {
     if (!value || !initialEmail) return;
 
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -185,6 +198,7 @@ export const useMyPageForm = () => {
           email: initialEmail,
           password: value,
         }),
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -202,7 +216,10 @@ export const useMyPageForm = () => {
 
       setCurrentPasswordServerError(null);
       clearPasswordFormErrors('currentPassword');
-    } catch {
+    } catch (error) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        return;
+      }
       // blur 검증 실패는 입력 UX를 방해하지 않기 위해 무시
     }
   };
