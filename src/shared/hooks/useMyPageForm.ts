@@ -137,8 +137,8 @@ export function useMyPageForm() {
 
   const updateMyInfoMutation = useMutation({
     mutationFn: updateMyInfo,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.me() });
+    onSuccess: (updatedMyInfo) => {
+      queryClient.setQueryData(QUERY_KEYS.me(), updatedMyInfo);
       queryClient.invalidateQueries({ queryKey: ['members'] });
       openAlert('프로필이 업데이트되었습니다.');
     },
