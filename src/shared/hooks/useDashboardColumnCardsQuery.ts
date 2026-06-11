@@ -11,7 +11,14 @@ interface UseDashboardColumnCardsQueryParams {
 }
 
 type DashboardColumnCardsQueryData = Record<number, ColumnCardState>;
-type DashboardColumnCardsQueryKey = ReturnType<typeof QUERY_KEYS.columnCards>;
+const getDashboardColumnCardsQueryKey = (
+  dashboardId: number,
+  size: number,
+  columnIds: number[],
+) => [...QUERY_KEYS.columnCards(dashboardId), size, columnIds] as const;
+type DashboardColumnCardsQueryKey = ReturnType<
+  typeof getDashboardColumnCardsQueryKey
+>;
 type UseDashboardColumnCardsQueryOptions<
   TData = DashboardColumnCardsQueryData,
 > = Omit<
@@ -33,6 +40,7 @@ export const useDashboardColumnCardsQuery = <
   const isDashboardIdValid = Number.isFinite(dashboardId) && dashboardId > 0;
   const hasColumns = columns.length > 0;
   const isQueryEnabled = queryOptions?.enabled !== false;
+  const columnIds = columns.map((column) => column.id);
 
   return useQuery<
     DashboardColumnCardsQueryData,
@@ -41,7 +49,7 @@ export const useDashboardColumnCardsQuery = <
     DashboardColumnCardsQueryKey
   >({
     ...queryOptions,
-    queryKey: QUERY_KEYS.columnCards(dashboardId),
+    queryKey: getDashboardColumnCardsQueryKey(dashboardId, size, columnIds),
     queryFn: async () => {
       const results = await Promise.all(
         columns.map((col) => getCards(col.id, size)),
