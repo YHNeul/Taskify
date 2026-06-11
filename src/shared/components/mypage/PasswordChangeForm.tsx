@@ -9,8 +9,8 @@ import type { PasswordFormValues } from '@/shared/hooks/useMyPageForm';
 interface PasswordChangeFormProps {
   currentPasswordRegister: UseFormRegisterReturn<'currentPassword'>;
   registerPassword: UseFormRegister<PasswordFormValues>;
-  handleCurrentPasswordChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleCurrentPasswordBlur: (event: FocusEvent<HTMLInputElement>) => void;
+  onCurrentPasswordChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onCurrentPasswordBlur: (event: FocusEvent<HTMLInputElement>) => void;
   currentPasswordErrorMessage?: string;
   newPasswordErrorMessage?: string;
   confirmPasswordErrorMessage?: string;
@@ -42,8 +42,8 @@ const renderPasswordToggleButton = (
 export default function PasswordChangeForm({
   currentPasswordRegister,
   registerPassword,
-  handleCurrentPasswordChange,
-  handleCurrentPasswordBlur,
+  onCurrentPasswordChange,
+  onCurrentPasswordBlur,
   currentPasswordErrorMessage,
   newPasswordErrorMessage,
   confirmPasswordErrorMessage,
@@ -70,8 +70,8 @@ export default function PasswordChangeForm({
           type={showCurrentPassword ? 'text' : 'password'}
           placeholder="비밀번호 입력"
           {...currentPasswordRegister}
-          onChange={handleCurrentPasswordChange}
-          onBlur={handleCurrentPasswordBlur}
+          onChange={onCurrentPasswordChange}
+          onBlur={onCurrentPasswordBlur}
           isError={!!currentPasswordErrorMessage}
           errorMessage={currentPasswordErrorMessage}
           className="text-md-regular md:text-lg-regular"
