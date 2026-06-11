@@ -1,11 +1,22 @@
 import { readCard } from '@/shared/apis/dashboard';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
-import { useQuery } from '@tanstack/react-query';
+import type { Card } from '@/shared/types/dashboard';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 
-export function useCardQuery(cardId: number) {
-  return useQuery({
+type CardQueryKey = ReturnType<typeof QUERY_KEYS.card>;
+type UseCardQueryOptions<TData = Card> = Omit<
+  UseQueryOptions<Card, Error, TData, CardQueryKey>,
+  'queryKey' | 'queryFn'
+>;
+
+export function useCardQuery<TData = Card>(
+  cardId: number,
+  queryOptions?: UseCardQueryOptions<TData>,
+) {
+  return useQuery<Card, Error, TData, CardQueryKey>({
     queryKey: QUERY_KEYS.card(cardId),
     queryFn: () => readCard(cardId),
     enabled: !!cardId,
+    ...queryOptions,
   });
 }
