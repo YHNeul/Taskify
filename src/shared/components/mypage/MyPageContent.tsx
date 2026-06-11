@@ -31,8 +31,8 @@ export default function MyPageContent() {
     isPasswordSubmitting,
     registerPassword,
     currentPasswordRegister,
-    onCurrentPasswordChange,
-    onCurrentPasswordBlur,
+    handleCurrentPasswordChange,
+    handleCurrentPasswordBlur,
     currentPasswordErrorMessage,
     newPasswordErrorMessage,
     confirmPasswordErrorMessage,
@@ -90,8 +90,8 @@ export default function MyPageContent() {
         <PasswordChangeForm
           currentPasswordRegister={currentPasswordRegister}
           registerPassword={registerPassword}
-          onCurrentPasswordChange={onCurrentPasswordChange}
-          onCurrentPasswordBlur={onCurrentPasswordBlur}
+          handleCurrentPasswordChange={handleCurrentPasswordChange}
+          handleCurrentPasswordBlur={handleCurrentPasswordBlur}
           currentPasswordErrorMessage={currentPasswordErrorMessage}
           newPasswordErrorMessage={newPasswordErrorMessage}
           confirmPasswordErrorMessage={confirmPasswordErrorMessage}

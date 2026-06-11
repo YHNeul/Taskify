@@ -294,7 +294,9 @@ export const useMyPageForm = () => {
 
   const currentPasswordRegister = registerPassword('currentPassword');
 
-  const onCurrentPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleCurrentPasswordChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     currentPasswordRegister.onChange(event);
 
     if (currentPasswordServerError) {
@@ -303,7 +305,7 @@ export const useMyPageForm = () => {
     }
   };
 
-  const onCurrentPasswordBlur = (event: FocusEvent<HTMLInputElement>) => {
+  const handleCurrentPasswordBlur = (event: FocusEvent<HTMLInputElement>) => {
     currentPasswordRegister.onBlur(event);
     void validateCurrentPassword(event.target.value);
   };
@@ -326,8 +328,8 @@ export const useMyPageForm = () => {
     isPasswordSubmitting,
     registerPassword,
     currentPasswordRegister,
-    onCurrentPasswordChange,
-    onCurrentPasswordBlur,
+    handleCurrentPasswordChange,
+    handleCurrentPasswordBlur,
     currentPasswordErrorMessage,
     newPasswordErrorMessage,
     confirmPasswordErrorMessage,
