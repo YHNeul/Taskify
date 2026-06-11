@@ -22,8 +22,7 @@ export const useCardQuery = <TData = Card>(
   queryOptions?: UseCardQueryOptions<TData>,
 ) => {
   const isCardIdValid = Number.isFinite(cardId) && cardId > 0;
-  const isQueryEnabled =
-    typeof queryOptions?.enabled === 'boolean' ? queryOptions.enabled : true;
+  const isQueryEnabled = queryOptions?.enabled !== false;
 
   return useQuery<Card, Error, TData, CardQueryKey>({
     ...queryOptions,
