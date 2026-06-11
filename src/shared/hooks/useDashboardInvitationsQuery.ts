@@ -1,6 +1,6 @@
 import { getInvitations } from '@/shared/apis/dashboard';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 
 interface UseDashboardInvitationsQueryParams {
   dashboardId: number;
@@ -8,14 +8,45 @@ interface UseDashboardInvitationsQueryParams {
   size: number;
 }
 
-export function useDashboardInvitationsQuery({
-  dashboardId,
-  page,
-  size,
-}: UseDashboardInvitationsQueryParams) {
-  return useQuery({
-    queryKey: QUERY_KEYS.invitations(dashboardId, page),
+type DashboardInvitationsQueryData = Awaited<ReturnType<typeof getInvitations>>;
+const getDashboardInvitationsQueryKey = (
+  dashboardId: number,
+  page: number,
+  size: number,
+) => [...QUERY_KEYS.invitations(dashboardId, page), size] as const;
+type DashboardInvitationsQueryKey = ReturnType<
+  typeof getDashboardInvitationsQueryKey
+>;
+type UseDashboardInvitationsQueryOptions<
+  TData = DashboardInvitationsQueryData,
+> = Omit<
+  UseQueryOptions<
+    DashboardInvitationsQueryData,
+    Error,
+    TData,
+    DashboardInvitationsQueryKey
+  >,
+  'queryKey' | 'queryFn'
+>;
+
+export const useDashboardInvitationsQuery = <
+  TData = DashboardInvitationsQueryData,
+>(
+  { dashboardId, page, size }: UseDashboardInvitationsQueryParams,
+  queryOptions?: UseDashboardInvitationsQueryOptions<TData>,
+) => {
+  const isDashboardIdValid = Number.isFinite(dashboardId) && dashboardId > 0;
+  const isQueryEnabled = queryOptions?.enabled ?? true;
+
+  return useQuery<
+    DashboardInvitationsQueryData,
+    Error,
+    TData,
+    DashboardInvitationsQueryKey
+  >({
+    ...queryOptions,
+    queryKey: getDashboardInvitationsQueryKey(dashboardId, page, size),
     queryFn: () => getInvitations(dashboardId, page, size),
-    enabled: !!dashboardId,
+    enabled: isDashboardIdValid && isQueryEnabled,
   });
-}
+};

@@ -1,6 +1,6 @@
 import { getDashboards } from '@/shared/apis/dashboard';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
 
 interface UseDashboardsPageQueryParams {
   page: number;
@@ -8,15 +8,37 @@ interface UseDashboardsPageQueryParams {
   enabled?: boolean;
 }
 
-export function useDashboardsPageQuery({
+type DashboardsPageQueryData = Awaited<ReturnType<typeof getDashboards>>;
+type DashboardsPageQueryKey = ReturnType<typeof QUERY_KEYS.dashboardsPage>;
+type UseDashboardsPageQueryOptions<TData = DashboardsPageQueryData> = Omit<
+  UseQueryOptions<
+    DashboardsPageQueryData,
+    Error,
+    TData,
+    DashboardsPageQueryKey
+  >,
+  'queryKey' | 'queryFn' | 'enabled'
+>;
+
+export const useDashboardsPageQuery = <TData = DashboardsPageQueryData>({
   page,
   size,
   enabled = true,
-}: UseDashboardsPageQueryParams) {
-  return useQuery({
+  queryOptions,
+}: UseDashboardsPageQueryParams & {
+  queryOptions?: UseDashboardsPageQueryOptions<TData>;
+}) => {
+  return useQuery<
+    DashboardsPageQueryData,
+    Error,
+    TData,
+    DashboardsPageQueryKey
+  >({
+    ...queryOptions,
     queryKey: QUERY_KEYS.dashboardsPage(page, size),
     queryFn: () => getDashboards(page, size),
     enabled,
-    placeholderData: (previousData) => previousData,
+    placeholderData:
+      queryOptions?.placeholderData ?? ((previousData) => previousData),
   });
-}
+};
