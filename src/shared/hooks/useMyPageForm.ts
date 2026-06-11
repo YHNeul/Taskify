@@ -51,7 +51,7 @@ const passwordSchema = z
 export type ProfileFormValues = z.infer<typeof profileSchema>;
 export type PasswordFormValues = z.infer<typeof passwordSchema>;
 
-export function useMyPageForm() {
+export const useMyPageForm = () => {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { data: myInfo, isLoading } = useMyInfoQuery();
@@ -339,4 +339,4 @@ export function useMyPageForm() {
     toggleShowConfirmPassword: () => setShowConfirmPassword((prev) => !prev),
     submitPasswordForm: onPasswordSubmit(handlePasswordSubmit),
   };
-}
+};
