@@ -9,14 +9,14 @@ type UseCardQueryOptions<TData = Card> = Omit<
   'queryKey' | 'queryFn'
 >;
 
-export function useCardQuery<TData = Card>(
+export const useCardQuery = <TData = Card>(
   cardId: number,
   queryOptions?: UseCardQueryOptions<TData>,
-) {
+) => {
   return useQuery<Card, Error, TData, CardQueryKey>({
     queryKey: QUERY_KEYS.card(cardId),
     queryFn: () => readCard(cardId),
     enabled: !!cardId,
     ...queryOptions,
   });
-}
+};
