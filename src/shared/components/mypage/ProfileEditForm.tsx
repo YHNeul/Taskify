@@ -33,7 +33,13 @@ export default function ProfileEditForm({
   onSubmit,
 }: ProfileEditFormProps) {
   return (
-    <section className="rounded-2xl bg-white px-4 py-5 md:p-6">
+    <form
+      className="rounded-2xl bg-white px-4 py-5 md:p-6"
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSubmit();
+      }}
+    >
       <h2 className="mb-6 text-lg-bold leading-none text-gray-900">프로필</h2>
 
       <div className="flex flex-col gap-5 md:flex-row md:items-start md:gap-10">
@@ -65,15 +71,15 @@ export default function ProfileEditForm({
           />
 
           <Button
+            type="submit"
             size="lg"
             className="h-12 w-full"
             disabled={!isProfileChanged || isProfileSubmitting}
-            onClick={onSubmit}
           >
             저장
           </Button>
         </div>
       </div>
-    </section>
+    </form>
   );
 }
