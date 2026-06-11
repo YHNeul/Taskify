@@ -9,7 +9,14 @@ interface UseDashboardInvitationsQueryParams {
 }
 
 type DashboardInvitationsQueryData = Awaited<ReturnType<typeof getInvitations>>;
-type DashboardInvitationsQueryKey = ReturnType<typeof QUERY_KEYS.invitations>;
+const getDashboardInvitationsQueryKey = (
+  dashboardId: number,
+  page: number,
+  size: number,
+) => [...QUERY_KEYS.invitations(dashboardId, page), size] as const;
+type DashboardInvitationsQueryKey = ReturnType<
+  typeof getDashboardInvitationsQueryKey
+>;
 type UseDashboardInvitationsQueryOptions<
   TData = DashboardInvitationsQueryData,
 > = Omit<
@@ -38,7 +45,7 @@ export const useDashboardInvitationsQuery = <
     DashboardInvitationsQueryKey
   >({
     ...queryOptions,
-    queryKey: QUERY_KEYS.invitations(dashboardId, page),
+    queryKey: getDashboardInvitationsQueryKey(dashboardId, page, size),
     queryFn: () => getInvitations(dashboardId, page, size),
     enabled: isDashboardIdValid && isQueryEnabled,
   });
