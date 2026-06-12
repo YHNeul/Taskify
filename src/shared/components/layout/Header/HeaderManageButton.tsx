@@ -27,6 +27,7 @@ export default function HeaderManageButton({
     <button
       type="button"
       onClick={onManageClick}
+      aria-label="관리"
       className="flex h-8 md:h-9 lg:h-10 items-center gap-1.5 md:gap-2 rounded-lg bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
     >
       <SettingIcon className="h-4.5 w-4.5 md:h-5 md:w-5 lg:h-5 lg:w-5" />
