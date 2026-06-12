@@ -17,6 +17,10 @@ export default function HeaderMyProfileButton({
   shouldPrioritizeMyAvatar,
   onProfileClick,
 }: HeaderMyProfileButtonProps) {
+  const nickname = me?.nickname ?? '사용자';
+  const profileImageUrl = me?.profileImageUrl ?? null;
+  const fallbackInitial = nickname[0]?.toUpperCase() ?? 'U';
+
   if (isMeLoading) {
     return (
       <div className="ml-2 md:ml-4 lg:ml-6 flex items-center gap-2 md:gap-3 border-l border-gray-300 pl-2 md:pl-4 lg:pl-6 shrink-0">
@@ -30,16 +34,17 @@ export default function HeaderMyProfileButton({
     <button
       type="button"
       onClick={onProfileClick}
+      aria-label={`${nickname} 프로필 페이지로 이동`}
       className="ml-2 md:ml-4 lg:ml-6 flex items-center gap-2 md:gap-3 border-l border-gray-300 pl-2 md:pl-4 lg:pl-6 hover:opacity-80 transition-opacity shrink-0 cursor-pointer"
     >
       <div
         className="flex h-profile-desktop w-profile-desktop items-center justify-center rounded-full overflow-hidden text-lg-medium text-white shrink-0"
         style={{ backgroundColor: myChipColor }}
       >
-        {me?.profileImageUrl ? (
+        {profileImageUrl ? (
           <Image
-            src={me.profileImageUrl}
-            alt={me.nickname}
+            src={profileImageUrl}
+            alt={nickname}
             width={38}
             height={38}
             priority={shouldPrioritizeMyAvatar}
@@ -47,11 +52,11 @@ export default function HeaderMyProfileButton({
             unoptimized
           />
         ) : (
-          (me?.nickname?.[0]?.toUpperCase() ?? 'U')
+          fallbackInitial
         )}
       </div>
       <span className="hidden lg:inline text-lg-medium text-gray-700">
-        {me?.nickname ?? ''}
+        {nickname}
       </span>
     </button>
   );
