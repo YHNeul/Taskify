@@ -41,13 +41,19 @@ export const useHeader = () => {
   const { data: me, isLoading: isMeLoading } = useMeQuery();
 
   useEffect(() => {
-    const update = () =>
+    const mediaQuery = window.matchMedia('(min-width: 1024px)');
+    const update = () => {
       setMaxVisibleMembers(
-        window.innerWidth < 1024 ? MAX_VISIBLE_COMPACT : MAX_VISIBLE_DESKTOP,
+        mediaQuery.matches ? MAX_VISIBLE_DESKTOP : MAX_VISIBLE_COMPACT,
       );
+    };
+
     update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    mediaQuery.addEventListener('change', update);
+
+    return () => {
+      mediaQuery.removeEventListener('change', update);
+    };
   }, []);
 
   const members = membersData?.members ?? [];
