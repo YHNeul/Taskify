@@ -1,338 +1,49 @@
-/**
- * @file 계정 관리 페이지 ( /mypage )
- * @description 유저의 프로필 이미지, 닉네임, 비밀번호를 수정하는 마이페이지입니다.
- * @note 프로필 이미지 업로드 API 연동과, 현재 비밀번호 검증 로직이 포함됩니다.
- */
-
 'use client';
 
-import { Eye, EyeOff } from 'lucide-react';
-import Image from 'next/image';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
 import AlertModal from '@/shared/components/modal/AlertModal';
-import Input from '@/shared/components/common/Input/Input';
 import Button from '@/shared/components/common/Button';
-import {
-  updateMyInfo,
-  uploadProfileImage,
-  changePassword,
-} from '@/shared/apis/user';
-import { QUERY_KEYS } from '@/shared/constants/queryKeys';
+import PasswordChangeForm from '@/shared/components/mypage/PasswordChangeForm';
+import ProfileEditForm from '@/shared/components/mypage/ProfileEditForm';
 import { useLogout } from '@/shared/hooks/useLogout';
-import { useMyInfoQuery } from '@/shared/hooks/useMyInfoQuery';
-import {
-  PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE,
-  PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE,
-  validatePasswordHasLetterAndNumber,
-  validatePasswordNoTripleRepeat,
-} from '@/shared/utils/validate';
-
-const profileSchema = z.object({
-  nickname: z
-    .string()
-    .trim()
-    .min(1, '닉네임을 입력해 주세요.')
-    .max(10, '열 자 이하로 작성해주세요.'),
-});
-
-const passwordSchema = z
-  .object({
-    currentPassword: z.string().min(1, '현재 비밀번호를 입력해 주세요.'),
-    newPassword: z
-      .string()
-      .min(1, '새 비밀번호를 입력해 주세요.')
-      .refine(
-        (value) => validatePasswordNoTripleRepeat(value),
-        PASSWORD_TRIPLE_REPEAT_ERROR_MESSAGE,
-      )
-      .min(8, '8자 이상 입력해 주세요.')
-      .refine(
-        (value) => validatePasswordHasLetterAndNumber(value),
-        PASSWORD_LETTER_AND_NUMBER_ERROR_MESSAGE,
-      ),
-    confirmPassword: z.string().min(1, '새 비밀번호를 한 번 더 입력해 주세요.'),
-  })
-  .refine((value) => value.newPassword === value.confirmPassword, {
-    message: '비밀번호가 일치하지 않습니다.',
-    path: ['confirmPassword'],
-  });
-
-type ProfileFormValues = z.infer<typeof profileSchema>;
-type PasswordFormValues = z.infer<typeof passwordSchema>;
+import { useMyPageForm } from '@/shared/hooks/useMyPageForm';
 
 export default function MyPageContent() {
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const queryClient = useQueryClient();
   const handleLogout = useLogout('/');
-
-  const { data: myInfo, isLoading } = useMyInfoQuery();
-
-  const initialEmail = myInfo?.email ?? '';
-  const initialProfileImageUrl = myInfo?.profileImageUrl ?? null;
-
-  const [previewImageUrl, setPreviewImageUrl] = useState<string | undefined>(
-    undefined,
-  );
-  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
-
-  // NOTE: 서버에서 받아온 초기값과 사용자가 수정 중인 값을 분리해서 다루기 위한 값
-  const currentPreviewImageUrl = previewImageUrl ?? initialProfileImageUrl;
-
-  const [alertMessage, setAlertMessage] = useState<string | null>(null);
-
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [currentPasswordServerError, setCurrentPasswordServerError] = useState<
-    string | null
-  >(null);
-
   const {
-    register: registerProfile,
-    handleSubmit: onProfileSubmit,
-    reset: resetProfileForm,
-    formState: {
-      errors: profileErrors,
-      isDirty: isProfileNicknameDirty,
-      isSubmitting: isProfileSubmitting,
-    },
-  } = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileSchema),
-    mode: 'onChange',
-    defaultValues: {
-      nickname: '',
-    },
-  });
-
-  const {
-    register: registerPassword,
-    watch: watchPassword,
-    handleSubmit: onPasswordSubmit,
-    reset: resetPasswordForm,
-    setError: setPasswordFormError,
-    clearErrors: clearPasswordFormErrors,
-    formState: {
-      errors: passwordErrors,
-      isValid: isPasswordFormValid,
-      isSubmitting: isPasswordSubmitting,
-    },
-  } = useForm<PasswordFormValues>({
-    resolver: zodResolver(passwordSchema),
-    mode: 'onChange',
-    defaultValues: {
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
-    },
-  });
-
-  const isNicknameChanged = isProfileNicknameDirty;
-  const isImageChanged = selectedImageFile !== null;
-  const isProfileChanged = isNicknameChanged || isImageChanged;
-  const currentPasswordRegister = registerPassword('currentPassword');
-
-  const currentPasswordValue = watchPassword('currentPassword');
-
-  const newPasswordValue = watchPassword('newPassword');
-  const confirmPasswordValue = watchPassword('confirmPassword');
-
-  const currentPasswordErrorMessage = currentPasswordValue
-    ? (currentPasswordServerError ?? passwordErrors.currentPassword?.message)
-    : undefined;
-  const newPasswordErrorMessage = newPasswordValue
-    ? passwordErrors.newPassword?.message
-    : undefined;
-  const confirmPasswordErrorMessage = confirmPasswordValue
-    ? passwordErrors.confirmPassword?.message
-    : undefined;
-
-  // NOTE: 이미지 업로드와 프로필 수정은 요청 흐름이 달라 mutation을 분리했습니다.
-  const uploadProfileImageMutation = useMutation({
-    mutationFn: uploadProfileImage,
-  });
-
-  // NOTE: 수정 성공 후 최신 사용자 정보를 다시 조회하기 위해 캐시를 무효화합니다.
-  const updateMyInfoMutation = useMutation({
-    mutationFn: updateMyInfo,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.me() });
-      queryClient.invalidateQueries({ queryKey: ['members'] });
-      openAlert('프로필이 업데이트되었습니다.');
-    },
-  });
-
-  const changePasswordMutation = useMutation({
-    mutationFn: changePassword,
-    onSuccess: () => {
-      openAlert('비밀번호가 변경되었습니다.');
-      resetPasswordForm();
-    },
-  });
-
-  useEffect(() => {
-    if (!myInfo?.nickname || isProfileNicknameDirty) return;
-    resetProfileForm({ nickname: myInfo.nickname });
-  }, [myInfo?.nickname, resetProfileForm, isProfileNicknameDirty]);
-
-  // NOTE: 이미지 미리보기용으로 생성한 object URL이 남지 않도록 정리합니다.
-  useEffect(() => {
-    return () => {
-      if (previewImageUrl) {
-        URL.revokeObjectURL(previewImageUrl);
-      }
-    };
-  }, [previewImageUrl]);
-
-  const renderPasswordToggleButton = (
-    isVisible: boolean,
-    onToggle: () => void,
-  ) => (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-label="비밀번호 표시 전환"
-      className="flex items-center justify-center h-full"
-    >
-      {isVisible ? <EyeOff size={20} /> : <Eye size={20} />}
-    </button>
-  );
-
-  const openAlert = (message: string) => {
-    setAlertMessage(message);
-  };
-
-  const closeAlert = () => {
-    setAlertMessage(null);
-  };
-
-  const handleCurrentPasswordBlur = async (value: string) => {
-    if (!value || !initialEmail) return;
-
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: initialEmail,
-          password: value,
-        }),
-      });
-
-      if (!response.ok) {
-        const data = (await response.json().catch(() => null)) as
-          | { message?: string }
-          | null;
-        const message = data?.message ?? '현재 비밀번호가 일치하지 않습니다.';
-        setCurrentPasswordServerError(message);
-        setPasswordFormError('currentPassword', {
-          type: 'server',
-          message,
-        });
-        return;
-      }
-
-      setCurrentPasswordServerError(null);
-      clearPasswordFormErrors('currentPassword');
-    } catch {
-      // blur 검증 실패는 입력 UX를 방해하지 않기 위해 무시
-    }
-  };
-
-  // 변경 버튼 클릭
-  const handlePasswordSubmit = async (values: PasswordFormValues) => {
-    setCurrentPasswordServerError(null);
-    try {
-      await changePasswordMutation.mutateAsync({
-        password: values.currentPassword,
-        newPassword: values.newPassword,
-      });
-    } catch (error) {
-      const unknownError = error as
-        | {
-            response?: {
-              status?: number;
-              data?: {
-                message?: string;
-              };
-            };
-          }
-        | undefined;
-      const statusCode = unknownError?.response?.status;
-      const serverMessage = unknownError?.response?.data?.message;
-
-      if (
-        statusCode === 400 ||
-        statusCode === 401 ||
-        statusCode === 403 ||
-        serverMessage?.includes('비밀번호')
-      ) {
-        const fieldErrorMessage =
-          serverMessage ?? '현재 비밀번호가 일치하지 않습니다.';
-        setCurrentPasswordServerError(fieldErrorMessage);
-        setPasswordFormError('currentPassword', {
-          type: 'server',
-          message: fieldErrorMessage,
-        });
-        return;
-      }
-
-      openAlert(serverMessage ?? '비밀번호 변경에 실패했습니다.');
-    }
-  };
-
-  const handleProfileImageButtonClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleProfileImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const imageFile = event.target.files?.[0];
-
-    if (!imageFile) {
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(imageFile);
-
-    setSelectedImageFile(imageFile);
-    setPreviewImageUrl(objectUrl);
-
-    // NOTE: 같은 파일을 다시 선택해도 change 이벤트가 동작하도록 value를 초기화합니다.
-    event.target.value = '';
-  };
-
-  const handleProfileSubmit = async ({ nickname }: ProfileFormValues) => {
-    if (!isProfileChanged) {
-      return;
-    }
-
-    try {
-      let profileImageUrl = currentPreviewImageUrl ?? null;
-
-      if (selectedImageFile) {
-        const uploadResult =
-          await uploadProfileImageMutation.mutateAsync(selectedImageFile);
-        profileImageUrl = uploadResult.profileImageUrl;
-      }
-
-      await updateMyInfoMutation.mutateAsync({
-        nickname: nickname.trim(),
-        profileImageUrl,
-      });
-
-      setSelectedImageFile(null);
-      setPreviewImageUrl(undefined);
-    } catch {
-      openAlert('프로필 저장 중 오류가 발생했습니다.');
-    }
-  };
+    isLoading,
+    initialEmail,
+    currentPreviewImageUrl,
+    fileInputRef,
+    alertMessage,
+    closeAlert,
+    isProfileChanged,
+    isProfileSubmitting,
+    profileErrors,
+    registerProfile,
+    submitProfileForm,
+    handleProfileImageButtonClick,
+    handleProfileImageChange,
+    isPasswordFormValid,
+    isPasswordSubmitting,
+    registerPassword,
+    currentPasswordRegister,
+    onCurrentPasswordChange,
+    onCurrentPasswordBlur,
+    currentPasswordErrorMessage,
+    newPasswordErrorMessage,
+    confirmPasswordErrorMessage,
+    showCurrentPassword,
+    showNewPassword,
+    showConfirmPassword,
+    toggleShowCurrentPassword,
+    toggleShowNewPassword,
+    toggleShowConfirmPassword,
+    submitPasswordForm,
+  } = useMyPageForm();
 
   if (isLoading) {
     return <div className="p-6">로딩 중...</div>;
@@ -363,150 +74,37 @@ export default function MyPageContent() {
       </button>
 
       <div className="flex w-full max-w-2xl flex-col mt-4 gap-4 md:gap-6">
-        <section className="rounded-2xl bg-white px-4 py-5 md:p-6">
-          <h2 className="mb-6 text-lg-bold leading-none text-gray-900">
-            프로필
-          </h2>
+        <ProfileEditForm
+          initialEmail={initialEmail}
+          fileInputRef={fileInputRef}
+          currentPreviewImageUrl={currentPreviewImageUrl}
+          onImageButtonClick={handleProfileImageButtonClick}
+          onImageChange={handleProfileImageChange}
+          registerNickname={registerProfile}
+          nicknameError={profileErrors.nickname?.message}
+          isProfileChanged={isProfileChanged}
+          isProfileSubmitting={isProfileSubmitting}
+          onSubmit={submitProfileForm}
+        />
 
-          <div className="flex flex-col gap-5 md:flex-row md:items-start md:gap-10">
-            <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-md bg-gray-100 ms:h-44 ms:w-44">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleProfileImageChange}
-              />
-
-              <button
-                type="button"
-                onClick={handleProfileImageButtonClick}
-                className="h-full w-full"
-                aria-label="프로필 이미지 업로드"
-              >
-                {currentPreviewImageUrl ? (
-                  <div className="relative h-full w-full">
-                    <Image
-                      src={currentPreviewImageUrl}
-                      alt="프로필 미리보기"
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                  </div>
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-2xl-semibold text-brand-violet">
-                    +
-                  </div>
-                )}
-              </button>
-            </div>
-
-            <div className="flex w-full min-w-0 flex-col gap-4">
-              <Input
-                label="이메일"
-                labelClassName="text-md-medium"
-                value={initialEmail}
-                readOnly
-                className="bg-white text-md-regular md:text-lg-regular"
-              />
-
-              <Input
-                label="닉네임"
-                labelClassName="text-md-medium"
-                placeholder="닉네임 입력"
-                maxLength={10}
-                {...registerProfile('nickname')}
-                isError={!!profileErrors.nickname}
-                errorMessage={profileErrors.nickname?.message}
-                className="text-md-regular md:text-lg-regular"
-              />
-
-              <Button
-                size="lg"
-                className="h-12 w-full"
-                disabled={!isProfileChanged || isProfileSubmitting}
-                onClick={onProfileSubmit(handleProfileSubmit)}
-              >
-                저장
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        <section className="rounded-2xl bg-white px-4 py-5 md:p-6">
-          <h2 className="mb-6 text-lg-bold leading-none text-gray-700">
-            비밀번호 변경
-          </h2>
-
-          <div className="flex flex-col gap-4">
-            <Input
-              label="현재 비밀번호"
-              labelClassName="text-md-medium"
-              type={showCurrentPassword ? 'text' : 'password'}
-              placeholder="비밀번호 입력"
-              {...currentPasswordRegister}
-              onChange={(event) => {
-                currentPasswordRegister.onChange(event);
-                if (currentPasswordServerError) {
-                  setCurrentPasswordServerError(null);
-                  clearPasswordFormErrors('currentPassword');
-                }
-              }}
-              onBlur={(event) => {
-                currentPasswordRegister.onBlur(event);
-                void handleCurrentPasswordBlur(event.target.value);
-              }}
-              isError={!!currentPasswordErrorMessage}
-              errorMessage={currentPasswordErrorMessage}
-              className="text-md-regular md:text-lg-regular"
-              rightIcon={renderPasswordToggleButton(showCurrentPassword, () =>
-                setShowCurrentPassword((prev) => !prev),
-              )}
-            />
-
-            <Input
-              label="새 비밀번호"
-              labelClassName="text-md-medium"
-              type={showNewPassword ? 'text' : 'password'}
-              placeholder="새 비밀번호 입력"
-              {...registerPassword('newPassword')}
-              isError={!!newPasswordErrorMessage}
-              errorMessage={newPasswordErrorMessage}
-              className="text-md-regular md:text-lg-regular"
-              rightIcon={renderPasswordToggleButton(showNewPassword, () =>
-                setShowNewPassword((prev) => !prev),
-              )}
-            />
-
-            <div>
-              <Input
-                label="새 비밀번호 확인"
-                labelClassName="text-md-medium"
-                type={showConfirmPassword ? 'text' : 'password'}
-                placeholder="새 비밀번호 입력"
-                {...registerPassword('confirmPassword')}
-                isError={!!confirmPasswordErrorMessage}
-                errorMessage={confirmPasswordErrorMessage}
-                className="text-md-regular md:text-lg-regular"
-                rightIcon={renderPasswordToggleButton(showConfirmPassword, () =>
-                  setShowConfirmPassword((prev) => !prev),
-                )}
-              />
-              {/* 에러메시지 공간 확보 */}
-              <div className="mt-1 h-5" />
-            </div>
-
-            <Button
-              size="lg"
-              className="h-12 w-full"
-              disabled={!isPasswordFormValid || isPasswordSubmitting}
-              onClick={onPasswordSubmit(handlePasswordSubmit)}
-            >
-              변경
-            </Button>
-          </div>
-        </section>
+        <PasswordChangeForm
+          currentPasswordRegister={currentPasswordRegister}
+          registerPassword={registerPassword}
+          onCurrentPasswordChange={onCurrentPasswordChange}
+          onCurrentPasswordBlur={onCurrentPasswordBlur}
+          currentPasswordErrorMessage={currentPasswordErrorMessage}
+          newPasswordErrorMessage={newPasswordErrorMessage}
+          confirmPasswordErrorMessage={confirmPasswordErrorMessage}
+          showCurrentPassword={showCurrentPassword}
+          showNewPassword={showNewPassword}
+          showConfirmPassword={showConfirmPassword}
+          toggleShowCurrentPassword={toggleShowCurrentPassword}
+          toggleShowNewPassword={toggleShowNewPassword}
+          toggleShowConfirmPassword={toggleShowConfirmPassword}
+          isPasswordFormValid={isPasswordFormValid}
+          isPasswordSubmitting={isPasswordSubmitting}
+          onSubmit={submitPasswordForm}
+        />
 
         <Button
           variant="secondary"
