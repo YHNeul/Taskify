@@ -46,7 +46,7 @@ export default function Header() {
             dashboardId={dashboardId}
             dashboard={dashboard}
             isDashboardLoading={isDashboardLoading}
-            onManageClick={() => router.push(`/dashboard/${dashboardId}/edit`)}
+            onManageClick={(id) => router.push(`/dashboard/${id}/edit`)}
           />
 
           <div

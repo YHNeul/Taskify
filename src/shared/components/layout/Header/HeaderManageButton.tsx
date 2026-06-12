@@ -6,7 +6,7 @@ interface HeaderManageButtonProps {
   dashboardId: number | null;
   dashboard?: Dashboard;
   isDashboardLoading: boolean;
-  onManageClick: () => void;
+  onManageClick: (dashboardId: number) => void;
 }
 
 export default function HeaderManageButton({
@@ -26,7 +26,7 @@ export default function HeaderManageButton({
   return (
     <button
       type="button"
-      onClick={onManageClick}
+      onClick={() => onManageClick(dashboardId)}
       aria-label="관리"
       className="flex h-8 md:h-9 lg:h-10 items-center gap-1.5 md:gap-2 rounded-lg bg-white px-2 md:px-3 lg:px-4 text-xs-medium md:text-md-medium text-gray-500 shrink-0 cursor-pointer hover:bg-brand-violet-light transition-colors"
     >
