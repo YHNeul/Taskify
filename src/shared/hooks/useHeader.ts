@@ -16,7 +16,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/mypage': '계정관리',
 };
 
-export const useHeaderContext = () => {
+export const useHeader = () => {
   const params = useParams();
   const pathname = usePathname();
   const activeDashboardId = useDashboardStore((s) => s.activeDashboardId);

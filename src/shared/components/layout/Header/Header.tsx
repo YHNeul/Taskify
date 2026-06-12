@@ -7,7 +7,7 @@ import HeaderManageButton from '@/shared/components/layout/Header/HeaderManageBu
 import HeaderInviteButton from '@/shared/components/layout/Header/HeaderInviteButton';
 import HeaderMyProfileButton from '@/shared/components/layout/Header/HeaderMyProfileButton';
 import HeaderInviteModal from '@/shared/components/layout/Header/HeaderInviteModal';
-import { useHeaderContext } from '@/shared/hooks/useHeaderContext';
+import { useHeader } from '@/shared/hooks/useHeader';
 import { useInviteMember } from '@/shared/hooks/useInviteMember';
 
 export default function Header() {
@@ -25,7 +25,7 @@ export default function Header() {
     me,
     isMeLoading,
     myChipColor,
-  } = useHeaderContext();
+  } = useHeader();
 
   const invite = useInviteMember(effectiveDashboardId);
   const showOwnerControls = Boolean(dashboardId && dashboard?.createdByMe);
