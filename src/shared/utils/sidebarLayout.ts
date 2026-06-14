@@ -15,7 +15,13 @@
  */
 
 /** 사이드바 레이아웃 모드 */
-export type LayoutType = 'mobile' | 'tablet' | 'desktop';
+export const SIDEBAR_LAYOUT = {
+  MOBILE: 'mobile',
+  TABLET: 'tablet',
+  DESKTOP: 'desktop',
+} as const;
+
+export type LayoutType = (typeof SIDEBAR_LAYOUT)[keyof typeof SIDEBAR_LAYOUT];
 
 /** 사이드바 최소 너비 (px) */
 export const SIDEBAR_MIN_WIDTH = 67;
@@ -30,9 +36,9 @@ export const SIDEBAR_MAX_WIDTH = 500;
  */
 export function getBreakpoint(): LayoutType {
   const w = window.innerWidth;
-  if (w < 768) return 'mobile';
-  if (w < 1024) return 'tablet';
-  return 'desktop';
+  if (w < 768) return SIDEBAR_LAYOUT.MOBILE;
+  if (w < 1024) return SIDEBAR_LAYOUT.TABLET;
+  return SIDEBAR_LAYOUT.DESKTOP;
 }
 
 /**
@@ -42,8 +48,8 @@ export function getBreakpoint(): LayoutType {
  * @returns 기본 너비 (px)
  */
 export function getDefaultWidth(bp: LayoutType): number {
-  if (bp === 'mobile') return SIDEBAR_MIN_WIDTH;
-  if (bp === 'tablet') return 160;
+  if (bp === SIDEBAR_LAYOUT.MOBILE) return SIDEBAR_MIN_WIDTH;
+  if (bp === SIDEBAR_LAYOUT.TABLET) return 160;
   return 300;
 }
 

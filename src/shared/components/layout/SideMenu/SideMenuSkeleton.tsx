@@ -10,7 +10,7 @@
 
 import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
 import { cn } from '@/lib/utils';
-import type { LayoutType } from '@/shared/utils/sidebarLayout';
+import { SIDEBAR_LAYOUT, type LayoutType } from '@/shared/utils/sidebarLayout';
 
 interface SideMenuSkeletonProps {
   /** 현재 사이드바 레이아웃 타입. `null`이면 CSS 클래스 기반 반응형 */
@@ -24,16 +24,16 @@ export default function SideMenuSkeleton({ layout }: SideMenuSkeletonProps) {
         'flex flex-col',
         layout === null
           ? 'gap-1.5 md:gap-0.5 lg:gap-2'
-          : layout === 'mobile'
+          : layout === SIDEBAR_LAYOUT.MOBILE
             ? 'gap-1.5'
-            : layout === 'tablet'
+            : layout === SIDEBAR_LAYOUT.TABLET
               ? 'gap-0.5'
               : 'gap-2',
       )}
     >
       {Array.from({ length: 5 }).map((_, i) => (
         <li key={i}>
-          {(layout === null || layout === 'mobile') && (
+          {(layout === null || layout === SIDEBAR_LAYOUT.MOBILE) && (
             <div
               className={cn(
                 'flex items-center justify-center w-10 h-10 ml-3.5',
@@ -43,7 +43,7 @@ export default function SideMenuSkeleton({ layout }: SideMenuSkeletonProps) {
               <Skeleton className="w-2 h-2 rounded-full" />
             </div>
           )}
-          {(layout === null || layout === 'tablet') && (
+          {(layout === null || layout === SIDEBAR_LAYOUT.TABLET) && (
             <div
               className={cn(
                 'flex items-center gap-4 h-11 mx-2 px-2.5',
@@ -54,7 +54,7 @@ export default function SideMenuSkeleton({ layout }: SideMenuSkeletonProps) {
               <Skeleton className="h-4 flex-1 rounded" />
             </div>
           )}
-          {(layout === null || layout === 'desktop') && (
+          {(layout === null || layout === SIDEBAR_LAYOUT.DESKTOP) && (
             <div
               className={cn(
                 'flex items-center gap-4 h-12 mx-3 px-3',

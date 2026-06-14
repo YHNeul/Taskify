@@ -35,6 +35,8 @@ import {
   useQueryParamState,
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
+import { SIDEBAR_LAYOUT } from '@/shared/utils/sidebarLayout';
 
 const PAGE_SIZE = 15;
 
@@ -70,7 +72,7 @@ const SideMenu = () => {
   const pathname = usePathname();
   const queryClient = useQueryClient();
   const [page, setPage] = useQueryParamState<number>({
-    key: 'sidePage',
+    key: QUERY_PARAM_KEYS.SIDE_PAGE,
     defaultValue: 1,
     parse: (rawValue) => parsePositiveIntParam(rawValue, 1),
     serialize: (value) => (value > 1 ? String(value) : null),
@@ -81,7 +83,7 @@ const SideMenu = () => {
   );
 
   const { sidebarWidth, layout, handleResizeStart } = useSidebarResize();
-  const isMobileLayout = layout === 'mobile';
+  const isMobileLayout = layout === SIDEBAR_LAYOUT.MOBILE;
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
@@ -207,9 +209,9 @@ const SideMenu = () => {
           'flex items-center shrink-0',
           layout === null
             ? 'pt-5 pl-5.5 md:pt-5 md:pl-3 lg:pl-2 mb-10 md:mb-space-57 lg:mb-14'
-            : layout === 'mobile'
+            : layout === SIDEBAR_LAYOUT.MOBILE
               ? 'pt-5 pl-5.5 mb-10'
-              : layout === 'tablet'
+              : layout === SIDEBAR_LAYOUT.TABLET
                 ? 'pt-5 pl-3 mb-space-57'
                 : 'pt-5 pl-2 mb-14',
         )}
@@ -223,7 +225,7 @@ const SideMenu = () => {
               <Logo variant="large" />
             </span>
           </>
-        ) : layout === 'mobile' ? (
+        ) : layout === SIDEBAR_LAYOUT.MOBILE ? (
           <Logo variant="small" />
         ) : (
           <Logo variant="large" />
@@ -235,9 +237,9 @@ const SideMenu = () => {
           'flex items-center justify-between shrink-0',
           layout === null
             ? 'pl-6 pr-3.5 md:pl-3 md:pr-3 lg:pl-2 lg:pr-3 mb-4.5 md:mb-4'
-            : layout === 'mobile'
+            : layout === SIDEBAR_LAYOUT.MOBILE
               ? 'pl-6 pr-3.5 mb-4.5'
-              : layout === 'tablet'
+              : layout === SIDEBAR_LAYOUT.TABLET
                 ? 'pl-3 pr-3 mb-4'
                 : 'pl-2 pr-3 mb-4',
         )}
@@ -247,7 +249,7 @@ const SideMenu = () => {
             'text-xs-semibold text-gray-500',
             layout === null
               ? 'hidden md:block'
-              : layout === 'mobile'
+              : layout === SIDEBAR_LAYOUT.MOBILE
                 ? 'hidden'
                 : 'block',
           )}
@@ -315,7 +317,7 @@ const SideMenu = () => {
                   'flex flex-col',
                   layout === null
                     ? 'gap-1.5 md:gap-0.5 lg:gap-2'
-                    : layout === 'tablet'
+                    : layout === SIDEBAR_LAYOUT.TABLET
                       ? 'gap-0.5'
                       : 'gap-2',
                 )}
@@ -343,7 +345,7 @@ const SideMenu = () => {
             'flex items-center gap-3 shrink-0 px-5 pb-4',
             layout === null
               ? 'hidden md:flex pt-6 lg:pt-8'
-              : layout === 'tablet'
+              : layout === SIDEBAR_LAYOUT.TABLET
                 ? 'pt-6'
                 : 'pt-8',
           )}

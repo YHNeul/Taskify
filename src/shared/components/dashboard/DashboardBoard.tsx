@@ -1,20 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { useDashboardStore } from '@/shared/store/useDashboardStore';
 import type { Column as ColumnType, Card } from '@/shared/types/dashboard';
-import {
-  getCards,
-  createColumn,
-  updateColumn,
-  deleteColumn,
-} from '@/shared/apis/dashboard';
 import Column from '@/shared/components/dashboard/Column';
 import TaskCard from '@/shared/components/dashboard/TaskCard';
 import Button from '@/shared/components/common/Button';
-import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import Cards from '@/shared/components/modal/Cards/Cards';
 import CreateCard from '@/shared/components/modal/Cards/CreateCard';
 import FormModal from '@/shared/components/modal/FormModal';
@@ -26,6 +18,9 @@ import { useDashboardQuery } from '@/shared/hooks/useDashboardQuery';
 import { useDashboardColumnsQuery } from '@/shared/hooks/useDashboardColumnsQuery';
 import { useDashboardColumnCardsQuery } from '@/shared/hooks/useDashboardColumnCardsQuery';
 import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
+import { useDashboardColumnMutations } from '@/shared/hooks/useDashboardColumnMutations';
+import { useColumnCardsPagination } from '@/shared/hooks/useColumnCardsPagination';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 
 interface DashboardBoardProps {
   dashboardId: number;
@@ -35,13 +30,10 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   const [columnCards, setColumnCards] = useState<
     Record<number, ColumnCardState>
   >({});
-  const [loadingColumnIds, setLoadingColumnIds] = useState<Set<number>>(
-    new Set(),
-  );
 
   const [selectedCardId, setSelectedCardId] = useQueryParamState<number | null>(
     {
-      key: 'cardId',
+      key: QUERY_PARAM_KEYS.CARD_ID,
       defaultValue: null,
       parse: (rawValue) => {
         if (!rawValue) return null;
@@ -67,9 +59,28 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     error: string;
   }>({ column: null, title: '', error: '' });
   const [deleteColumnId, setDeleteColumnId] = useState<number | null>(null);
+  const [boardErrorMessage, setBoardErrorMessage] = useState<string | null>(
+    null,
+  );
 
-  const queryClient = useQueryClient();
   const setActiveDashboardId = useDashboardStore((s) => s.setActiveDashboardId);
+  const { createColumn, updateColumn, deleteColumn } =
+    useDashboardColumnMutations({
+      dashboardId,
+      onDeleteError: () => {
+        setBoardErrorMessage(
+          '컬럼 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+        );
+      },
+    });
+  const { loadingColumnIds, loadMoreCards } = useColumnCardsPagination({
+    setColumnCards,
+    onLoadMoreError: () => {
+      setBoardErrorMessage(
+        '카드를 더 불러오지 못했습니다. 다시 시도해 주세요.',
+      );
+    },
+  });
 
   useEffect(() => {
     setActiveDashboardId(dashboardId);
@@ -104,31 +115,25 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     handleDragStart,
     handleDragOver,
     handleDragEnd,
-  } = useBoardDnd({ columnCards, setColumnCards });
-
-  const handleLoadMore = useCallback(
-    async (columnId: number, cursorId: number) => {
-      setLoadingColumnIds((prev) => new Set(prev).add(columnId));
-      try {
-        const result = await getCards(columnId, 10, cursorId);
-        setColumnCards((prev) => ({
-          ...prev,
-          [columnId]: {
-            cards: [...(prev[columnId]?.cards ?? []), ...result.cards],
-            totalCount: result.totalCount,
-            cursorId: result.cursorId,
-          },
-        }));
-      } finally {
-        setLoadingColumnIds((prev) => {
-          const next = new Set(prev);
-          next.delete(columnId);
-          return next;
-        });
-      }
+  } = useBoardDnd({
+    columnCards,
+    setColumnCards,
+    onMovePersistError: () => {
+      setBoardErrorMessage('카드 이동 저장에 실패해 이전 상태로 복구했습니다.');
     },
-    [],
-  );
+  });
+
+  useEffect(() => {
+    if (!boardErrorMessage) return;
+
+    const timerId = window.setTimeout(() => {
+      setBoardErrorMessage(null);
+    }, 2500);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [boardErrorMessage]);
 
   const handleEditColumnConfirm = async () => {
     const { column, title } = editColumnModal;
@@ -142,10 +147,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
       return;
     }
     try {
-      await updateColumn(column.id, trimmed);
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.columns(dashboardId),
-      });
+      await updateColumn({ columnId: column.id, title: trimmed });
       setEditColumnModal({ column: null, title: '', error: '' });
     } catch {
       setEditColumnModal((prev) => ({
@@ -159,9 +161,8 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     if (!deleteColumnId) return;
     try {
       await deleteColumn(deleteColumnId);
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.columns(dashboardId),
-      });
+    } catch {
+      // 에러 토스트는 useDashboardColumnMutations의 onDeleteError에서 처리한다.
     } finally {
       setDeleteColumnId(null);
     }
@@ -177,10 +178,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
       return;
     }
     try {
-      await createColumn(trimmed, dashboardId);
-      queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.columns(dashboardId),
-      });
+      await createColumn(trimmed);
       setAddColumnModal({ isOpen: false, title: '', error: '' });
     } catch {
       setAddColumnModal((prev) => ({
@@ -205,7 +203,9 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   return (
     <div className="flex flex-col h-full">
       <div className="lg:hidden border-b border-gray-200 bg-white px-4 py-3 md:px-5">
-        <h1 className="truncate text-2lg-bold text-gray-700">{dashboard.title}</h1>
+        <h1 className="truncate text-2lg-bold text-gray-700">
+          {dashboard.title}
+        </h1>
       </div>
       <div className="flex-1 overflow-hidden bg-gray-100">
         <DndContext
@@ -236,7 +236,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                 onCardClick={(card: Card) => {
                   setSelectedCardId(card.id);
                 }}
-                onLoadMore={handleLoadMore}
+                onLoadMore={loadMoreCards}
                 isLoadingMore={loadingColumnIds.has(column.id)}
               />
             ))}
@@ -382,6 +382,16 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
               />
             </div>
           </div>
+        </div>
+      )}
+
+      {boardErrorMessage && (
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-gray-700 px-4 py-3 text-sm-medium text-white shadow-lg md:bottom-auto md:top-6"
+        >
+          {boardErrorMessage}
         </div>
       )}
     </div>

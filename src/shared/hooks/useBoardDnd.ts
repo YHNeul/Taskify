@@ -43,6 +43,8 @@ interface UseBoardDndProps {
   setColumnCards: React.Dispatch<
     React.SetStateAction<Record<number, ColumnCardState>>
   >;
+  /** 서버 반영 실패(롤백) 시 호출 */
+  onMovePersistError?: () => void;
 }
 
 /**
@@ -55,6 +57,7 @@ interface UseBoardDndProps {
 export const useBoardDnd = ({
   columnCards,
   setColumnCards,
+  onMovePersistError,
 }: UseBoardDndProps) => {
   /** DragOverlay 렌더링에 사용할 드래그 중인 카드 정보 */
   const [activeCard, setActiveCard] = useState<{
@@ -267,6 +270,7 @@ export const useBoardDnd = ({
             state.cards.map((c) => c.id),
           );
         }
+        onMovePersistError?.();
       }
     }
   };

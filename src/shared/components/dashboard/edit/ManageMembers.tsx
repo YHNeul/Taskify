@@ -18,6 +18,7 @@ import {
   useQueryParamState,
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 
 const ITEM_PER_PAGE = 4;
 
@@ -27,7 +28,7 @@ interface MembersTableProps {
 
 export default function ManageMembers({ dashboardId }: MembersTableProps) {
   const [currentPage, setCurrentPage] = useQueryParamState<number>({
-    key: 'memberPage',
+    key: QUERY_PARAM_KEYS.MEMBER_PAGE,
     defaultValue: 1,
     parse: (rawValue) => parsePositiveIntParam(rawValue, 1),
     serialize: (value) => (value > 1 ? String(value) : null),

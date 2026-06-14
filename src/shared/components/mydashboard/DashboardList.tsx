@@ -13,18 +13,19 @@ import {
   useQueryParamState,
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 
 const DASHBOARD_LIMIT = 6;
 
 export default function DashboardList() {
   const [currentPage, setCurrentPage] = useQueryParamState<number>({
-    key: 'dashboardPage',
+    key: QUERY_PARAM_KEYS.DASHBOARD_PAGE,
     defaultValue: 1,
     parse: (rawValue) => parsePositiveIntParam(rawValue, 1),
     serialize: (value) => (value > 1 ? String(value) : null),
   });
   const [isModalOpen, setIsModalOpen] = useQueryParamState<boolean>({
-    key: 'createDashboard',
+    key: QUERY_PARAM_KEYS.CREATE_DASHBOARD,
     defaultValue: false,
     parse: (rawValue) => rawValue === '1',
     serialize: (value) => (value ? '1' : null),

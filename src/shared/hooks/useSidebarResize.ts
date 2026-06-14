@@ -17,6 +17,7 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import {
   type LayoutType,
+  SIDEBAR_LAYOUT,
   SIDEBAR_MIN_WIDTH,
   SIDEBAR_MAX_WIDTH,
   getBreakpoint,
@@ -85,9 +86,9 @@ export const useSidebarResize = () => {
    */
   const layout = useMemo<LayoutType | null>(() => {
     if (sidebarWidth === null) return null;
-    if (sidebarWidth < 100) return 'mobile';
-    if (sidebarWidth < 220) return 'tablet';
-    return 'desktop';
+    if (sidebarWidth < 100) return SIDEBAR_LAYOUT.MOBILE;
+    if (sidebarWidth < 220) return SIDEBAR_LAYOUT.TABLET;
+    return SIDEBAR_LAYOUT.DESKTOP;
   }, [sidebarWidth]);
 
   /**
