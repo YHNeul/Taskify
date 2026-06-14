@@ -67,6 +67,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     error: string;
   }>({ column: null, title: '', error: '' });
   const [deleteColumnId, setDeleteColumnId] = useState<number | null>(null);
+  const [dndErrorMessage, setDndErrorMessage] = useState<string | null>(null);
 
   const queryClient = useQueryClient();
   const setActiveDashboardId = useDashboardStore((s) => s.setActiveDashboardId);
@@ -104,7 +105,25 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     handleDragStart,
     handleDragOver,
     handleDragEnd,
-  } = useBoardDnd({ columnCards, setColumnCards });
+  } = useBoardDnd({
+    columnCards,
+    setColumnCards,
+    onMovePersistError: () => {
+      setDndErrorMessage('카드 이동 저장에 실패해 이전 상태로 복구했습니다.');
+    },
+  });
+
+  useEffect(() => {
+    if (!dndErrorMessage) return;
+
+    const timerId = window.setTimeout(() => {
+      setDndErrorMessage(null);
+    }, 2500);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [dndErrorMessage]);
 
   const handleLoadMore = useCallback(
     async (columnId: number, cursorId: number) => {
@@ -205,7 +224,9 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   return (
     <div className="flex flex-col h-full">
       <div className="lg:hidden border-b border-gray-200 bg-white px-4 py-3 md:px-5">
-        <h1 className="truncate text-2lg-bold text-gray-700">{dashboard.title}</h1>
+        <h1 className="truncate text-2lg-bold text-gray-700">
+          {dashboard.title}
+        </h1>
       </div>
       <div className="flex-1 overflow-hidden bg-gray-100">
         <DndContext
@@ -382,6 +403,12 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
               />
             </div>
           </div>
+        </div>
+      )}
+
+      {dndErrorMessage && (
+        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-gray-700 px-4 py-3 text-sm-medium text-white shadow-lg md:bottom-auto md:top-6">
+          {dndErrorMessage}
         </div>
       )}
     </div>
