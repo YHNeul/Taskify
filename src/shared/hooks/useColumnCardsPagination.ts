@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { getCards } from '@/shared/apis/dashboard';
 import { ColumnCardState } from '@/shared/hooks/useBoardDnd';
 
@@ -17,29 +17,32 @@ export const useColumnCardsPagination = ({
     new Set(),
   );
 
-  const loadMoreCards = async (columnId: number, cursorId: number) => {
-    setLoadingColumnIds((prev) => new Set(prev).add(columnId));
+  const loadMoreCards = useCallback(
+    async (columnId: number, cursorId: number) => {
+      setLoadingColumnIds((prev) => new Set(prev).add(columnId));
 
-    try {
-      const result = await getCards(columnId, 10, cursorId);
-      setColumnCards((prev) => ({
-        ...prev,
-        [columnId]: {
-          cards: [...(prev[columnId]?.cards ?? []), ...result.cards],
-          totalCount: result.totalCount,
-          cursorId: result.cursorId,
-        },
-      }));
-    } catch {
-      onLoadMoreError?.();
-    } finally {
-      setLoadingColumnIds((prev) => {
-        const next = new Set(prev);
-        next.delete(columnId);
-        return next;
-      });
-    }
-  };
+      try {
+        const result = await getCards(columnId, 10, cursorId);
+        setColumnCards((prev) => ({
+          ...prev,
+          [columnId]: {
+            cards: [...(prev[columnId]?.cards ?? []), ...result.cards],
+            totalCount: result.totalCount,
+            cursorId: result.cursorId,
+          },
+        }));
+      } catch {
+        onLoadMoreError?.();
+      } finally {
+        setLoadingColumnIds((prev) => {
+          const next = new Set(prev);
+          next.delete(columnId);
+          return next;
+        });
+      }
+    },
+    [onLoadMoreError, setColumnCards],
+  );
 
   return {
     loadingColumnIds,
