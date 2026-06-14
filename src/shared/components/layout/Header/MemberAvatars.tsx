@@ -12,9 +12,12 @@
  *   (데스크탑: 4개, 태블릿 이하: 2개)
  */
 
-import UserProfileImage from '@/shared/components/common/User/UserProfileImage';
-import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
+import { useMemo } from 'react';
 import type { Member } from '@/shared/types/dashboard';
+import MemberAvatarOverflowBadge from '@/shared/components/layout/Header/MemberAvatarOverflowBadge';
+import MemberAvatarSkeletonList from '@/shared/components/layout/Header/MemberAvatarSkeletonList';
+import MemberAvatarVisibleList from '@/shared/components/layout/Header/MemberAvatarVisibleList';
+import { getMemberAvatarDisplay } from '@/shared/components/layout/Header/memberAvatarDisplay';
 
 interface MemberAvatarsProps {
   /** 표시할 전체 멤버 목록 */
@@ -33,54 +36,25 @@ export default function MemberAvatars({
   isLoading,
   hasDashboard,
 }: MemberAvatarsProps) {
-  const visibleMembers = members.slice(0, maxVisibleMembers);
-  const hiddenMembers = members.slice(maxVisibleMembers);
-  const extraCount = Math.max(0, members.length - maxVisibleMembers);
+  const { visibleMembers, extraCount, hiddenNicknames } = useMemo(
+    () => getMemberAvatarDisplay(members, maxVisibleMembers),
+    [members, maxVisibleMembers],
+  );
 
   if (isLoading && hasDashboard) {
-    return (
-      <div className="flex items-center">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton
-            key={i}
-            className="w-profile-desktop h-profile-desktop rounded-full border-2 border-white"
-            style={{ marginLeft: i !== 0 ? '-8px' : undefined }}
-          />
-        ))}
-      </div>
-    );
+    return <MemberAvatarSkeletonList />;
   }
 
   if (visibleMembers.length === 0) return null;
 
   return (
-    <div className="flex items-center shrink-0">
-      {visibleMembers.map((member, index) => (
-        <div
-          key={member.id}
-          className="group relative shrink-0"
-          style={{
-            marginLeft: index !== 0 ? '-8px' : undefined,
-            zIndex: index + 1,
-          }}
-        >
-          <UserProfileImage profile={member} index={index} size={38} />
-          <span className="pointer-events-none absolute left-1/2 top-full z-20 mt-1 -translate-x-1/2 whitespace-nowrap rounded-xl bg-gray-600 px-2 py-1 text-xs-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
-            {member.nickname}
-          </span>
-        </div>
-      ))}
-      {extraCount > 0 && (
-        <div
-          className="group relative -ml-2 flex h-profile-desktop w-profile-desktop shrink-0 items-center justify-center rounded-full border-2 border-white bg-gray-200 px-2 text-xs-semibold text-gray-600 cursor-default select-none"
-          style={{ zIndex: visibleMembers.length + 1 }}
-        >
-          +{extraCount}
-          <span className="pointer-events-none absolute left-1/2 top-full z-20 mt-1 -translate-x-1/2 whitespace-nowrap rounded-xl bg-gray-600 px-2 py-1 text-xs-medium text-white opacity-0 transition-opacity group-hover:opacity-100">
-            {hiddenMembers.map((member) => member.nickname).join(', ')}
-          </span>
-        </div>
-      )}
+    <div className="flex items-center -space-x-2 shrink-0">
+      <MemberAvatarVisibleList members={visibleMembers} />
+      <MemberAvatarOverflowBadge
+        extraCount={extraCount}
+        visibleCount={visibleMembers.length}
+        hiddenNicknames={hiddenNicknames}
+      />
     </div>
   );
 }
