@@ -15,7 +15,7 @@ export default function MemberAvatarOverflowBadge({
 
   return (
     <div
-      className="group relative -ml-2 flex h-profile-desktop w-profile-desktop shrink-0 items-center justify-center rounded-full border-2 border-white bg-gray-200 px-2 text-xs-semibold text-gray-600 cursor-default select-none"
+      className="group relative flex h-profile-desktop w-profile-desktop shrink-0 items-center justify-center rounded-full border-2 border-white bg-gray-200 px-2 text-xs-semibold text-gray-600 cursor-default select-none"
       style={{ zIndex: visibleCount + 1 }}
       aria-label={`추가 멤버 ${extraCount}명: ${hiddenNicknames}`}
     >

@@ -48,7 +48,7 @@ export default function MemberAvatars({
   if (visibleMembers.length === 0) return null;
 
   return (
-    <div className="flex items-center shrink-0">
+    <div className="flex items-center -space-x-2 shrink-0">
       <MemberAvatarVisibleList members={visibleMembers} />
       <MemberAvatarOverflowBadge
         extraCount={extraCount}
