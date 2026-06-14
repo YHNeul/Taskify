@@ -61,8 +61,7 @@ export const useSidebarResize = () => {
     applyWidth(bp);
 
     const mediaQueries = [
-      window.matchMedia('(max-width: 767px)'),
-      window.matchMedia('(min-width: 768px) and (max-width: 1023px)'),
+      window.matchMedia('(min-width: 768px)'),
       window.matchMedia('(min-width: 1024px)'),
     ];
 
