@@ -4,4 +4,5 @@ export const QUERY_PARAM_KEYS = {
   SIDE_PAGE: 'sidePage',
   DASHBOARD_PAGE: 'dashboardPage',
   CREATE_DASHBOARD: 'createDashboard',
+  CARD_ID: 'cardId',
 } as const;

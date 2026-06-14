@@ -20,6 +20,7 @@ import { useDashboardColumnCardsQuery } from '@/shared/hooks/useDashboardColumnC
 import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
 import { useDashboardColumnMutations } from '@/shared/hooks/useDashboardColumnMutations';
 import { useColumnCardsPagination } from '@/shared/hooks/useColumnCardsPagination';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams';
 
 interface DashboardBoardProps {
   dashboardId: number;
@@ -32,7 +33,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
 
   const [selectedCardId, setSelectedCardId] = useQueryParamState<number | null>(
     {
-      key: 'cardId',
+      key: QUERY_PARAM_KEYS.CARD_ID,
       defaultValue: null,
       parse: (rawValue) => {
         if (!rawValue) return null;
