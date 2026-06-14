@@ -11,13 +11,14 @@ export const getMemberAvatarDisplay = (
   members: Member[],
   maxVisibleMembers: number,
 ): MemberAvatarDisplay => {
+  const safeMembers = Array.isArray(members) ? members : [];
   const visibleCount =
     Number.isFinite(maxVisibleMembers) && maxVisibleMembers > 0
       ? Math.floor(maxVisibleMembers)
       : 0;
 
-  const visibleMembers = members.slice(0, visibleCount);
-  const hiddenMembers = members.slice(visibleCount);
+  const visibleMembers = safeMembers.slice(0, visibleCount);
+  const hiddenMembers = safeMembers.slice(visibleCount);
 
   return {
     visibleMembers,
