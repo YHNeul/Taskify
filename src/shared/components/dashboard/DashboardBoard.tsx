@@ -386,7 +386,11 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
       )}
 
       {boardErrorMessage && (
-        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-gray-700 px-4 py-3 text-sm-medium text-white shadow-lg md:bottom-auto md:top-6">
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-gray-700 px-4 py-3 text-sm-medium text-white shadow-lg md:bottom-auto md:top-6"
+        >
           {boardErrorMessage}
         </div>
       )}
