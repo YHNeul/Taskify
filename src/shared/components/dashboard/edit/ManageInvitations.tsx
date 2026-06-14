@@ -16,7 +16,7 @@ import {
   useQueryParamState,
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
-import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 
 const EMAIL_PER_PAGE = 5;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

@@ -35,7 +35,7 @@ import {
   useQueryParamState,
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
-import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 import { SIDEBAR_LAYOUT } from '@/shared/utils/sidebarLayout';
 
 const PAGE_SIZE = 15;

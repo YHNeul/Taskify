@@ -13,7 +13,7 @@ import {
   useQueryParamState,
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
-import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 
 const DASHBOARD_LIMIT = 6;
 

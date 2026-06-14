@@ -20,7 +20,7 @@ import { useDashboardColumnCardsQuery } from '@/shared/hooks/useDashboardColumnC
 import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
 import { useDashboardColumnMutations } from '@/shared/hooks/useDashboardColumnMutations';
 import { useColumnCardsPagination } from '@/shared/hooks/useColumnCardsPagination';
-import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 
 interface DashboardBoardProps {
   dashboardId: number;
