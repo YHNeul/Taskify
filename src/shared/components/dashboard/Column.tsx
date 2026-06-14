@@ -37,7 +37,7 @@ interface ColumnProps {
   onAddCard: (columnId: number) => void;
   onEditColumn: (column: ColumnType) => void;
   onCardClick: (card: Card) => void;
-  onLoadMore?: (columnId: number, cursorId: number) => void;
+  onLoadMore?: (columnId: number, cursorId: number | null | undefined) => void;
   cursorId?: number | null;
   isLoadingMore?: boolean;
   isFirstColumn?: boolean;

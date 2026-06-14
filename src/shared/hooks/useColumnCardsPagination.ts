@@ -18,8 +18,14 @@ export const useColumnCardsPagination = ({
   );
 
   const loadMoreCards = useCallback(
-    async (columnId: number, cursorId: number) => {
-      setLoadingColumnIds((prev) => new Set(prev).add(columnId));
+    async (columnId: number, cursorId: number | null | undefined) => {
+      if (cursorId === null || cursorId === undefined) return;
+
+      setLoadingColumnIds((prev) => {
+        const next = new Set(prev);
+        next.add(columnId);
+        return next;
+      });
 
       try {
         const result = await getCards(columnId, 10, cursorId);
