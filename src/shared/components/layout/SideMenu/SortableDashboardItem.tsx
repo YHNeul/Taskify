@@ -14,7 +14,8 @@
  * - `touchAction: 'pan-y'`로 모바일 수직 스크롤이 드래그와 충돌하지 않도록 합니다.
  */
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 import { useDndMonitor } from '@dnd-kit/core';
@@ -41,6 +42,13 @@ export default function SortableDashboardItem({
   layout,
 }: SortableDashboardItemProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchParamsString = searchParams.toString();
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
 
   const {
     attributes,
@@ -64,7 +72,27 @@ export default function SortableDashboardItem({
   });
 
   const handleClick = () => {
-    if (!hasDragged) router.push(`/dashboard/${dashboard.id}`);
+    if (hasDragged) return;
+
+    const query = searchParamsString;
+    const targetUrl = query
+      ? `/dashboard/${dashboard.id}?${query}`
+      : `/dashboard/${dashboard.id}`;
+
+    router.push(targetUrl);
+  };
+
+  const handleTooltipEnter = (target: HTMLDivElement) => {
+    const rect = target.getBoundingClientRect();
+    setTooltipPos({
+      top: rect.top + rect.height / 2,
+      left: rect.right + 8,
+    });
+    setTooltipOpen(true);
+  };
+
+  const handleTooltipLeave = () => {
+    setTooltipOpen(false);
   };
 
   const style: React.CSSProperties = {
@@ -87,11 +115,13 @@ export default function SortableDashboardItem({
       {layout === SIDEBAR_LAYOUT.MOBILE && (
         <div
           className={cn(
-            'flex items-center justify-center',
+            'relative flex items-center justify-center',
             'w-10 h-10 ml-3.5 rounded transition-colors cursor-pointer',
             isActive ? 'bg-white' : 'hover:bg-gray-100',
             isDragging && 'bg-gray-100',
           )}
+          onMouseEnter={(e) => handleTooltipEnter(e.currentTarget)}
+          onMouseLeave={handleTooltipLeave}
         >
           <span
             className="w-2 h-2 rounded-full shrink-0"
@@ -104,11 +134,13 @@ export default function SortableDashboardItem({
         <>
           <div
             className={cn(
-              'md:hidden flex items-center justify-center',
+              'relative md:hidden flex items-center justify-center',
               'w-10 h-10 ml-3.5 rounded transition-colors cursor-pointer',
               isActive ? 'bg-white' : 'hover:bg-gray-100',
               isDragging && 'bg-gray-100',
             )}
+            onMouseEnter={(e) => handleTooltipEnter(e.currentTarget)}
+            onMouseLeave={handleTooltipLeave}
           >
             <span
               className="w-2 h-2 rounded-full shrink-0"
@@ -226,6 +258,19 @@ export default function SortableDashboardItem({
             )}
           </span>
         </div>
+      )}
+
+      {tooltipOpen && tooltipPos && (
+        <span
+          className="pointer-events-none fixed z-[9999] whitespace-nowrap rounded-md bg-gray-700 px-2 py-1 text-xs-medium text-white"
+          style={{
+            top: tooltipPos.top,
+            left: tooltipPos.left,
+            transform: 'translateY(-50%)',
+          }}
+        >
+          {dashboard.title}
+        </span>
       )}
     </li>
   );

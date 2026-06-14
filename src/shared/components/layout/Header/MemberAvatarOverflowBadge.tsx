@@ -22,7 +22,7 @@ export default function MemberAvatarOverflowBadge({
       +{extraCount}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-full z-20 mt-1 -translate-x-1/2 max-w-48 whitespace-normal break-all rounded-xl bg-gray-600 px-2 py-1 text-center text-xs-medium text-white opacity-0 transition-opacity group-hover:opacity-100"
+        className="pointer-events-none absolute left-1/2 top-full z-20 mt-1 w-max max-w-56 -translate-x-1/2 whitespace-normal wrap-break-word rounded-xl bg-gray-600 px-2 py-1 text-center text-xs-medium text-white opacity-0 transition-opacity group-hover:opacity-100"
       >
         {hiddenNicknames}
       </span>
