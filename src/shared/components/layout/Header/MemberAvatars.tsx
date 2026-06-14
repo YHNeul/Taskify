@@ -12,6 +12,7 @@
  *   (데스크탑: 4개, 태블릿 이하: 2개)
  */
 
+import { useMemo } from 'react';
 import type { Member } from '@/shared/types/dashboard';
 import MemberAvatarOverflowBadge from '@/shared/components/layout/Header/MemberAvatarOverflowBadge';
 import MemberAvatarSkeletonList from '@/shared/components/layout/Header/MemberAvatarSkeletonList';
@@ -35,8 +36,10 @@ export default function MemberAvatars({
   isLoading,
   hasDashboard,
 }: MemberAvatarsProps) {
-  const { visibleMembers, extraCount, hiddenNicknames } =
-    getMemberAvatarDisplay(members, maxVisibleMembers);
+  const { visibleMembers, extraCount, hiddenNicknames } = useMemo(
+    () => getMemberAvatarDisplay(members, maxVisibleMembers),
+    [members, maxVisibleMembers],
+  );
 
   if (isLoading && hasDashboard) {
     return <MemberAvatarSkeletonList />;
