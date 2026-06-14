@@ -21,7 +21,7 @@ import { useDndMonitor } from '@dnd-kit/core';
 import CrownIcon from '@/shared/components/common/Icon/CrownIcon';
 import { cn } from '@/lib/utils';
 import type { Dashboard } from '@/shared/types/dashboard';
-import type { LayoutType } from '@/shared/utils/sidebarLayout';
+import { SIDEBAR_LAYOUT, type LayoutType } from '@/shared/utils/sidebarLayout';
 
 /** 드래그 직후 클릭 이벤트를 억제하기 위한 모듈 레벨 플래그 */
 let hasDragged = false;
@@ -84,7 +84,7 @@ export default function SortableDashboardItem({
       {...attributes}
       {...listeners}
     >
-      {layout === 'mobile' && (
+      {layout === SIDEBAR_LAYOUT.MOBILE && (
         <div
           className={cn(
             'flex items-center justify-center',
@@ -170,7 +170,7 @@ export default function SortableDashboardItem({
         </>
       )}
 
-      {layout === 'tablet' && (
+      {layout === SIDEBAR_LAYOUT.TABLET && (
         <div
           className={cn(
             'flex items-center gap-4',
@@ -199,7 +199,7 @@ export default function SortableDashboardItem({
         </div>
       )}
 
-      {layout === 'desktop' && (
+      {layout === SIDEBAR_LAYOUT.DESKTOP && (
         <div
           className={cn(
             'flex items-center gap-4',
