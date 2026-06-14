@@ -6,10 +6,12 @@ interface UseColumnCardsPaginationParams {
   setColumnCards: React.Dispatch<
     React.SetStateAction<Record<number, ColumnCardState>>
   >;
+  onLoadMoreError?: () => void;
 }
 
 export const useColumnCardsPagination = ({
   setColumnCards,
+  onLoadMoreError,
 }: UseColumnCardsPaginationParams) => {
   const [loadingColumnIds, setLoadingColumnIds] = useState<Set<number>>(
     new Set(),
@@ -28,6 +30,8 @@ export const useColumnCardsPagination = ({
           cursorId: result.cursorId,
         },
       }));
+    } catch {
+      onLoadMoreError?.();
     } finally {
       setLoadingColumnIds((prev) => {
         const next = new Set(prev);

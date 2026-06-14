@@ -8,10 +8,12 @@ import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 
 interface UseDashboardColumnMutationsParams {
   dashboardId: number;
+  onDeleteError?: () => void;
 }
 
 export const useDashboardColumnMutations = ({
   dashboardId,
+  onDeleteError,
 }: UseDashboardColumnMutationsParams) => {
   const queryClient = useQueryClient();
 
@@ -35,6 +37,9 @@ export const useDashboardColumnMutations = ({
   const deleteColumnMutation = useMutation({
     mutationFn: (columnId: number) => deleteColumn(columnId),
     onSuccess: invalidateColumns,
+    onError: () => {
+      onDeleteError?.();
+    },
   });
 
   return {

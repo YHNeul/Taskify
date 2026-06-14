@@ -58,15 +58,27 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     error: string;
   }>({ column: null, title: '', error: '' });
   const [deleteColumnId, setDeleteColumnId] = useState<number | null>(null);
-  const [dndErrorMessage, setDndErrorMessage] = useState<string | null>(null);
+  const [boardErrorMessage, setBoardErrorMessage] = useState<string | null>(
+    null,
+  );
 
   const setActiveDashboardId = useDashboardStore((s) => s.setActiveDashboardId);
   const { createColumn, updateColumn, deleteColumn } =
     useDashboardColumnMutations({
       dashboardId,
+      onDeleteError: () => {
+        setBoardErrorMessage(
+          '컬럼 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+        );
+      },
     });
   const { loadingColumnIds, loadMoreCards } = useColumnCardsPagination({
     setColumnCards,
+    onLoadMoreError: () => {
+      setBoardErrorMessage(
+        '카드를 더 불러오지 못했습니다. 다시 시도해 주세요.',
+      );
+    },
   });
 
   useEffect(() => {
@@ -106,21 +118,21 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     columnCards,
     setColumnCards,
     onMovePersistError: () => {
-      setDndErrorMessage('카드 이동 저장에 실패해 이전 상태로 복구했습니다.');
+      setBoardErrorMessage('카드 이동 저장에 실패해 이전 상태로 복구했습니다.');
     },
   });
 
   useEffect(() => {
-    if (!dndErrorMessage) return;
+    if (!boardErrorMessage) return;
 
     const timerId = window.setTimeout(() => {
-      setDndErrorMessage(null);
+      setBoardErrorMessage(null);
     }, 2500);
 
     return () => {
       window.clearTimeout(timerId);
     };
-  }, [dndErrorMessage]);
+  }, [boardErrorMessage]);
 
   const handleEditColumnConfirm = async () => {
     const { column, title } = editColumnModal;
@@ -370,9 +382,9 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
         </div>
       )}
 
-      {dndErrorMessage && (
+      {boardErrorMessage && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-gray-700 px-4 py-3 text-sm-medium text-white shadow-lg md:bottom-auto md:top-6">
-          {dndErrorMessage}
+          {boardErrorMessage}
         </div>
       )}
     </div>
