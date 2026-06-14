@@ -19,7 +19,7 @@ export default function HeaderTitle({
 
   return (
     <>
-      <h1 className="hidden lg:block truncate text-xl-bold text-gray-700">
+      <h1 className="sr-only lg:not-sr-only lg:block truncate text-xl-bold text-gray-700">
         {staticTitle ?? dashboard?.title ?? ''}
       </h1>
       {!staticTitle && dashboard?.createdByMe && (

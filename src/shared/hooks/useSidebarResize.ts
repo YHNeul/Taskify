@@ -49,7 +49,7 @@ export const useSidebarResize = () => {
       setSidebarWidth(w);
     };
 
-    const handleResize = () => {
+    const syncByBreakpoint = () => {
       const bp = getBreakpoint();
       if (bp === currentBpRef.current) return;
       currentBpRef.current = bp;
@@ -60,8 +60,20 @@ export const useSidebarResize = () => {
     currentBpRef.current = bp;
     applyWidth(bp);
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    const mediaQueries = [
+      window.matchMedia('(min-width: 768px)'),
+      window.matchMedia('(min-width: 1024px)'),
+    ];
+
+    mediaQueries.forEach((mediaQuery) => {
+      mediaQuery.addEventListener('change', syncByBreakpoint);
+    });
+
+    return () => {
+      mediaQueries.forEach((mediaQuery) => {
+        mediaQuery.removeEventListener('change', syncByBreakpoint);
+      });
+    };
   }, []);
 
   /**
