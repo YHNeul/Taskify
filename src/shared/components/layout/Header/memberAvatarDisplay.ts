@@ -7,6 +7,9 @@ interface MemberAvatarDisplay {
   hiddenNicknames: string;
 }
 
+/**
+ * 멤버 목록과 최대 표시할 멤버 수를 기반으로 화면에 표시할 멤버와 숨겨질 멤버 정보 계산
+ */
 export const getMemberAvatarDisplay = (
   members: Member[],
   maxVisibleMembers: number,
