@@ -161,6 +161,8 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     if (!deleteColumnId) return;
     try {
       await deleteColumn(deleteColumnId);
+    } catch {
+      // 에러 토스트는 useDashboardColumnMutations의 onDeleteError에서 처리한다.
     } finally {
       setDeleteColumnId(null);
     }
