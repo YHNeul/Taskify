@@ -141,6 +141,7 @@ export default function SortableDashboardItem({
             isActive ? 'bg-white' : 'hover:bg-gray-100',
             isDragging && 'bg-gray-100',
           )}
+          aria-label={dashboard.title}
           onMouseEnter={(e) => handleTooltipEnter(e.currentTarget)}
           onMouseLeave={handleTooltipLeave}
         >
@@ -160,6 +161,7 @@ export default function SortableDashboardItem({
               isActive ? 'bg-white' : 'hover:bg-gray-100',
               isDragging && 'bg-gray-100',
             )}
+            aria-label={dashboard.title}
             onMouseEnter={(e) => handleTooltipEnter(e.currentTarget)}
             onMouseLeave={handleTooltipLeave}
           >
