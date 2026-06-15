@@ -21,6 +21,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { useDndMonitor } from '@dnd-kit/core';
 import CrownIcon from '@/shared/components/common/Icon/CrownIcon';
 import { cn } from '@/lib/utils';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 import type { Dashboard } from '@/shared/types/dashboard';
 import { SIDEBAR_LAYOUT, type LayoutType } from '@/shared/utils/sidebarLayout';
 
@@ -80,7 +81,11 @@ export default function SortableDashboardItem({
   const handleClick = () => {
     if (hasDraggedRef.current) return;
 
-    const query = searchParamsString;
+    const params = new URLSearchParams(searchParamsString);
+    const sidePage = params.get(QUERY_PARAM_KEYS.SIDE_PAGE);
+    const query = sidePage
+      ? `${QUERY_PARAM_KEYS.SIDE_PAGE}=${encodeURIComponent(sidePage)}`
+      : '';
     const targetUrl = query
       ? `/dashboard/${dashboard.id}?${query}`
       : `/dashboard/${dashboard.id}`;
