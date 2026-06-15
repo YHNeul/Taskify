@@ -43,6 +43,7 @@ import Button from '@/shared/components/common/Button';
 import { useComments } from '@/shared/hooks/useComments';
 import { useCardData } from '@/shared/hooks/useCardData';
 import CardSkeleton from '@/shared/components/modal/Cards/CardSkeleton';
+import ImageLightboxModal from '@/shared/components/modal/Cards/ImageLightboxModal';
 
 interface CardsProps {
   onModalClose: () => void;
@@ -95,6 +96,7 @@ export default function Cards({
 }: CardsProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isImageDetailOpen, setIsImageDetailOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false); // 드롭다운 열림 상태
 
   const handleCloseMenu = () => setIsMenuOpen(false);
@@ -270,7 +272,12 @@ export default function Cards({
 
             {/* 이미지 섹션: 이미지가 있을 때만 렌더링 */}
             {imageUrl && (
-              <div className="relative mb-6 w-full rounded-md bg-gray-100 md:mb-4 aspect-video">
+              <button
+                type="button"
+                onClick={() => setIsImageDetailOpen(true)}
+                className="relative mb-6 block w-full overflow-hidden rounded-md bg-gray-100 md:mb-4 aspect-video"
+                aria-label="이미지 상세 보기 열기"
+              >
                 <Image
                   src={imageUrl}
                   alt="할 일 카드 이미지"
@@ -279,7 +286,7 @@ export default function Cards({
                   sizes="(max-width: 768px) calc(100vw - 32px), 445px"
                   unoptimized
                 />
-              </div>
+              </button>
             )}
 
             {/* 댓글 섹션 */}
@@ -366,6 +373,14 @@ export default function Cards({
           </div>
         )}
       </ModalOverlay>
+
+      {isImageDetailOpen && imageUrl && (
+        <ImageLightboxModal
+          imageUrl={imageUrl}
+          alt="할 일 카드 이미지 상세"
+          onClose={() => setIsImageDetailOpen(false)}
+        />
+      )}
     </>
   );
 }
