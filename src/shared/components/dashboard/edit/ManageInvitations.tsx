@@ -221,15 +221,14 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
         </thead>
         <tbody>
           {invitations.map((item, index) => {
-            const overallIndex = (currentPage - 1) * EMAIL_PER_PAGE + index + 1;
-            const isPageEnd = overallIndex % EMAIL_PER_PAGE === 0;
+            const isLastRow = index === invitations.length - 1;
 
             return (
               <tr
                 key={item.id}
                 className={clsx(
                   'border-gray-200 border-b',
-                  isPageEnd && 'border-b-0',
+                  isLastRow && 'border-b-0',
                 )}
               >
                 <td className="pl-5 py-4 md:pl-7 md:py-6">
