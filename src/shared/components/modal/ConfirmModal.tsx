@@ -40,8 +40,8 @@ export default function ConfirmModal({
   onConfirm,
 }: ConfirmModalProps) {
   return (
-    <ModalBase className="w-modal-form rounded-2xl p-6">
-      <p className="mb-6 text-center text-xl-medium text-gray-700">
+    <ModalBase className="w-full max-w-[calc(100vw-5rem)] sm:w-modal-form sm:max-w-120 rounded-2xl p-6">
+      <p className="mb-6 text-center text-2lg-medium leading-7 text-gray-700 whitespace-pre-line break-keep">
         {message}
       </p>
 

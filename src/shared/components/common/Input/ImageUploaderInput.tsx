@@ -69,11 +69,7 @@ export default function ImageUploaderInput({
     // input value 초기화 — 같은 파일 재선택 시에도 onChange가 트리거되도록
     e.target.value = '';
 
-    if (!selected) {
-      setImageUrl('');
-      onUpload(null);
-      return;
-    }
+    if (!selected) return;
 
     const isHeic =
       HEIC_TYPES.includes(selected.type) || /\.heic$/i.test(selected.name);
@@ -108,10 +104,14 @@ export default function ImageUploaderInput({
 
   /** 업로드 버튼 클릭 시 숨겨진 input[type="file"]을 트리거하는 함수 */
   const handleUploadClick = () => {
-    // ✅ 클릭 시점에 바로 초기화
+    inputRef.current?.click();
+  };
+
+  /** 현재 이미지를 명시적으로 삭제하는 함수 */
+  const handleRemoveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     setImageUrl('');
     onUpload(null);
-    inputRef.current?.click();
   };
 
   // imageUrl이 바뀔 때마다 이전 blob URL 메모리 해제
@@ -122,7 +122,7 @@ export default function ImageUploaderInput({
   }, [imageUrl]);
 
   return (
-    <div>
+    <div className="relative" style={{ width: size, height: size }}>
       {/* 숨겨진 input */}
       <input
         type="file"
@@ -173,6 +173,16 @@ export default function ImageUploaderInput({
           <ImageUploaderChip size={size} />
         )}
       </button>
+      {imageUrl && (
+        <button
+          type="button"
+          onClick={handleRemoveClick}
+          aria-label="이미지 삭제"
+          className="absolute -right-2 -top-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-gray-700 text-white text-sm hover:bg-gray-900"
+        >
+          ✕
+        </button>
+      )}
     </div>
   );
 }
