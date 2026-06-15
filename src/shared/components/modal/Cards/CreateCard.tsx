@@ -24,11 +24,12 @@ import { createCard, uploadCardImage } from '@/shared/apis/dashboard';
 import { formatDateTime } from '@/shared/utils/formatDate';
 import TagChip from '@/shared/components/common/Chip/TagChip';
 import AlertModal from '@/shared/components/modal/AlertModal';
+import ConfirmModal from '@/shared/components/modal/ConfirmModal';
 import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { useDashboardMembersQuery } from '@/shared/hooks/useDashboardMembersQuery';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
@@ -121,8 +122,10 @@ export default function CreateCard({
   const [tagInput, setTagInput] = useState('');
   const [isTagFocused, setIsTagFocused] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // API 호출 에러 처리
+  const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm<CreateCardFormValues>({
@@ -132,6 +135,10 @@ export default function CreateCard({
       title: '',
       description: '',
     },
+  });
+  const [title = '', description = ''] = useWatch({
+    control,
+    name: ['title', 'description'],
   });
 
   /** 멤버 목록 조회 */
@@ -181,6 +188,22 @@ export default function CreateCard({
     submitCard(values);
   };
 
+  const isDirty =
+    title.trim().length > 0 ||
+    description.trim().length > 0 ||
+    selectedMemberId !== null ||
+    formData.tags.length > 0 ||
+    formData.dueDate !== null ||
+    imageFile !== null;
+
+  const handleRequestClose = () => {
+    if (isDirty) {
+      setIsCancelConfirmOpen(true);
+      return;
+    }
+    onModalClose();
+  };
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   /** 태그 입력 - Enter 키로 추가 */
@@ -209,7 +232,7 @@ export default function CreateCard({
 
   return (
     <>
-      <ModalOverlay onClose={onModalClose}>
+      <ModalOverlay onClose={handleRequestClose}>
         <ModalBase className="px-4 mobile:px-8 max-h-screen-minus-160 overflow-y-auto w-modal-card h-auto rounded-2xl text-gray-700 p-8 flex flex-col gap-8">
           <header>
             <h2 className="text-2xl-bold wrap-break-word">할 일 생성</h2>
@@ -307,8 +330,9 @@ export default function CreateCard({
             <div className="relative flex items-stretch gap-2 h-14">
               <Button
                 variant="secondary"
+                type="button"
                 className="flex-1"
-                onClick={onModalClose}
+                onClick={handleRequestClose}
               >
                 취소
               </Button>
@@ -330,6 +354,20 @@ export default function CreateCard({
             <AlertModal
               message={resolvedErrorMessage}
               onConfirm={() => setErrorMessage(null)}
+            />
+          </div>
+        )}
+
+        {isCancelConfirmOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+            <ConfirmModal
+              message={
+                '저장되지 않은 변경사항이 있습니다.\n취소하면 작성 내용이 사라집니다.'
+              }
+              cancelText="계속 작성"
+              confirmText="취소하기"
+              onCancel={() => setIsCancelConfirmOpen(false)}
+              onConfirm={onModalClose}
             />
           </div>
         )}

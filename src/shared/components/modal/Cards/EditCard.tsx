@@ -29,6 +29,7 @@ import {
 import { formatDateTime } from '@/shared/utils/formatDate';
 import TagChip from '@/shared/components/common/Chip/TagChip';
 import AlertModal from '@/shared/components/modal/AlertModal';
+import ConfirmModal from '@/shared/components/modal/ConfirmModal';
 import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -138,6 +139,7 @@ export default function EditCard({
   const [tagInput, setTagInput] = useState('');
   const [isTagFocused, setIsTagFocused] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // API 호출 에러 처리
+  const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const {
@@ -268,15 +270,23 @@ export default function EditCard({
     setTags((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleRequestClose = () => {
+    if (isDirty) {
+      setIsCancelConfirmOpen(true);
+      return;
+    }
+    onModalClose();
+  };
+
   if (isMembersLoading) return <EditCardSkeleton onModalClose={onModalClose} />;
 
   const baseFontStyle = 'text-2lg-medium mb-2';
 
   return (
-    <ModalOverlay onClose={onModalClose}>
+    <ModalOverlay onClose={handleRequestClose}>
       <ModalBase className="px-4 mobile:px-8 max-h-screen-minus-160 overflow-y-auto w-modal-card h-auto rounded-2xl text-gray-700 p-8 flex flex-col gap-8">
         <header>
-          <h2 className="text-2xl-bold break-words">할 일 수정</h2>
+          <h2 className="text-2xl-bold wrap-break-word">할 일 수정</h2>
         </header>
 
         <form className="contents" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -394,8 +404,9 @@ export default function EditCard({
           <div className="relative flex items-stretch gap-2 h-14">
             <Button
               variant="secondary"
+              type="button"
               className="flex-1"
-              onClick={onModalClose}
+              onClick={handleRequestClose}
             >
               취소
             </Button>
@@ -419,6 +430,20 @@ export default function EditCard({
           <AlertModal
             message={errorMessage}
             onConfirm={() => setErrorMessage(null)}
+          />
+        </div>
+      )}
+
+      {isCancelConfirmOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <ConfirmModal
+            message={
+              '저장되지 않은 변경사항이 있습니다.\n취소하면 수정 내용이 사라집니다.'
+            }
+            cancelText="계속 수정"
+            confirmText="취소하기"
+            onCancel={() => setIsCancelConfirmOpen(false)}
+            onConfirm={onModalClose}
           />
         </div>
       )}
