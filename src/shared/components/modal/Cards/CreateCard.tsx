@@ -246,7 +246,7 @@ export default function CreateCard({
           >
             {/* 담당자 */}
             <div className="">
-              <p className={clsx(baseFontStyle)}>담당자</p>
+              <p className={baseFontStyle}>담당자</p>
               <DropdownAssignee
                 members={members}
                 onSelect={(id) => {
@@ -288,7 +288,7 @@ export default function CreateCard({
 
             {/* 태그 */}
             <div className="">
-              <p className={clsx(baseFontStyle)}>태그</p>
+              <p className={baseFontStyle}>태그</p>
               <div
                 className={clsx(
                   'flex min-h-12 w-full cursor-text flex-wrap items-center gap-1 rounded-md border px-4 py-2 text-sm outline-none transition',
@@ -324,7 +324,7 @@ export default function CreateCard({
 
             {/* 이미지 */}
             <div>
-              <p className={clsx(baseFontStyle)}>이미지</p>
+              <p className={baseFontStyle}>이미지</p>
               <ImageUploaderInput onUpload={(file) => setImageFile(file)} />
             </div>
 
