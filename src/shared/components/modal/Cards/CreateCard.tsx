@@ -189,8 +189,8 @@ export default function CreateCard({
   };
 
   const isDirty =
-    title.trim().length > 0 ||
-    description.trim().length > 0 ||
+    title.length > 0 ||
+    description.length > 0 ||
     selectedMemberId !== null ||
     formData.tags.length > 0 ||
     formData.dueDate !== null ||
