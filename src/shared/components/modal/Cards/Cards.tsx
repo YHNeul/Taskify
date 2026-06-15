@@ -63,9 +63,7 @@ function DeleteConfirmModal({
 }: ConfirmModalProps) {
   return (
     <ModalBase className="w-screen mobile:w-full mobile:max-w-sm rounded-2xl p-6">
-      <p className="mb-6 text-center text-lg-medium text-gray-700">
-        {message}
-      </p>
+      <p className="mb-6 text-center text-lg-medium text-gray-700">{message}</p>
 
       <div className="flex gap-3.5 flex-col mobile:flex-row">
         <Button
@@ -172,27 +170,32 @@ export default function Cards({
           {/* 우측 영역 - 메뉴, 닫기 버튼, 담당자/마감일 */}
           <aside className="order-1 md:order-2 flex flex-col items-start gap-6 min-w-50 w-full md:w-52 md:pl-4 md:border-l md:border-gray-200">
             <div className="self-end flex gap-1 md:gap-3 relative">
-              {/* 메뉴 */}
-              <button
-                type="button"
-                onClick={() => setIsMenuOpen((prev) => !prev)}
-                className="interactive-icon-btn cursor-pointer"
-              >
-                <KebabMenuIcon width={22} className="w-7 aspect-square" />
-              </button>
+              <div className="relative" ref={menuRef}>
+                {/* 메뉴 */}
+                <button
+                  type="button"
+                  onClick={() => setIsMenuOpen((prev) => !prev)}
+                  className="interactive-icon-btn cursor-pointer"
+                >
+                  <KebabMenuIcon width={22} className="w-7 aspect-square" />
+                </button>
 
-              {/* 드롭다운 메뉴 */}
-              {isMenuOpen && (
-                <div className="absolute top-8 right-14" ref={menuRef}>
-                  <DropdownMenu
-                    onEdit={() => {
-                      setIsEditing(true);
-                      handleCloseMenu();
-                    }}
-                    onDelete={() => setIsDeleting(true)}
-                  />
-                </div>
-              )}
+                {/* 드롭다운 메뉴 */}
+                {isMenuOpen && (
+                  <div className="absolute top-8 right-0">
+                    <DropdownMenu
+                      onEdit={() => {
+                        setIsEditing(true);
+                        handleCloseMenu();
+                      }}
+                      onDelete={() => {
+                        setIsDeleting(true);
+                        handleCloseMenu();
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
 
               {/* 모달 닫기 버튼 */}
               <button

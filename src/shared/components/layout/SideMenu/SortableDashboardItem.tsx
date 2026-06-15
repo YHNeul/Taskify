@@ -14,17 +14,16 @@
  * - `touchAction: 'pan-y'`로 모바일 수직 스크롤이 드래그와 충돌하지 않도록 합니다.
  */
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 import { useDndMonitor } from '@dnd-kit/core';
 import CrownIcon from '@/shared/components/common/Icon/CrownIcon';
 import { cn } from '@/lib/utils';
+import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 import type { Dashboard } from '@/shared/types/dashboard';
 import { SIDEBAR_LAYOUT, type LayoutType } from '@/shared/utils/sidebarLayout';
-
-/** 드래그 직후 클릭 이벤트를 억제하기 위한 모듈 레벨 플래그 */
-let hasDragged = false;
 
 interface SortableDashboardItemProps {
   /** 표시할 대시보드 데이터 */
@@ -41,6 +40,15 @@ export default function SortableDashboardItem({
   layout,
 }: SortableDashboardItemProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const searchParamsString = searchParams.toString();
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
+  const hasDraggedRef = useRef(false);
+  const resetDragTimeoutRef = useRef<number | null>(null);
 
   const {
     attributes,
@@ -52,19 +60,59 @@ export default function SortableDashboardItem({
   } = useSortable({ id: dashboard.id });
 
   useDndMonitor({
-    onDragStart() {
-      hasDragged = false;
+    onDragStart(event) {
+      if (String(event.active.id) !== String(dashboard.id)) return;
+      hasDraggedRef.current = false;
     },
-    onDragEnd() {
-      hasDragged = true;
-      setTimeout(() => {
-        hasDragged = false;
+    onDragEnd(event) {
+      if (String(event.active.id) !== String(dashboard.id)) return;
+
+      hasDraggedRef.current = true;
+      if (resetDragTimeoutRef.current !== null) {
+        window.clearTimeout(resetDragTimeoutRef.current);
+      }
+      resetDragTimeoutRef.current = window.setTimeout(() => {
+        hasDraggedRef.current = false;
+        resetDragTimeoutRef.current = null;
       }, 100);
     },
   });
 
   const handleClick = () => {
-    if (!hasDragged) router.push(`/dashboard/${dashboard.id}`);
+    if (hasDraggedRef.current) return;
+
+    const params = new URLSearchParams(searchParamsString);
+    const sidePage = params.get(QUERY_PARAM_KEYS.SIDE_PAGE);
+    const query = sidePage
+      ? `${QUERY_PARAM_KEYS.SIDE_PAGE}=${encodeURIComponent(sidePage)}`
+      : '';
+    const targetUrl = query
+      ? `/dashboard/${dashboard.id}?${query}`
+      : `/dashboard/${dashboard.id}`;
+
+    router.push(targetUrl);
+  };
+
+  useEffect(
+    () => () => {
+      if (resetDragTimeoutRef.current !== null) {
+        window.clearTimeout(resetDragTimeoutRef.current);
+      }
+    },
+    [],
+  );
+
+  const handleTooltipEnter = (target: HTMLDivElement) => {
+    const rect = target.getBoundingClientRect();
+    setTooltipPos({
+      top: rect.top + rect.height / 2,
+      left: rect.right + 8,
+    });
+    setTooltipOpen(true);
+  };
+
+  const handleTooltipLeave = () => {
+    setTooltipOpen(false);
   };
 
   const style: React.CSSProperties = {
@@ -81,17 +129,21 @@ export default function SortableDashboardItem({
       ref={setNodeRef}
       style={style}
       onClick={handleClick}
+      aria-label={dashboard.title}
       {...attributes}
       {...listeners}
     >
       {layout === SIDEBAR_LAYOUT.MOBILE && (
         <div
           className={cn(
-            'flex items-center justify-center',
+            'relative flex items-center justify-center',
             'w-10 h-10 ml-3.5 rounded transition-colors cursor-pointer',
             isActive ? 'bg-white' : 'hover:bg-gray-100',
             isDragging && 'bg-gray-100',
           )}
+          aria-label={dashboard.title}
+          onMouseEnter={(e) => handleTooltipEnter(e.currentTarget)}
+          onMouseLeave={handleTooltipLeave}
         >
           <span
             className="w-2 h-2 rounded-full shrink-0"
@@ -104,11 +156,14 @@ export default function SortableDashboardItem({
         <>
           <div
             className={cn(
-              'md:hidden flex items-center justify-center',
+              'relative md:hidden flex items-center justify-center',
               'w-10 h-10 ml-3.5 rounded transition-colors cursor-pointer',
               isActive ? 'bg-white' : 'hover:bg-gray-100',
               isDragging && 'bg-gray-100',
             )}
+            aria-label={dashboard.title}
+            onMouseEnter={(e) => handleTooltipEnter(e.currentTarget)}
+            onMouseLeave={handleTooltipLeave}
           >
             <span
               className="w-2 h-2 rounded-full shrink-0"
@@ -226,6 +281,19 @@ export default function SortableDashboardItem({
             )}
           </span>
         </div>
+      )}
+
+      {tooltipOpen && tooltipPos && (
+        <span
+          className="pointer-events-none fixed z-9999 whitespace-nowrap rounded-md bg-gray-700 px-2 py-1 text-xs-medium text-white"
+          style={{
+            top: tooltipPos.top,
+            left: tooltipPos.left,
+            transform: 'translateY(-50%)',
+          }}
+        >
+          {dashboard.title}
+        </span>
       )}
     </li>
   );
