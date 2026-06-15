@@ -34,6 +34,7 @@ import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import clsx from 'clsx';
 
 interface EditCardProps {
   cardData: Card;
@@ -367,9 +368,10 @@ export default function EditCard({
           <div>
             <p className={baseFontStyle}>태그</p>
             <div
-              className={`flex flex-wrap gap-1 items-center w-full min-h-12 px-4 py-2 text-sm rounded-md border cursor-text outline-none transition ${
-                isTagFocused ? 'border-brand-violet' : 'border-gray-300'
-              }`}
+              className={clsx(
+                'flex min-h-12 w-full cursor-text flex-wrap items-center gap-1 rounded-md border px-4 py-2 text-sm outline-none transition',
+                isTagFocused ? 'border-brand-violet' : 'border-gray-300',
+              )}
               onClick={() => inputRef.current?.focus()}
             >
               {tags.map((tag, index) => (

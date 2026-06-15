@@ -13,6 +13,7 @@
  */
 
 import { useInView } from '@/shared/hooks/useInView';
+import clsx from 'clsx';
 
 const CARDS = [
   {
@@ -48,9 +49,12 @@ export default function LandingFeatureGrid() {
       <div className="mx-auto max-w-6xl">
         {/* 타이틀 — 섹션 진입 시 위로 올라오며 등장 */}
         <h2
-          className={`reveal-up mb-10 text-center text-2xl font-bold leading-none text-white sm:text-3xl lg:text-left lg:text-3xl ${
-            isVisible ? 'is-visible' : ''
-          }`}
+          className={clsx(
+            'reveal-up mb-10 text-center text-2xl font-bold leading-none text-white',
+            'sm:text-3xl',
+            'lg:text-left lg:text-3xl',
+            isVisible && 'is-visible',
+          )}
         >
           생산성을 높이는 다양한 설정 ⚡
         </h2>
@@ -59,9 +63,11 @@ export default function LandingFeatureGrid() {
           {CARDS.map((card, i) => (
             <article
               key={card.title}
-              className={`reveal-up mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-lg lg:mx-0 lg:max-w-none lg:flex-1 ${
-                isVisible ? 'is-visible' : ''
-              }`}
+              className={clsx(
+                'reveal-up mx-auto flex w-full max-w-sm flex-col overflow-hidden rounded-lg',
+                'lg:mx-0 lg:max-w-none lg:flex-1',
+                isVisible && 'is-visible',
+              )}
               style={{ transitionDelay: CARD_DELAYS[i] }}
             >
               <div className="flex h-56 shrink-0 items-center justify-center bg-gray-600 p-4 sm:h-64">

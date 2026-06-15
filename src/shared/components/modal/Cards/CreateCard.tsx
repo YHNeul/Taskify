@@ -32,6 +32,7 @@ import { useDashboardMembersQuery } from '@/shared/hooks/useDashboardMembersQuer
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import clsx from 'clsx';
 
 interface CreateCardExtraForm {
   tags: string[];
@@ -245,7 +246,7 @@ export default function CreateCard({
           >
             {/* 담당자 */}
             <div className="">
-              <p className={`${baseFontStyle}`}>담당자</p>
+              <p className={clsx(baseFontStyle)}>담당자</p>
               <DropdownAssignee
                 members={members}
                 onSelect={(id) => {
@@ -287,11 +288,12 @@ export default function CreateCard({
 
             {/* 태그 */}
             <div className="">
-              <p className={`${baseFontStyle}`}>태그</p>
+              <p className={clsx(baseFontStyle)}>태그</p>
               <div
-                className={`flex flex-wrap gap-1 items-center w-full min-h-12 px-4 py-2 text-sm rounded-md border cursor-text outline-none transition ${
-                  isTagFocused ? 'border-brand-violet' : 'border-gray-300'
-                }`}
+                className={clsx(
+                  'flex min-h-12 w-full cursor-text flex-wrap items-center gap-1 rounded-md border px-4 py-2 text-sm outline-none transition',
+                  isTagFocused ? 'border-brand-violet' : 'border-gray-300',
+                )}
                 onClick={() => inputRef.current?.focus()}
               >
                 {/* 저장된 태그칩 */}
@@ -322,7 +324,7 @@ export default function CreateCard({
 
             {/* 이미지 */}
             <div>
-              <p className={`${baseFontStyle}`}>이미지</p>
+              <p className={clsx(baseFontStyle)}>이미지</p>
               <ImageUploaderInput onUpload={(file) => setImageFile(file)} />
             </div>
 

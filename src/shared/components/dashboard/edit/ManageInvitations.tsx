@@ -17,6 +17,7 @@ import {
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
 import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
+import clsx from 'clsx';
 
 const EMAIL_PER_PAGE = 5;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -226,7 +227,10 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
             return (
               <tr
                 key={item.id}
-                className={`border-gray-200 border-b ${isPageEnd ? 'border-b-0' : ''}`}
+                className={clsx(
+                  'border-gray-200 border-b',
+                  isPageEnd && 'border-b-0',
+                )}
               >
                 <td className="pl-5 py-4 md:pl-7 md:py-6">
                   <div className="truncate">{item.invitee.email}</div>

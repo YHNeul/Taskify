@@ -18,6 +18,7 @@
  */
 
 import { forwardRef, ReactNode } from 'react';
+import clsx from 'clsx';
 
 interface ModalBaseProps {
   children: ReactNode;
@@ -27,7 +28,7 @@ interface ModalBaseProps {
 const ModalBase = forwardRef<HTMLDivElement, ModalBaseProps>(
   ({ children, className = '' }, ref) => {
     return (
-      <div ref={ref} className={`bg-white shadow-lg ${className}`}>
+      <div ref={ref} className={clsx('bg-white shadow-lg', className)}>
         {children}
       </div>
     );

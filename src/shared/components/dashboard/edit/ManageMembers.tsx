@@ -19,6 +19,7 @@ import {
   parsePositiveIntParam,
 } from '@/shared/hooks/useQueryParamState';
 import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
+import clsx from 'clsx';
 
 const ITEM_PER_PAGE = 4;
 
@@ -126,7 +127,10 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
               return (
                 <tr
                   key={item.id}
-                  className={`border-gray-200 border-b ${isLastRow ? 'border-b-0' : ''}`}
+                  className={clsx(
+                    'border-gray-200 border-b',
+                    isLastRow && 'border-b-0',
+                  )}
                 >
                   <td
                     className="flex items-center gap-2 py-3 

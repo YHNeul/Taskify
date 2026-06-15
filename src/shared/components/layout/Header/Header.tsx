@@ -9,6 +9,7 @@ import HeaderMyProfileButton from '@/shared/components/layout/Header/HeaderMyPro
 import HeaderInviteModal from '@/shared/components/layout/Header/HeaderInviteModal';
 import { useHeader } from '@/shared/hooks/useHeader';
 import { useInviteMember } from '@/shared/hooks/useInviteMember';
+import clsx from 'clsx';
 
 export default function Header() {
   const router = useRouter();
@@ -50,7 +51,10 @@ export default function Header() {
           />
 
           <div
-            className={`ml-1 flex min-w-0 items-center gap-0 ${showOwnerControls ? 'pl-3 md:pl-4 border-l border-gray-300' : ''}`}
+            className={clsx(
+              'ml-1 flex min-w-0 items-center gap-0',
+              showOwnerControls && 'border-gray-300 border-l pl-3 md:pl-4',
+            )}
           >
             <MemberAvatars
               members={members}

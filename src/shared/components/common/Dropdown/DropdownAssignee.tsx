@@ -23,6 +23,7 @@ import ArrowDropDownIcon from '@/shared/components/common/Icon/ArrowDropDownIcon
 import UserName from '@/shared/components/common/User/UserName';
 import { Assignee, Member } from '@/shared/types/dashboard';
 import DropdownList from '@/shared/components/common/Dropdown/DropdownList';
+import clsx from 'clsx';
 
 interface AssigneeProps {
   /** 드롭다운에 보여줄 전체 멤버 목록 */
@@ -54,7 +55,10 @@ export default function DropdownAssignee({
   /** Input과 담당자가 선택된 박스의 공통 css */
   const baseStyle =
     'w-full h-12 border border-gray-300 px-4 py-2 rounded-md flex justify-between items-center bg-white';
-  const buttonStyle = `${baseStyle} cursor-pointer hover:bg-gray-100 transition-colors`;
+  const buttonStyle = clsx(
+    baseStyle,
+    'cursor-pointer transition-colors hover:bg-gray-100',
+  );
 
   return (
     <div className="relative sm:min-w-56">
@@ -90,7 +94,10 @@ export default function DropdownAssignee({
           }}
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
-          className={`${baseStyle} outline-none text-gray-700 placeholder:text-gray-400`}
+          className={clsx(
+            baseStyle,
+            'outline-none text-gray-700 placeholder:text-gray-400',
+          )}
         />
       )}
 

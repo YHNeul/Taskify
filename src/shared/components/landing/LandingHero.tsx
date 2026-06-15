@@ -7,6 +7,7 @@
  */
 
 import Link from 'next/link';
+import clsx from 'clsx';
 
 type LandingHeroProps = {
   montserratClass: string;
@@ -41,7 +42,12 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
             새로운 일정 관리
           </span>
           <span
-            className={`text-4xl font-bold leading-none tracking-tight text-brand-violet md:text-5xl lg:text-7xl ${montserratClass}`}
+            className={clsx(
+              'text-4xl font-bold leading-none tracking-tight text-brand-violet',
+              'md:text-5xl',
+              'lg:text-7xl',
+              montserratClass,
+            )}
           >
             Taskify
           </span>

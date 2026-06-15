@@ -10,6 +10,7 @@ import LandingFooter from '@/shared/components/landing/LandingFooter';
 import LandingHeader from '@/shared/components/landing/LandingHeader';
 import LandingHero from '@/shared/components/landing/LandingHero';
 import LandingPointSection from '@/shared/components/landing/LandingPointSection';
+import clsx from 'clsx';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -20,7 +21,10 @@ const montserrat = Montserrat({
 export default function Home() {
   return (
     <div
-      className={`${montserrat.variable} min-h-screen bg-gray-900 text-white`}
+      className={clsx(
+        montserrat.variable,
+        'min-h-screen bg-gray-900 text-white',
+      )}
     >
       <LandingHeader />
       <main>
