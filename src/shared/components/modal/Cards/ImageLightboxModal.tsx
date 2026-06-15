@@ -55,7 +55,6 @@ export default function ImageLightboxModal({
 
   const handleImageZoom = (event: React.WheelEvent<HTMLDivElement>) => {
     if (!event.ctrlKey) return;
-    event.preventDefault();
 
     const zoomStep = -event.deltaY * 0.01;
     setScale((prev) => {
