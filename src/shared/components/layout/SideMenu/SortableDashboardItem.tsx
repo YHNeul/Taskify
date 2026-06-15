@@ -124,6 +124,7 @@ export default function SortableDashboardItem({
       ref={setNodeRef}
       style={style}
       onClick={handleClick}
+      aria-label={dashboard.title}
       {...attributes}
       {...listeners}
     >
