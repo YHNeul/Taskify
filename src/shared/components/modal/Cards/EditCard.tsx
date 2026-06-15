@@ -31,7 +31,7 @@ import TagChip from '@/shared/components/common/Chip/TagChip';
 import AlertModal from '@/shared/components/modal/AlertModal';
 import ConfirmModal from '@/shared/components/modal/ConfirmModal';
 import Skeleton from '@/shared/components/common/Skeleton/Skeleton';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
@@ -144,7 +144,7 @@ export default function EditCard({
   const inputRef = useRef<HTMLInputElement>(null);
   const {
     register,
-    watch,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<EditCardFormValues>({
@@ -155,8 +155,12 @@ export default function EditCard({
       description: cardData.description,
     },
   });
-  const title = watch('title');
-  const description = watch('description');
+  const [title = cardData.title, description = cardData.description] = useWatch(
+    {
+      control,
+      name: ['title', 'description'],
+    },
+  );
 
   /** 변경된 필드만 감지 */
   const getChangedFields = () => {
@@ -173,21 +177,22 @@ export default function EditCard({
 
     if (JSON.stringify(tags) !== JSON.stringify(initial.tags))
       changes.tags = tags;
-    if (
-      selectedMemberId !== undefined &&
-      selectedMemberId !== initial.assignee?.id
-    )
-      changes.assigneeUserId = selectedMemberId;
-    if (imageFile || isImageRemoved) changes.imageUrl = true; // 이미지는 업로드 후 처리
+
+    const initialAssigneeId = initial.assignee?.id ?? null;
+    const currentAssigneeId =
+      selectedMemberId === undefined ? initialAssigneeId : selectedMemberId;
+
+    if (currentAssigneeId !== initialAssigneeId)
+      changes.assigneeUserId = currentAssigneeId;
+
+    const hasImageChanged = imageFile !== null || isImageRemoved;
+    if (hasImageChanged) changes.imageUrl = true; // 이미지는 업로드 후 처리
 
     return changes;
   };
 
   /** 변경 여부 */
-  const isDirty =
-    Object.keys(getChangedFields()).length > 0 ||
-    imageFile !== null ||
-    isImageRemoved;
+  const isDirty = Object.keys(getChangedFields()).length > 0;
 
   /** 멤버 목록 조회 */
   useEffect(() => {
@@ -394,7 +399,7 @@ export default function EditCard({
             <ImageUploaderInput
               onUpload={(file) => {
                 setImageFile(file);
-                setIsImageRemoved(!file);
+                setIsImageRemoved(!file && !!cardData.imageUrl);
               }}
               defaultUrl={cardData.imageUrl}
             />
