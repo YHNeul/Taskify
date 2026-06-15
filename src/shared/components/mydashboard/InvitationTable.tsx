@@ -169,11 +169,10 @@ export default function InvitationTable({
               {filteredData.map((item, index) => (
                 <tr
                   key={item.id}
-                  className={
-                    index !== filteredData.length - 1
-                      ? 'border-gray-200 border-b'
-                      : ''
-                  }
+                  className={clsx(
+                    index !== filteredData.length - 1 &&
+                      'border-gray-200 border-b',
+                  )}
                 >
                   <td className="pl-0 pr-2.5 py-5 font-normal text-left lg:pr-5 text-gray-700">
                     <div className="truncate max-w-60 lg:max-w-sm">
