@@ -359,7 +359,7 @@ export default function CreateCard({
         )}
 
         {isCancelConfirmOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <ConfirmModal
               message={
                 '저장되지 않은 변경사항이 있습니다.\n취소하면 작성 내용이 사라집니다.'
