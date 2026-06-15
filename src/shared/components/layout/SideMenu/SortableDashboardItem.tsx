@@ -15,7 +15,7 @@
  */
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 import { useDndMonitor } from '@dnd-kit/core';
@@ -23,9 +23,6 @@ import CrownIcon from '@/shared/components/common/Icon/CrownIcon';
 import { cn } from '@/lib/utils';
 import type { Dashboard } from '@/shared/types/dashboard';
 import { SIDEBAR_LAYOUT, type LayoutType } from '@/shared/utils/sidebarLayout';
-
-/** 드래그 직후 클릭 이벤트를 억제하기 위한 모듈 레벨 플래그 */
-let hasDragged = false;
 
 interface SortableDashboardItemProps {
   /** 표시할 대시보드 데이터 */
@@ -49,6 +46,8 @@ export default function SortableDashboardItem({
     top: number;
     left: number;
   } | null>(null);
+  const hasDraggedRef = useRef(false);
+  const resetDragTimeoutRef = useRef<number | null>(null);
 
   const {
     attributes,
@@ -60,19 +59,26 @@ export default function SortableDashboardItem({
   } = useSortable({ id: dashboard.id });
 
   useDndMonitor({
-    onDragStart() {
-      hasDragged = false;
+    onDragStart(event) {
+      if (String(event.active.id) !== String(dashboard.id)) return;
+      hasDraggedRef.current = false;
     },
-    onDragEnd() {
-      hasDragged = true;
-      setTimeout(() => {
-        hasDragged = false;
+    onDragEnd(event) {
+      if (String(event.active.id) !== String(dashboard.id)) return;
+
+      hasDraggedRef.current = true;
+      if (resetDragTimeoutRef.current !== null) {
+        window.clearTimeout(resetDragTimeoutRef.current);
+      }
+      resetDragTimeoutRef.current = window.setTimeout(() => {
+        hasDraggedRef.current = false;
+        resetDragTimeoutRef.current = null;
       }, 100);
     },
   });
 
   const handleClick = () => {
-    if (hasDragged) return;
+    if (hasDraggedRef.current) return;
 
     const query = searchParamsString;
     const targetUrl = query
@@ -81,6 +87,15 @@ export default function SortableDashboardItem({
 
     router.push(targetUrl);
   };
+
+  useEffect(
+    () => () => {
+      if (resetDragTimeoutRef.current !== null) {
+        window.clearTimeout(resetDragTimeoutRef.current);
+      }
+    },
+    [],
+  );
 
   const handleTooltipEnter = (target: HTMLDivElement) => {
     const rect = target.getBoundingClientRect();
@@ -262,7 +277,7 @@ export default function SortableDashboardItem({
 
       {tooltipOpen && tooltipPos && (
         <span
-          className="pointer-events-none fixed z-[9999] whitespace-nowrap rounded-md bg-gray-700 px-2 py-1 text-xs-medium text-white"
+          className="pointer-events-none fixed z-9999 whitespace-nowrap rounded-md bg-gray-700 px-2 py-1 text-xs-medium text-white"
           style={{
             top: tooltipPos.top,
             left: tooltipPos.left,
