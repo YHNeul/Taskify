@@ -15,6 +15,7 @@ export default function ImageLightboxModal({
   onClose,
 }: ImageLightboxModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const onCloseRef = useRef(onClose);
   const dragStartRef = useRef<{ x: number; y: number } | null>(null);
   const dragOriginRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
@@ -26,13 +27,17 @@ export default function ImageLightboxModal({
   };
 
   useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     closeButtonRef.current?.focus();
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
       }
     };
 
@@ -51,7 +56,7 @@ export default function ImageLightboxModal({
       document.removeEventListener('keydown', handleEscape);
       window.removeEventListener('wheel', handleBrowserZoom);
     };
-  }, [onClose]);
+  }, []);
 
   const handleImageZoom = (event: React.WheelEvent<HTMLDivElement>) => {
     if (!event.ctrlKey) return;
