@@ -13,6 +13,8 @@
  * @author 수경
  */
 
+import clsx from 'clsx';
+
 const TAG_COLORS = [
   { bg: 'bg-orange-100', text: 'text-orange-600' }, // 오렌지
   { bg: 'bg-green-100', text: 'text-green-500' }, // 그린
@@ -50,10 +52,10 @@ export default function TagChip({ label, onClick, className }: TagChipProps) {
   const { bg, text } = TAG_COLORS[colorIndex];
   return (
     <div
-      className={`inline-flex rounded-2xl ${bg} ${className}`}
+      className={clsx('inline-flex rounded-2xl', bg, className)}
       onClick={onClick}
     >
-      <p className={`px-2 py-1 text-md-regular ${text}`}>{label}</p>
+      <p className={clsx('px-2 py-1 text-md-regular', text)}>{label}</p>
     </div>
   );
 }

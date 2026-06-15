@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
+import clsx from 'clsx';
 
 interface ImageLightboxModalProps {
   imageUrl: string;
@@ -126,13 +127,10 @@ export default function ImageLightboxModal({
               src={imageUrl}
               alt={alt}
               draggable={false}
-              className={`max-h-full max-w-full rounded-lg object-contain transition-transform ${
-                scale > 1
-                  ? isDragging
-                    ? 'cursor-grabbing'
-                    : 'cursor-grab'
-                  : ''
-              }`}
+              className={clsx(
+                'max-h-full max-w-full rounded-lg object-contain transition-transform',
+                scale > 1 && (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
+              )}
               style={{
                 transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
                 transitionDuration: isDragging ? '0ms' : '150ms',

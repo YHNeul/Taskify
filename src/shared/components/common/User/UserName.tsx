@@ -12,6 +12,7 @@
 
 import { ProfileOwner } from '@/shared/types/user';
 import UserProfileImage from '@/shared/components/common/User/UserProfileImage';
+import clsx from 'clsx';
 
 interface Props {
   profile: ProfileOwner;
@@ -28,7 +29,7 @@ export default function UserName({
   return (
     <div className="flex items-center gap-2 py-1 rounded-2xl">
       <UserProfileImage profile={profile} />
-      <p className={`text-gray-700 ${fontSize}`}>{nickname}</p>
+      <p className={clsx('text-gray-700', fontSize)}>{nickname}</p>
     </div>
   );
 }

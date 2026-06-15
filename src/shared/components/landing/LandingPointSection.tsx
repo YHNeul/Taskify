@@ -14,6 +14,7 @@
  */
 
 import { useInView } from '@/shared/hooks/useInView';
+import clsx from 'clsx';
 
 type LandingPointSectionProps = {
   point: string;
@@ -52,9 +53,10 @@ export default function LandingPointSection({
        * 1920px 기준: 1200 × 600 (= 2:1) ✓
        */}
       <div
-        className={`mx-auto flex w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-gray-800 ${
-          imageFirst ? 'md:flex-row-reverse' : 'md:flex-row'
-        }`}
+        className={clsx(
+          'mx-auto flex w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-gray-800',
+          imageFirst ? 'md:flex-row-reverse' : 'md:flex-row',
+        )}
       >
         {/*
          * 텍스트 컬럼
@@ -63,9 +65,14 @@ export default function LandingPointSection({
          * Point 2 lg:pl-[44px]  → 우측 컬럼 기준 left=44px (카드 기준 left=644px)
          */}
         <div
-          className={`flex min-w-0 flex-1 flex-col items-center px-6 pt-16 pb-8 font-main sm:items-start sm:flex-none sm:pt-14 sm:pb-0 sm:pl-14 md:px-10 md:py-10 lg:pb-0 lg:pt-20 ${
-            imageFirst ? 'lg:pl-10' : 'lg:pl-12'
-          } ${imageFirst ? 'reveal-right' : 'reveal-left'} ${isVisible ? 'is-visible' : ''}`}
+          className={clsx(
+            'flex min-w-0 flex-1 flex-col items-center px-6 pt-16 pb-8 font-main',
+            'sm:flex-none sm:items-start sm:pt-14 sm:pb-0 sm:pl-14',
+            'md:px-10 md:py-10',
+            'lg:pt-20 lg:pb-0',
+            imageFirst ? 'lg:pl-10 reveal-right' : 'lg:pl-12 reveal-left',
+            isVisible && 'is-visible',
+          )}
           style={{ transitionDelay: '0s' }}
         >
           {/* 태블릿: 22px / 데스크탑: clamp(16px,1.15vw,22px) */}
@@ -79,11 +86,15 @@ export default function LandingPointSection({
            * Point2 sm:max-w-[230px]: 664-60-374=230px bounding box
            */}
           <h2
-            className={`mt-14 break-keep font-bold text-center text-white text-3xl leading-tight max-w-44 sm:text-left sm:text-4xl sm:leading-tight sm:mt-24 md:text-4xl md:leading-tight lg:mt-20 lg:text-5xl lg:leading-tight ${
+            className={clsx(
+              'mt-14 max-w-44 break-keep text-center font-bold text-3xl leading-tight text-white',
+              'sm:mt-24 sm:text-left sm:text-4xl sm:leading-tight',
+              'md:text-4xl md:leading-tight',
+              'lg:mt-20 lg:text-5xl lg:leading-tight',
               imageFirst
                 ? 'sm:max-w-56 lg:max-w-sm'
-                : 'sm:max-w-sm lg:max-w-sm'
-            }`}
+                : 'sm:max-w-sm lg:max-w-sm',
+            )}
           >
             {title}
           </h2>
@@ -98,22 +109,24 @@ export default function LandingPointSection({
          *   → lg:px-10 좌우 패딩으로 좌/우 테두리 분리
          */}
         <div
-          className={`flex min-w-0 flex-1 overflow-hidden md:p-8 ${
+          className={clsx(
+            'flex min-w-0 flex-1 overflow-hidden md:p-8',
             imageFirst
               ? 'items-end justify-end px-16 pb-0 pt-0 sm:justify-center sm:px-8 md:pb-0 md:pt-0 lg:justify-start lg:px-10 lg:pb-0 lg:pt-0'
-              : 'items-end justify-end pl-12 pr-0 pb-0 pt-0 sm:pl-20 sm:pr-0 md:pb-0 md:pr-0 lg:p-0'
-          } ${imageFirst ? 'reveal-left' : 'reveal-right'} ${isVisible ? 'is-visible' : ''}`}
+              : 'items-end justify-end pl-12 pr-0 pb-0 pt-0 sm:pl-20 sm:pr-0 md:pb-0 md:pr-0 lg:p-0',
+            imageFirst ? 'reveal-left' : 'reveal-right',
+            isVisible && 'is-visible',
+          )}
           style={{ transitionDelay: '0.2s' }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- 랜딩 스크린샷 PNG */}
           <img
             src={imageSrc}
             alt={imageAlt}
-            className={`h-auto w-full object-contain ${
-              imageFirst
-                ? 'max-w-md lg:w-auto lg:max-h-96'
-                : 'max-w-full'
-            }`}
+            className={clsx(
+              'h-auto w-full object-contain',
+              imageFirst ? 'max-w-md lg:max-h-96 lg:w-auto' : 'max-w-full',
+            )}
           />
         </div>
       </div>

@@ -7,6 +7,7 @@ import { RefObject, useMemo, useRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { respondToInvitation } from '@/shared/apis/dashboard';
 import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
+import clsx from 'clsx';
 
 interface InvitationTableProps {
   data: Invitation[];
@@ -106,9 +107,10 @@ export default function InvitationTable({
           {filteredData.map((item, index) => (
             <div
               key={item.id}
-              className={`py-3.5 ${
-                index !== filteredData.length - 1 ? 'border-b border-gray-200' : ''
-              }`}
+              className={clsx(
+                'py-3.5',
+                index !== filteredData.length - 1 && 'border-gray-200 border-b',
+              )}
             >
               <div className="flex flex-col gap-1 mb-3.5">
                 <div className="flex items-center">
@@ -153,9 +155,7 @@ export default function InvitationTable({
           <table className="w-full table-fixed text-lg-regular text-gray-500">
             <thead className="sticky top-0 bg-white z-10 text-lg-regular text-gray-400">
               <tr>
-                <th className="pl-0 font-normal text-left w-2/5">
-                  이름
-                </th>
+                <th className="pl-0 w-2/5 text-left font-normal">이름</th>
                 <th className="pl-12 font-normal text-left w-1/4">초대자</th>
                 <th className="pr-3 font-normal text-right">
                   <span className="ml-auto inline-block w-40 lg:w-44 text-center">
@@ -169,7 +169,10 @@ export default function InvitationTable({
               {filteredData.map((item, index) => (
                 <tr
                   key={item.id}
-                  className={index !== filteredData.length - 1 ? 'border-gray-200 border-b' : ''}
+                  className={clsx(
+                    index !== filteredData.length - 1 &&
+                      'border-gray-200 border-b',
+                  )}
                 >
                   <td className="pl-0 pr-2.5 py-5 font-normal text-left lg:pr-5 text-gray-700">
                     <div className="truncate max-w-60 lg:max-w-sm">
@@ -185,9 +188,7 @@ export default function InvitationTable({
                           index={item.inviter.id}
                         />
                       </div>
-                      <div className="truncate">
-                        {item.inviter.nickname}
-                      </div>
+                      <div className="truncate">{item.inviter.nickname}</div>
                     </div>
                   </td>
                   <td className="pr-3">
