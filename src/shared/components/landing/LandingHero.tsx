@@ -7,6 +7,7 @@
  */
 
 import Link from 'next/link';
+import Image from 'next/image';
 import clsx from 'clsx';
 
 type LandingHeroProps = {
@@ -22,12 +23,15 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
           className="mx-auto w-full max-w-3xl"
           style={{ animation: 'fadeInDown 0.8s ease-out both' }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element -- 히어로 전체 이미지 */}
-          <img
-            src="/images/landing/illustartion.png"
+          <Image
+            src="/images/landing/illustration.png"
             alt="Taskify 팀 협업 일러스트"
+            width={1200}
+            height={675}
             className="h-auto w-full rounded-lg"
-            fetchPriority="high"
+            priority
+            quality={70}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 768px"
           />
         </div>
       </div>
@@ -55,7 +59,7 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
 
         <Link
           href="/login"
-          className="mt-24 inline-flex h-12 min-w-56 items-center justify-center rounded-lg bg-brand-violet text-base font-medium text-white transition-opacity hover:opacity-90 sm:mt-8 md:h-14 md:min-w-72 lg:mt-20"
+          className="mt-24 inline-flex h-12 min-w-56 items-center justify-center rounded-lg bg-brand-violet text-lg-medium text-white transition-opacity hover:opacity-90 sm:mt-8 md:h-14 md:min-w-72 lg:mt-20"
           style={{ animation: 'fadeInUp 0.8s ease-out 0.6s both' }}
         >
           로그인하기

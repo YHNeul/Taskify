@@ -76,7 +76,7 @@ export default function LandingPointSection({
           style={{ transitionDelay: '0s' }}
         >
           {/* 태블릿: 22px / 데스크탑: clamp(16px,1.15vw,22px) */}
-          <p className="font-medium leading-none text-center text-gray-400 text-lg sm:text-left sm:text-xl md:text-lg lg:text-xl">
+          <p className="text-2lg-medium text-center text-gray-400 sm:text-left sm:text-xl-medium md:text-2lg-medium lg:text-xl-medium">
             {point}
           </p>
           {/*
@@ -87,7 +87,7 @@ export default function LandingPointSection({
            */}
           <h2
             className={clsx(
-              'mt-14 max-w-44 break-keep text-center font-bold text-3xl leading-tight text-white',
+              'mt-14 max-w-44 break-keep text-3xl font-bold text-center leading-tight text-white',
               'sm:mt-24 sm:text-left sm:text-4xl sm:leading-tight',
               'md:text-4xl md:leading-tight',
               'lg:mt-20 lg:text-5xl lg:leading-tight',
