@@ -28,7 +28,7 @@ export const useColumnCardsPagination = ({
       });
 
       try {
-        const result = await getCards(columnId, 10, cursorId);
+        const result = await getCards(columnId, 4, cursorId);
         setColumnCards((prev) => ({
           ...prev,
           [columnId]: {

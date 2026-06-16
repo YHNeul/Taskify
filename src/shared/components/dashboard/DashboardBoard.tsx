@@ -96,7 +96,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   const { data: columnCardsData } = useDashboardColumnCardsQuery({
     dashboardId,
     columns,
-    size: 10,
+    size: 4,
   });
 
   useEffect(() => {
@@ -188,7 +188,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     }
   };
 
-  if (isDashboardLoading || isColumnsLoading) return <DashboardBoardSkeleton />;
+  if (isDashboardLoading) return <DashboardBoardSkeleton />;
 
   if (!dashboard) {
     return (
@@ -216,30 +216,41 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
           onDragEnd={handleDragEnd}
         >
           <div className="flex flex-col lg:flex-row h-full overflow-y-auto lg:overflow-y-hidden lg:overflow-x-auto">
-            {columns.map((column, index) => (
-              <Column
-                key={column.id}
-                column={column}
-                cards={columnCards[column.id]?.cards ?? []}
-                totalCount={columnCards[column.id]?.totalCount ?? 0}
-                cursorId={columnCards[column.id]?.cursorId}
-                colorIndex={index}
-                isFirstColumn={index === 0}
-                onAddCard={(columnId) => setCreateCardColumnId(columnId)}
-                onEditColumn={(col) =>
-                  setEditColumnModal({
-                    column: col,
-                    title: col.title,
-                    error: '',
-                  })
-                }
-                onCardClick={(card: Card) => {
-                  setSelectedCardId(card.id);
-                }}
-                onLoadMore={loadMoreCards}
-                isLoadingMore={loadingColumnIds.has(column.id)}
-              />
-            ))}
+            {isColumnsLoading
+              ? Array.from({ length: 3 }).map((_, index) => (
+                  <div
+                    key={`column-skeleton-${index}`}
+                    className="w-full lg:w-dashboard-column shrink-0 border-b lg:border-b-0 lg:border-r border-gray-200 px-4 md:px-5 py-4"
+                  >
+                    <div className="h-6 w-36 rounded bg-gray-200 animate-pulse mb-4" />
+                    <div className="h-10 w-full rounded-md bg-gray-200 animate-pulse mb-4" />
+                    <div className="h-32 w-full rounded-card-sm bg-gray-200 animate-pulse" />
+                  </div>
+                ))
+              : columns.map((column, index) => (
+                  <Column
+                    key={column.id}
+                    column={column}
+                    cards={columnCards[column.id]?.cards ?? []}
+                    totalCount={columnCards[column.id]?.totalCount ?? 0}
+                    cursorId={columnCards[column.id]?.cursorId}
+                    colorIndex={index}
+                    isFirstColumn={index === 0}
+                    onAddCard={(columnId) => setCreateCardColumnId(columnId)}
+                    onEditColumn={(col) =>
+                      setEditColumnModal({
+                        column: col,
+                        title: col.title,
+                        error: '',
+                      })
+                    }
+                    onCardClick={(card: Card) => {
+                      setSelectedCardId(card.id);
+                    }}
+                    onLoadMore={loadMoreCards}
+                    isLoadingMore={loadingColumnIds.has(column.id)}
+                  />
+                ))}
 
             <div className="flex items-start pt-4 lg:pt-space-26 px-4 md:px-5 pb-8 lg:pb-0 shrink-0">
               <Button
