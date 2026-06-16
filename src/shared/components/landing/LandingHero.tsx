@@ -24,7 +24,7 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- 히어로 전체 이미지 */}
           <img
-            src="/images/landing/illustartion.png"
+            src="/images/landing/illustration.png"
             alt="Taskify 팀 협업 일러스트"
             className="h-auto w-full rounded-lg"
             fetchPriority="high"
