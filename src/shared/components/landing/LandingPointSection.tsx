@@ -87,10 +87,10 @@ export default function LandingPointSection({
            */}
           <h2
             className={clsx(
-              'mt-14 max-w-44 break-keep text-3xl-bold text-center text-white',
-              'sm:mt-24 sm:text-left sm:text-3xl-bold',
-              'md:text-3xl-bold',
-              'lg:mt-20 lg:text-3xl-bold',
+              'mt-14 max-w-44 break-keep text-3xl font-bold text-center leading-tight text-white',
+              'sm:mt-24 sm:text-left sm:text-4xl sm:leading-tight',
+              'md:text-4xl md:leading-tight',
+              'lg:mt-20 lg:text-5xl lg:leading-tight',
               imageFirst
                 ? 'sm:max-w-56 lg:max-w-sm'
                 : 'sm:max-w-sm lg:max-w-sm',
