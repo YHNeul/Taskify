@@ -96,6 +96,7 @@ export default function SortableDashboardItem({
   };
 
   const handlePrefetch = () => {
+    router.prefetch(`/dashboard/${dashboard.id}`);
     prefetchDashboard(dashboard.id);
   };
 

@@ -20,6 +20,7 @@ export default function DashboardCard({ board }: DashboardCardProps) {
   };
 
   const handlePrefetch = () => {
+    router.prefetch(`/dashboard/${board.id}`);
     prefetchDashboard(board.id);
   };
 
