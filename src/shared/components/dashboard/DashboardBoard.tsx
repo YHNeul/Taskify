@@ -96,7 +96,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   const { data: columnCardsData } = useDashboardColumnCardsQuery({
     dashboardId,
     columns,
-    size: 4,
+    size: 10,
   });
 
   useEffect(() => {
