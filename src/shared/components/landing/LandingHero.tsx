@@ -41,14 +41,14 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
           className="mt-6 flex flex-col items-center gap-2 text-center sm:mt-8 md:flex-row md:items-baseline md:gap-5 lg:mt-10"
           style={{ animation: 'fadeInUp 0.8s ease-out 0.3s both' }}
         >
-          <span className="text-3xl-bold text-white md:text-3xl-bold lg:text-3xl-bold">
+          <span className="text-4xl font-bold leading-none tracking-tight text-white md:text-5xl lg:text-6xl lg:leading-tight">
             새로운 일정 관리
           </span>
           <span
             className={clsx(
-              'text-3xl-bold text-brand-violet',
-              'md:text-3xl-bold',
-              'lg:text-3xl-bold',
+              'text-4xl font-bold leading-none tracking-tight text-brand-violet',
+              'md:text-5xl',
+              'lg:text-7xl',
               montserratClass,
             )}
           >
