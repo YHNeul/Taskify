@@ -30,7 +30,8 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
             height={675}
             className="h-auto w-full rounded-lg"
             priority
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
+            quality={70}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 768px"
           />
         </div>
       </div>
