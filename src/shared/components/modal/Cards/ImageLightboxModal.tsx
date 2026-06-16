@@ -16,7 +16,6 @@ export default function ImageLightboxModal({
   onClose,
 }: ImageLightboxModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const onCloseRef = useRef(onClose);
   const dragStartRef = useRef<{ x: number; y: number } | null>(null);
   const dragOriginRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -50,14 +49,13 @@ export default function ImageLightboxModal({
       }
     };
 
-    const container = containerRef.current;
     document.addEventListener('keydown', handleEscape);
-    container?.addEventListener('wheel', handleBrowserZoom, { passive: false });
+    window.addEventListener('wheel', handleBrowserZoom, { passive: false });
 
     return () => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', handleEscape);
-      container?.removeEventListener('wheel', handleBrowserZoom);
+      window.removeEventListener('wheel', handleBrowserZoom);
     };
   }, []);
 
@@ -103,7 +101,6 @@ export default function ImageLightboxModal({
   return (
     <ModalOverlay onClose={onClose}>
       <div
-        ref={containerRef}
         role="dialog"
         aria-modal="true"
         aria-label="이미지 상세 보기"
