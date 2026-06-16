@@ -29,11 +29,11 @@ import TagChip from '@/shared/components/common/Chip/TagChip';
 import KebabMenuIcon from '@/shared/components/common/Icon/KebabMenuIcon';
 import DropdownMenu from '@/shared/components/common/Dropdown/DropdownMenu';
 import { useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import type { Card } from '@/shared/types/dashboard';
 import AssigneeItem from '@/shared/components/modal/Cards/AssigneeItem';
 import ReplyItem from '@/shared/components/modal/Cards/ReplyItem';
 import ModalBase from '@/shared/components/common/ModalBase';
-import EditCard from '@/shared/components/modal/Cards/EditCard';
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
 import { useDropdownClose } from '@/shared/hooks/useToggle';
 import CommentsForm from '@/shared/components/modal/Cards/CommentsForm';
@@ -42,8 +42,14 @@ import Button from '@/shared/components/common/Button';
 import { useComments } from '@/shared/hooks/useComments';
 import { useCardData } from '@/shared/hooks/useCardData';
 import CardSkeleton from '@/shared/components/modal/Cards/CardSkeleton';
-import ImageLightboxModal from '@/shared/components/modal/Cards/ImageLightboxModal';
 import OptimizedImageWithFallback from '@/shared/components/common/Image/OptimizedImageWithFallback';
+
+const EditCard = dynamic(
+  () => import('@/shared/components/modal/Cards/EditCard'),
+);
+const ImageLightboxModal = dynamic(
+  () => import('@/shared/components/modal/Cards/ImageLightboxModal'),
+);
 
 interface CardsProps {
   onModalClose: () => void;

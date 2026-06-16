@@ -1,16 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { useDashboardStore } from '@/shared/store/useDashboardStore';
 import type { Column as ColumnType, Card } from '@/shared/types/dashboard';
 import Column from '@/shared/components/dashboard/Column';
 import TaskCard from '@/shared/components/dashboard/TaskCard';
 import Button from '@/shared/components/common/Button';
-import Cards from '@/shared/components/modal/Cards/Cards';
-import CreateCard from '@/shared/components/modal/Cards/CreateCard';
-import FormModal from '@/shared/components/modal/FormModal';
-import ConfirmModal from '@/shared/components/modal/ConfirmModal';
 import DashboardBoardSkeleton from '@/shared/components/dashboard/BoardSkeleton';
 import { useBoardDnd, type ColumnCardState } from '@/shared/hooks/useBoardDnd';
 import { applySavedOrder } from '@/shared/utils/cardOrder';
@@ -21,6 +18,15 @@ import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
 import { useDashboardColumnMutations } from '@/shared/hooks/useDashboardColumnMutations';
 import { useColumnCardsPagination } from '@/shared/hooks/useColumnCardsPagination';
 import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
+
+const Cards = dynamic(() => import('@/shared/components/modal/Cards/Cards'));
+const CreateCard = dynamic(
+  () => import('@/shared/components/modal/Cards/CreateCard'),
+);
+const FormModal = dynamic(() => import('@/shared/components/modal/FormModal'));
+const ConfirmModal = dynamic(
+  () => import('@/shared/components/modal/ConfirmModal'),
+);
 
 interface DashboardBoardProps {
   dashboardId: number;
