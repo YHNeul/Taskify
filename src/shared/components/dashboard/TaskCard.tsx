@@ -80,6 +80,7 @@ export default function TaskCard({
             priority={priority}
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 314px"
+            unoptimized
           />
         </div>
       )}
