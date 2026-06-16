@@ -63,10 +63,6 @@ function StatefulImage({
           isLoading ? 'opacity-0' : 'opacity-100',
           isFadeEnabled && 'transition-opacity',
         )}
-        onLoadStart={(event) => {
-          setIsLoading(true);
-          imageProps?.onLoadStart?.(event);
-        }}
         onLoad={(event) => {
           setIsLoading(false);
           onImageLoad?.();
