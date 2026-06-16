@@ -121,7 +121,7 @@ export default function ImageLightboxModal({
           </button>
 
           <div
-            className="flex h-full w-full items-center justify-center overflow-hidden"
+            className="relative flex h-full w-full items-center justify-center overflow-hidden"
             onWheel={handleImageZoom}
           >
             <OptimizedImageWithFallback
