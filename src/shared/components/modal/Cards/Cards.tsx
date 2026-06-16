@@ -290,6 +290,7 @@ export default function Cards({
                   imageProps={{
                     fill: true,
                     loading: 'lazy',
+                    quality: 72,
                     sizes: '(max-width: 768px) calc(100vw - 32px), 445px',
                   }}
                 />

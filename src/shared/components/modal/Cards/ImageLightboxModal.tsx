@@ -141,7 +141,9 @@ export default function ImageLightboxModal({
               imageProps={{
                 fill: true,
                 priority: true,
-                sizes: '(max-width: 768px) 100vw, 1200px',
+                quality: 86,
+                sizes:
+                  '(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1200px',
                 draggable: false,
                 style: {
                   transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,

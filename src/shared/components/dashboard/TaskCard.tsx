@@ -86,7 +86,9 @@ export default function TaskCard({
               fill: true,
               priority,
               loading: priority ? 'eager' : 'lazy',
-              sizes: '(max-width: 1024px) 100vw, 314px',
+              quality: 58,
+              sizes:
+                '(max-width: 767px) calc(100vw - 32px), (max-width: 1023px) calc(100vw - 40px), 314px',
             }}
           />
         </div>
