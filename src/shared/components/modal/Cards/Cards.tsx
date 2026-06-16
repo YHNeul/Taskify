@@ -32,7 +32,6 @@ import { useEffect, useRef, useState } from 'react';
 import type { Card } from '@/shared/types/dashboard';
 import AssigneeItem from '@/shared/components/modal/Cards/AssigneeItem';
 import ReplyItem from '@/shared/components/modal/Cards/ReplyItem';
-import Image from 'next/image';
 import ModalBase from '@/shared/components/common/ModalBase';
 import EditCard from '@/shared/components/modal/Cards/EditCard';
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
@@ -44,6 +43,7 @@ import { useComments } from '@/shared/hooks/useComments';
 import { useCardData } from '@/shared/hooks/useCardData';
 import CardSkeleton from '@/shared/components/modal/Cards/CardSkeleton';
 import ImageLightboxModal from '@/shared/components/modal/Cards/ImageLightboxModal';
+import OptimizedImageWithFallback from '@/shared/components/common/Image/OptimizedImageWithFallback';
 
 interface CardsProps {
   onModalClose: () => void;
@@ -278,13 +278,15 @@ export default function Cards({
                 className="relative mb-6 block w-full overflow-hidden rounded-md bg-gray-100 md:mb-4 aspect-video"
                 aria-label="이미지 상세 보기 열기"
               >
-                <Image
+                <OptimizedImageWithFallback
                   src={imageUrl}
                   alt="할 일 카드 이미지"
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) calc(100vw - 32px), 445px"
-                  unoptimized
+                  imageClassName="object-contain"
+                  imageProps={{
+                    fill: true,
+                    loading: 'lazy',
+                    sizes: '(max-width: 768px) calc(100vw - 32px), 445px',
+                  }}
                 />
               </button>
             )}

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
 import clsx from 'clsx';
+import OptimizedImageWithFallback from '@/shared/components/common/Image/OptimizedImageWithFallback';
 
 interface ImageLightboxModalProps {
   imageUrl: string;
@@ -123,24 +124,36 @@ export default function ImageLightboxModal({
             className="flex h-full w-full items-center justify-center overflow-hidden"
             onWheel={handleImageZoom}
           >
-            <img
+            <OptimizedImageWithFallback
               src={imageUrl}
               alt={alt}
-              draggable={false}
-              className={clsx(
-                'max-h-full max-w-full rounded-lg object-contain transition-transform',
+              imageClassName={clsx(
+                'max-h-full max-w-full rounded-lg object-contain transition-all',
                 scale > 1 && (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
               )}
-              style={{
-                transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
-                transitionDuration: isDragging ? '0ms' : '150ms',
+              skeletonClassName="rounded-lg"
+              fallback={
+                <div className="flex h-full w-full items-center justify-center rounded-lg bg-gray-100 text-md-medium text-gray-500">
+                  이미지를 불러오지 못했습니다.
+                </div>
+              }
+              withFade
+              imageProps={{
+                fill: true,
+                priority: true,
+                sizes: '(max-width: 768px) 100vw, 1200px',
+                draggable: false,
+                style: {
+                  transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
+                  transitionDuration: isDragging ? '0ms' : '150ms',
+                },
+                onDragStart: (event) => event.preventDefault(),
+                onMouseDown: (event) => event.stopPropagation(),
+                onPointerDown: handlePointerDown,
+                onPointerMove: handlePointerMove,
+                onPointerUp: handlePointerUp,
+                onPointerCancel: handlePointerUp,
               }}
-              onDragStart={(event) => event.preventDefault()}
-              onMouseDown={(event) => event.stopPropagation()}
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
-              onPointerCancel={handlePointerUp}
             />
           </div>
         </div>
