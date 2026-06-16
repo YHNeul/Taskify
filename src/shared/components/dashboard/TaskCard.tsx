@@ -77,6 +77,11 @@ export default function TaskCard({
             src={imageUrl}
             alt={title}
             imageClassName="object-cover"
+            fallback={
+              <div className="flex h-full w-full items-center justify-center bg-gray-100 text-xs-medium text-gray-400">
+                이미지를 불러올 수 없습니다.
+              </div>
+            }
             imageProps={{
               fill: true,
               priority,
