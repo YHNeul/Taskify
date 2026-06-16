@@ -7,6 +7,7 @@
  */
 
 import Link from 'next/link';
+import Image from 'next/image';
 import clsx from 'clsx';
 
 type LandingHeroProps = {
@@ -22,12 +23,14 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
           className="mx-auto w-full max-w-3xl"
           style={{ animation: 'fadeInDown 0.8s ease-out both' }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element -- 히어로 전체 이미지 */}
-          <img
+          <Image
             src="/images/landing/illustration.png"
             alt="Taskify 팀 협업 일러스트"
+            width={1200}
+            height={675}
             className="h-auto w-full rounded-lg"
-            fetchPriority="high"
+            priority
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
           />
         </div>
       </div>
