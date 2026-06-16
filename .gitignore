@@ -46,3 +46,4 @@ src/app/preview/
 # 로컬 전용 파일
 src/actions/
 public/images/landing 2/
+.tmp/
