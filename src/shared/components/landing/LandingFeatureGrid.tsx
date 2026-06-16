@@ -50,9 +50,9 @@ export default function LandingFeatureGrid() {
         {/* 타이틀 — 섹션 진입 시 위로 올라오며 등장 */}
         <h2
           className={clsx(
-            'reveal-up mb-10 text-center text-2xl font-bold leading-none text-white',
-            'sm:text-3xl',
-            'lg:text-left lg:text-3xl',
+            'reveal-up mb-10 text-2xl-bold text-center text-white',
+            'sm:text-3xl-bold',
+            'lg:text-left lg:text-3xl-bold',
             isVisible && 'is-visible',
           )}
         >
@@ -79,10 +79,10 @@ export default function LandingFeatureGrid() {
                 />
               </div>
               <div className="flex flex-1 flex-col justify-center bg-gray-800 px-8 py-5 sm:px-6">
-                <h3 className="font-bold leading-none text-white text-sm sm:text-lg lg:text-lg">
+                <h3 className="text-md-bold text-white sm:text-lg-bold lg:text-lg-bold">
                   {card.title}
                 </h3>
-                <p className="mt-4 font-medium leading-none text-white text-xs sm:mt-3 sm:text-base lg:text-base">
+                <p className="mt-4 text-xs-medium text-white sm:mt-3 sm:text-lg-medium lg:text-lg-medium">
                   {card.description}
                 </p>
               </div>

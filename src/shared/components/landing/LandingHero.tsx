@@ -38,14 +38,14 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
           className="mt-6 flex flex-col items-center gap-2 text-center sm:mt-8 md:flex-row md:items-baseline md:gap-5 lg:mt-10"
           style={{ animation: 'fadeInUp 0.8s ease-out 0.3s both' }}
         >
-          <span className="text-4xl font-bold leading-none tracking-tight text-white md:text-5xl lg:text-6xl lg:leading-tight">
+          <span className="text-3xl-bold text-white md:text-3xl-bold lg:text-3xl-bold">
             새로운 일정 관리
           </span>
           <span
             className={clsx(
-              'text-4xl font-bold leading-none tracking-tight text-brand-violet',
-              'md:text-5xl',
-              'lg:text-7xl',
+              'text-3xl-bold text-brand-violet',
+              'md:text-3xl-bold',
+              'lg:text-3xl-bold',
               montserratClass,
             )}
           >
@@ -55,7 +55,7 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
 
         <Link
           href="/login"
-          className="mt-24 inline-flex h-12 min-w-56 items-center justify-center rounded-lg bg-brand-violet text-base font-medium text-white transition-opacity hover:opacity-90 sm:mt-8 md:h-14 md:min-w-72 lg:mt-20"
+          className="mt-24 inline-flex h-12 min-w-56 items-center justify-center rounded-lg bg-brand-violet text-lg-medium text-white transition-opacity hover:opacity-90 sm:mt-8 md:h-14 md:min-w-72 lg:mt-20"
           style={{ animation: 'fadeInUp 0.8s ease-out 0.6s both' }}
         >
           로그인하기
