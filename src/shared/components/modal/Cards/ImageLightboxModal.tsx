@@ -137,7 +137,7 @@ export default function ImageLightboxModal({
                   이미지를 불러오지 못했습니다.
                 </div>
               }
-              withFade
+              isFadeEnabled
               imageProps={{
                 fill: true,
                 priority: true,

@@ -10,9 +10,9 @@ interface OptimizedImageWithFallbackProps {
   imageClassName?: string;
   skeletonClassName?: string;
   fallback?: ReactNode;
-  withFade?: boolean;
-  showSkeleton?: boolean;
-  showFallbackWhileLoading?: boolean;
+  isFadeEnabled?: boolean;
+  isSkeletonVisible?: boolean;
+  isFallbackVisibleWhileLoading?: boolean;
   onImageLoad?: () => void;
   onImageError?: () => void;
   imageProps?: Omit<ImageProps, 'src' | 'alt' | 'className'>;
@@ -28,9 +28,9 @@ function StatefulImage({
   imageClassName,
   skeletonClassName,
   fallback = null,
-  withFade = true,
-  showSkeleton = true,
-  showFallbackWhileLoading = false,
+  isFadeEnabled = true,
+  isSkeletonVisible = true,
+  isFallbackVisibleWhileLoading = false,
   onImageLoad,
   onImageError,
   imageProps,
@@ -44,8 +44,8 @@ function StatefulImage({
 
   return (
     <>
-      {showFallbackWhileLoading && isLoading && fallback}
-      {showSkeleton && isLoading && (
+      {isFallbackVisibleWhileLoading && isLoading && fallback}
+      {isSkeletonVisible && isLoading && (
         <div
           aria-hidden="true"
           className={clsx(
@@ -61,7 +61,7 @@ function StatefulImage({
         className={clsx(
           imageClassName,
           isLoading ? 'opacity-0' : 'opacity-100',
-          withFade && 'transition-opacity',
+          isFadeEnabled && 'transition-opacity',
         )}
         onLoadStart={(event) => {
           setIsLoading(true);

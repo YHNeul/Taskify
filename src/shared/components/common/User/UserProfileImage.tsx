@@ -67,8 +67,8 @@ export default function UserProfileImage({
             src={profileImageUrl}
             alt="담당자 프로필"
             imageClassName="object-cover"
-            showSkeleton={false}
-            showFallbackWhileLoading
+            isSkeletonVisible={false}
+            isFallbackVisibleWhileLoading
             fallback={
               <span className="text-white text-xs-semibold select-none cursor-default">
                 {initial}
