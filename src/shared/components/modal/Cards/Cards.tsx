@@ -284,7 +284,6 @@ export default function Cards({
                   fill
                   className="object-contain"
                   sizes="(max-width: 768px) calc(100vw - 32px), 445px"
-                  unoptimized
                 />
               </button>
             )}
