@@ -24,6 +24,7 @@ import { cn } from '@/lib/utils';
 import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 import type { Dashboard } from '@/shared/types/dashboard';
 import { SIDEBAR_LAYOUT, type LayoutType } from '@/shared/utils/sidebarLayout';
+import { useDashboardPrefetch } from '@/shared/hooks/useDashboardPrefetch';
 
 interface SortableDashboardItemProps {
   /** 표시할 대시보드 데이터 */
@@ -49,6 +50,7 @@ export default function SortableDashboardItem({
   } | null>(null);
   const hasDraggedRef = useRef(false);
   const resetDragTimeoutRef = useRef<number | null>(null);
+  const prefetchDashboard = useDashboardPrefetch();
 
   const {
     attributes,
@@ -93,6 +95,10 @@ export default function SortableDashboardItem({
     router.push(targetUrl);
   };
 
+  const handlePrefetch = () => {
+    prefetchDashboard(dashboard.id);
+  };
+
   useEffect(
     () => () => {
       if (resetDragTimeoutRef.current !== null) {
@@ -129,6 +135,9 @@ export default function SortableDashboardItem({
       ref={setNodeRef}
       style={style}
       onClick={handleClick}
+      onMouseEnter={handlePrefetch}
+      onFocus={handlePrefetch}
+      onTouchStart={handlePrefetch}
       aria-label={dashboard.title}
       {...attributes}
       {...listeners}

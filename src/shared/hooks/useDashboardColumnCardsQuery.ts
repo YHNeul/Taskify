@@ -2,7 +2,8 @@ import { getCards } from '@/shared/apis/dashboard';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { Column } from '@/shared/types/dashboard';
 import { ColumnCardState } from '@/shared/hooks/useBoardDnd';
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import { useMemo } from 'react';
+import { useQueries, type UseQueryOptions } from '@tanstack/react-query';
 
 interface UseDashboardColumnCardsQueryParams {
   dashboardId: number;
@@ -11,22 +12,18 @@ interface UseDashboardColumnCardsQueryParams {
 }
 
 type DashboardColumnCardsQueryData = Record<number, ColumnCardState>;
-const getDashboardColumnCardsQueryKey = (
+const getColumnCardsQueryKey = (
   dashboardId: number,
   size: number,
-  columnIds: number[],
-) => [...QUERY_KEYS.columnCards(dashboardId), size, columnIds] as const;
-type DashboardColumnCardsQueryKey = ReturnType<
-  typeof getDashboardColumnCardsQueryKey
->;
+  columnId: number,
+) => [...QUERY_KEYS.columnCards(dashboardId), size, columnId] as const;
 type UseDashboardColumnCardsQueryOptions<
   TData = DashboardColumnCardsQueryData,
 > = Omit<
   UseQueryOptions<
-    DashboardColumnCardsQueryData,
+    Awaited<ReturnType<typeof getCards>>,
     Error,
-    TData,
-    DashboardColumnCardsQueryKey
+    Awaited<ReturnType<typeof getCards>>
   >,
   'queryKey' | 'queryFn'
 >;
@@ -40,32 +37,39 @@ export const useDashboardColumnCardsQuery = <
   const isDashboardIdValid = Number.isFinite(dashboardId) && dashboardId > 0;
   const hasColumns = columns.length > 0;
   const isQueryEnabled = queryOptions?.enabled ?? true;
-  const columnIds = columns.map((column) => column.id);
 
-  return useQuery<
-    DashboardColumnCardsQueryData,
-    Error,
-    TData,
-    DashboardColumnCardsQueryKey
-  >({
-    ...queryOptions,
-    queryKey: getDashboardColumnCardsQueryKey(dashboardId, size, columnIds),
-    queryFn: async () => {
-      const results = await Promise.all(
-        columns.map((col) => getCards(col.id, size)),
-      );
-      const map: Record<number, ColumnCardState> = {};
-
-      columns.forEach((col, i) => {
-        map[col.id] = {
-          cards: results[i].cards,
-          totalCount: results[i].totalCount,
-          cursorId: results[i].cursorId,
-        };
-      });
-
-      return map;
-    },
-    enabled: isDashboardIdValid && hasColumns && isQueryEnabled,
+  const queries = useQueries({
+    queries: columns.map((column) => ({
+      ...queryOptions,
+      queryKey: getColumnCardsQueryKey(dashboardId, size, column.id),
+      queryFn: () => getCards(column.id, size),
+      enabled: isDashboardIdValid && hasColumns && isQueryEnabled,
+      staleTime: queryOptions?.staleTime ?? 1000 * 30,
+      gcTime: queryOptions?.gcTime ?? 1000 * 60 * 10,
+    })),
   });
+
+  const data = useMemo(() => {
+    const map: Record<number, ColumnCardState> = {};
+
+    columns.forEach((column, index) => {
+      const result = queries[index]?.data;
+      if (!result) return;
+
+      map[column.id] = {
+        cards: result.cards,
+        totalCount: result.totalCount,
+        cursorId: result.cursorId,
+      };
+    });
+
+    return Object.keys(map).length > 0 ? (map as TData) : undefined;
+  }, [columns, queries]);
+
+  return {
+    data,
+    isLoading: queries.some((query) => query.isLoading),
+    isFetching: queries.some((query) => query.isFetching),
+    isError: queries.some((query) => query.isError),
+  };
 };
