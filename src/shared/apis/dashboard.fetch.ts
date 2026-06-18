@@ -41,8 +41,7 @@ export const fetchDashboard = async (
 ): Promise<Dashboard> => {
   const res = await fetch(`${BASE_URL}/dashboards/${dashboardId}`, {
     headers: await getHeaders(),
-    // 대시보드 정보는 자주 바뀌지 않으므로 60초 캐싱
-    next: { revalidate: 60 },
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error(`대시보드 조회 실패: ${res.status}`);
   return res.json();
