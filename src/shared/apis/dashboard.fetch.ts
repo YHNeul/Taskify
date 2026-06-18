@@ -56,7 +56,7 @@ export const fetchColumns = async (
 ): Promise<ColumnsResponse> => {
   const res = await fetch(`${BASE_URL}/columns?dashboardId=${dashboardId}`, {
     headers: await getHeaders(),
-    next: { revalidate: 30 },
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error(`칼럼 목록 조회 실패: ${res.status}`);
   return res.json();
@@ -94,7 +94,7 @@ export const fetchMembers = async (
     `${BASE_URL}/members?dashboardId=${dashboardId}&page=1&size=20`,
     {
       headers: await getHeaders(),
-      next: { revalidate: 60 },
+      cache: 'no-store',
     },
   );
   if (!res.ok) throw new Error(`멤버 목록 조회 실패: ${res.status}`);
