@@ -37,6 +37,8 @@ function StatefulImage({
 }: StatefulImageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [shouldUseUnoptimized, setShouldUseUnoptimized] = useState(false);
+  const isRemoteSource = /^https?:\/\//.test(src);
 
   if (hasError) {
     return <>{fallback}</>;
@@ -58,6 +60,7 @@ function StatefulImage({
         {...imageProps}
         src={src}
         alt={alt}
+        unoptimized={imageProps?.unoptimized ?? shouldUseUnoptimized}
         className={clsx(
           imageClassName,
           isLoading ? 'opacity-0' : 'opacity-100',
@@ -69,6 +72,16 @@ function StatefulImage({
           imageProps?.onLoad?.(event);
         }}
         onError={(event) => {
+          if (
+            isRemoteSource &&
+            !shouldUseUnoptimized &&
+            imageProps?.unoptimized !== true
+          ) {
+            // next/image 최적화 경로가 실패할 때 원본 URL로 1회 재시도
+            setShouldUseUnoptimized(true);
+            setIsLoading(true);
+            return;
+          }
           setHasError(true);
           setIsLoading(false);
           onImageError?.();

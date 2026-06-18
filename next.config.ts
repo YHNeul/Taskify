@@ -12,6 +12,7 @@ const apiHostname = (() => {
 const imageHostnames = Array.from(
   new Set([
     apiHostname,
+    'sprint-fe-project.s3.ap-northeast-2.amazonaws.com',
     ...(process.env.NEXT_PUBLIC_IMAGE_HOSTNAMES ?? '')
       .split(',')
       .map((hostname) => hostname.trim())
