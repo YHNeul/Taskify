@@ -31,7 +31,6 @@ export default function DashboardCard({ board }: DashboardCardProps) {
       onClick={handleNavigate}
       onMouseEnter={handlePrefetch}
       onFocus={handlePrefetch}
-      onTouchStart={handlePrefetch}
     >
       <div className="flex items-center min-w-0 flex-1">
         <span
