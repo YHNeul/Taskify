@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect } from 'react';
 import ErrorPageView from '@/shared/components/common/error-page/ErrorPageView';
 import { reportRuntimeError } from '@/shared/utils/errorReporter';
@@ -34,12 +33,14 @@ export default function GlobalErrorPage({
               >
                 다시 시도
               </button>
-              <Link
+              {/* global-error에서는 Router Context가 깨질 수 있어 안전한 full reload 이동 사용 */}
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+              <a
                 href="/"
                 className="inline-flex h-12 min-w-40 items-center justify-center rounded-full border border-gray-300 bg-white px-6 text-lg-medium text-gray-700 transition-colors hover:bg-brand-violet-light"
               >
                 홈으로 이동
-              </Link>
+              </a>
             </>
           }
         />
