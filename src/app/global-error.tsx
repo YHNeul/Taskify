@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
 import ErrorPageView from '@/shared/components/common/ErrorPage/ErrorPageView';
-import { reportRuntimeError } from '@/utils/errorReporter';
+import { reportRuntimeError } from '@/shared/utils/errorReporter';
 
 type GlobalErrorPageProps = {
   error: Error & { digest?: string };

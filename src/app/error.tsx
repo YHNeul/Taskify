@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import ErrorPageView from '@/shared/components/common/ErrorPage/ErrorPageView';
 import Button from '@/shared/components/common/Button/Button';
-import { reportRuntimeError } from '@/utils/errorReporter';
+import { reportRuntimeError } from '@/shared/utils/errorReporter';
 
 type ErrorPageProps = {
   error: Error & { digest?: string };
