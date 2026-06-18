@@ -19,7 +19,7 @@ export default function ErrorPageView({
   actions,
 }: ErrorPageViewProps) {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100 px-6 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-6 py-12">
       <section className="w-full max-w-lg rounded-card-md border border-gray-200 bg-white p-8 text-center shadow-sm sm:p-10">
         <p className="text-3xl-bold text-brand-violet">{statusCode}</p>
         <h1 className="mt-3 text-2xl-bold text-gray-700">{title}</h1>
@@ -33,6 +33,6 @@ export default function ErrorPageView({
           </div>
         ) : null}
       </section>
-    </main>
+    </div>
   );
 }
