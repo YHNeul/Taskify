@@ -9,6 +9,15 @@ const apiHostname = (() => {
     return 'sp-taskify-api.vercel.app';
   }
 })();
+const imageHostnames = Array.from(
+  new Set([
+    apiHostname,
+    ...(process.env.NEXT_PUBLIC_IMAGE_HOSTNAMES ?? '')
+      .split(',')
+      .map((hostname) => hostname.trim())
+      .filter(Boolean),
+  ]),
+);
 
 const nextConfig: NextConfig = {
   devIndicators: false,
@@ -19,14 +28,10 @@ const nextConfig: NextConfig = {
     deviceSizes: [256, 320, 384, 445, 560, 640, 750, 828, 1080, 1200],
     imageSizes: [16, 24, 26, 32, 38, 48, 64, 96, 128, 160, 192, 256],
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: apiHostname,
-      },
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
+      ...imageHostnames.map((hostname) => ({
+        protocol: 'https' as const,
+        hostname,
+      })),
       {
         protocol: 'http',
         hostname: 'localhost',
