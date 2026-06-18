@@ -3,6 +3,7 @@ import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { Column } from '@/shared/types/dashboard';
 import { ColumnCardState } from '@/shared/hooks/useBoardDnd';
 import { useQueries, type UseQueryOptions } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
 interface UseDashboardColumnCardsQueryParams {
   dashboardId: number;
@@ -44,23 +45,52 @@ export const useDashboardColumnCardsQuery = (
     })),
   });
 
-  const dataMap: DashboardColumnCardsQueryData = {};
-  queries.forEach((query, index) => {
-    const result = query.data;
-    const columnId = columns[index]?.id;
-    if (!result || !columnId) return;
-    dataMap[columnId] = {
-      cards: result.cards,
-      totalCount: result.totalCount,
-      cursorId: result.cursorId,
-    };
-  });
+  const columnIdsKey = columns.map((column) => column.id).join('|');
+  const dataVersion = queries.map((query) => query.dataUpdatedAt).join('|');
+  const queriesStatusKey = queries
+    .map(
+      (query) =>
+        `${query.status}:${query.fetchStatus}:${query.dataUpdatedAt}:${query.errorUpdatedAt}`,
+    )
+    .join('|');
 
-  return {
-    data: Object.keys(dataMap).length > 0 ? dataMap : undefined,
-    dataVersion: queries.map((query) => query.dataUpdatedAt).join('|'),
-    isLoading: queries.some((query) => query.isLoading),
-    isFetching: queries.some((query) => query.isFetching),
-    isError: queries.some((query) => query.isError),
-  };
+  const data = useMemo(() => {
+    const dataMap: DashboardColumnCardsQueryData = {};
+    queries.forEach((query, index) => {
+      const result = query.data;
+      const columnId = columns[index]?.id;
+      if (!result || !columnId) return;
+      dataMap[columnId] = {
+        cards: result.cards,
+        totalCount: result.totalCount,
+        cursorId: result.cursorId,
+      };
+    });
+
+    return Object.keys(dataMap).length > 0 ? dataMap : undefined;
+  }, [columnIdsKey, dataVersion, queries, columns]);
+
+  const isLoading = useMemo(
+    () => queries.some((query) => query.isLoading),
+    [queriesStatusKey, queries],
+  );
+  const isFetching = useMemo(
+    () => queries.some((query) => query.isFetching),
+    [queriesStatusKey, queries],
+  );
+  const isError = useMemo(
+    () => queries.some((query) => query.isError),
+    [queriesStatusKey, queries],
+  );
+
+  return useMemo(
+    () => ({
+      data,
+      dataVersion,
+      isLoading,
+      isFetching,
+      isError,
+    }),
+    [data, dataVersion, isLoading, isFetching, isError],
+  );
 };
