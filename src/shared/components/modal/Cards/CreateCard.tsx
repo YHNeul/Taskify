@@ -229,14 +229,14 @@ export default function CreateCard({
     return <CreateCardSkeleton onModalClose={onModalClose} />;
 
   /** 타이틀 공통 CSS */
-  const baseFontStyle = 'text-2lg-medium mb-2';
+  const baseFontStyle = 'typo-2lg-medium mb-2';
 
   return (
     <>
       <ModalOverlay onClose={handleRequestClose}>
         <ModalBase className="px-4 mobile:px-8 max-h-screen-minus-160 overflow-y-auto w-modal-card h-auto rounded-2xl text-gray-700 p-8 flex flex-col gap-8">
           <header>
-            <h2 className="text-2xl-bold wrap-break-word">할 일 생성</h2>
+            <h2 className="typo-2xl-bold wrap-break-word">할 일 생성</h2>
           </header>
 
           <form
@@ -314,7 +314,7 @@ export default function CreateCard({
                   onKeyDown={handleTagKeyDown}
                   onFocus={() => setIsTagFocused(true)}
                   onBlur={() => setIsTagFocused(false)}
-                  className="bg-transparent outline-none flex-1 min-w-20 text-gray-700 text-lg-regular"
+                  className="bg-transparent outline-none flex-1 min-w-20 text-gray-700 typo-lg-regular"
                   placeholder={
                     formData.tags.length === 0 ? '태그 입력 후 Enter' : ''
                   }

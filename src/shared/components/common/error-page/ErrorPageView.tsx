@@ -21,9 +21,9 @@ export default function ErrorPageView({
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100 px-6 py-12">
       <section className="w-full max-w-lg rounded-card-md border border-gray-200 bg-white p-8 text-center shadow-sm sm:p-10">
-        <p className="text-3xl-bold text-brand-violet">{statusCode}</p>
-        <h1 className="mt-3 text-2xl-bold text-gray-700">{title}</h1>
-        <p className="mt-4 whitespace-pre-line text-md-regular text-gray-500">
+        <p className="typo-3xl-bold text-brand-violet">{statusCode}</p>
+        <h1 className="mt-3 typo-2xl-bold text-gray-700">{title}</h1>
+        <p className="mt-4 whitespace-pre-line typo-md-regular text-gray-500">
           {description}
         </p>
 

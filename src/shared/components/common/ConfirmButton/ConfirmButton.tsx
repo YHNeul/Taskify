@@ -62,7 +62,7 @@ export default function ConfirmButton({
   className,
 }: ConfirmButtonProps) {
   const btnBase =
-    'inline-flex items-center justify-center rounded-xl text-md-medium transition-colors disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center rounded-xl typo-md-medium transition-colors disabled:cursor-not-allowed';
 
   /** 개별 버튼 크기 — mobile: 109×32, tablet: 72×30, desktop: 84×32 */
   const btnSize = 'w-28 h-8 md:w-18 md:h-8 lg:w-20 lg:h-8';

@@ -27,7 +27,7 @@ export default async function DashboardEditPage({ params }: PageProps) {
           className="pt-4 flex items-center gap-1.5 md:gap-2"
         >
           <ArrowRightIcon className="w-back-icon-mobile rotate-180 md:w-5" />
-          <span className="text-md-medium text-gray-700 md:text-lg-medium mt-px">
+          <span className="typo-md-medium text-gray-700 md:typo-lg-medium mt-px">
             돌아가기
           </span>
         </Link>

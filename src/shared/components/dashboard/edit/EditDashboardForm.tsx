@@ -62,12 +62,12 @@ export default function EditDashboardForm({
   return (
     <div className="px-4 py-5 md:px-7 md:py-8">
       <div>
-        <span className="text-xl-bold text-gray-700 md:text-2xl-bold">
+        <span className="typo-xl-bold text-gray-700 md:typo-2xl-bold">
           {dashboard?.title ?? '대시보드 불러오는 중...'}
         </span>
       </div>
       <div className="pt-6">
-        <span className="inline-block mb-2 text-lg-medium text-gray-700 md:text-2lg-medium">
+        <span className="inline-block mb-2 typo-lg-medium text-gray-700 md:typo-2lg-medium">
           대시보드 이름
         </span>
         <Input
@@ -89,7 +89,7 @@ export default function EditDashboardForm({
         </div>
         <div>
           <Button
-            className="w-full h-14 mt-8 text-lg-semibold md:mt-10"
+            className="w-full h-14 mt-8 typo-lg-semibold md:mt-10"
             variant="primary"
             disabled={isSubmitDisabled}
             onClick={() => {

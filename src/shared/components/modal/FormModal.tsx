@@ -71,7 +71,7 @@ export default function FormModal({
   return (
     <ModalBase className="w-modal-form rounded-lg p-6">
       <div className="mb-6 flex items-start justify-between">
-        <h2 className="text-2xl-bold text-gray-900">{title}</h2>
+        <h2 className="typo-2xl-bold text-gray-900">{title}</h2>
 
         {showCloseButton && (
           <button
@@ -85,7 +85,7 @@ export default function FormModal({
       </div>
 
       <div className="mb-2.5">
-        <label className="mb-2 block text-2lg-medium text-gray-700">
+        <label className="mb-2 block typo-2lg-medium text-gray-700">
           {label}
         </label>
 

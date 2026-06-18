@@ -78,7 +78,7 @@ export default function TaskCard({
             alt={title}
             imageClassName="object-cover"
             fallback={
-              <div className="flex h-full w-full items-center justify-center bg-gray-100 text-xs-medium text-gray-400">
+              <div className="flex h-full w-full items-center justify-center bg-gray-100 typo-xs-medium text-gray-400">
                 이미지를 불러올 수 없습니다.
               </div>
             }
@@ -93,7 +93,7 @@ export default function TaskCard({
       )}
 
       {/* 제목 */}
-      <p className="text-md-bold md:text-lg-bold text-gray-700 mb-2 truncate">
+      <p className="typo-md-bold md:typo-lg-bold text-gray-700 mb-2 truncate">
         {title}
       </p>
 
@@ -111,7 +111,7 @@ export default function TaskCard({
         {dueDate ? (
           <div className="flex items-center gap-1 text-gray-400">
             <CalendarIcon width={14} height={14} />
-            <span className="text-xs-regular">{dueDate}</span>
+            <span className="typo-xs-regular">{dueDate}</span>
           </div>
         ) : (
           <span />

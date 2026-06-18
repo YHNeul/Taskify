@@ -68,7 +68,7 @@ export default function MyPageContent() {
           />
         </svg>
 
-        <span className="text-sm-medium md:text-md-medium mt-px text-gray-700">
+        <span className="typo-sm-medium md:typo-md-medium mt-px text-gray-700">
           돌아가기
         </span>
       </button>

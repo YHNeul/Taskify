@@ -45,7 +45,7 @@ export default function DateInput({
           dateFormat="yyyy-MM-dd HH:mm"
           placeholderText="날짜를 입력해 주세요"
           wrapperClassName="w-full"
-          className="w-full outline-none text-gray-700 bg-transparent text-lg-regular placeholder:text-gray-400 leading-none"
+          className="w-full outline-none text-gray-700 bg-transparent typo-lg-regular placeholder:text-gray-400 leading-none"
         />
       </div>
     </div>

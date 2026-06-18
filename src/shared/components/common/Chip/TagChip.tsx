@@ -55,7 +55,7 @@ export default function TagChip({ label, onClick, className }: TagChipProps) {
       className={clsx('inline-flex rounded-2xl', bg, className)}
       onClick={onClick}
     >
-      <p className={clsx('px-2 py-1 text-md-regular', text)}>{label}</p>
+      <p className={clsx('px-2 py-1 typo-md-regular', text)}>{label}</p>
     </div>
   );
 }

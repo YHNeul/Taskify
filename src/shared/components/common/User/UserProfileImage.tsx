@@ -70,7 +70,7 @@ export default function UserProfileImage({
             isSkeletonVisible={false}
             isFallbackVisibleWhileLoading
             fallback={
-              <span className="absolute inset-0 z-10 flex items-center justify-center text-white text-xs-semibold select-none cursor-default">
+              <span className="absolute inset-0 z-10 flex items-center justify-center text-white typo-xs-semibold select-none cursor-default">
                 {initial}
               </span>
             }
@@ -82,7 +82,7 @@ export default function UserProfileImage({
             }}
           />
         ) : (
-          <span className="text-white text-xs-semibold select-none cursor-default">
+          <span className="text-white typo-xs-semibold select-none cursor-default">
             {initial}
           </span>
         )}

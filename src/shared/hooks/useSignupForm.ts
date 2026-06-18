@@ -67,8 +67,9 @@ export const useSignupForm = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  const [focusedField, setFocusedField] =
-    useState<keyof SignupFormValues | null>(null);
+  const [focusedField, setFocusedField] = useState<
+    keyof SignupFormValues | null
+  >(null);
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');

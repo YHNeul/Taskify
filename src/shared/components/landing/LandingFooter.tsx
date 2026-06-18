@@ -39,25 +39,43 @@ export default function LandingFooter() {
   return (
     <footer className="border-t border-white/5 bg-black px-4 py-8 md:px-10 lg:h-24 lg:px-20 lg:py-0">
       <div className="flex h-full flex-col items-center justify-center gap-6 lg:flex-row lg:justify-between">
-        <p className="order-1 text-xs-regular text-gray-400 lg:order-none">
+        <p className="order-1 typo-xs-regular text-gray-400 lg:order-none">
           ©codeit - 2023
         </p>
-        <div className="order-2 flex items-center gap-6 text-xs-regular text-gray-400 lg:order-none">
-          <Link href="#" className="opacity-80 hover:text-white hover:opacity-100">
+        <div className="order-2 flex items-center gap-6 typo-xs-regular text-gray-400 lg:order-none">
+          <Link
+            href="#"
+            className="opacity-80 hover:text-white hover:opacity-100"
+          >
             Privacy Policy
           </Link>
-          <Link href="#" className="opacity-80 hover:text-white hover:opacity-100">
+          <Link
+            href="#"
+            className="opacity-80 hover:text-white hover:opacity-100"
+          >
             FAQ
           </Link>
         </div>
         <div className="order-3 flex w-24 items-center justify-between gap-3 text-white lg:order-none">
-          <Link href="mailto:" aria-label="이메일" className="opacity-80 hover:opacity-100">
+          <Link
+            href="mailto:"
+            aria-label="이메일"
+            className="opacity-80 hover:opacity-100"
+          >
             <Mail className="size-4.5" strokeWidth={1.75} />
           </Link>
-          <Link href="#" aria-label="Facebook" className="opacity-80 hover:opacity-100">
+          <Link
+            href="#"
+            aria-label="Facebook"
+            className="opacity-80 hover:opacity-100"
+          >
             <FacebookIcon className="size-4.5" />
           </Link>
-          <Link href="#" aria-label="Instagram" className="opacity-80 hover:opacity-100">
+          <Link
+            href="#"
+            aria-label="Instagram"
+            className="opacity-80 hover:opacity-100"
+          >
             <InstagramIcon className="size-4.5" />
           </Link>
         </div>

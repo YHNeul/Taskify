@@ -39,7 +39,7 @@ export default function DeleteDashboardButton({ dashboardId }: Props) {
       <Button
         variant="secondary"
         size="lg"
-        className="h-delete-dashboard-mobile w-full bg-gray-100 text-lg-medium md:h-delete-dashboard-desktop md:w-auto md:min-w-delete-dashboard md:text-2lg-medium"
+        className="h-delete-dashboard-mobile w-full bg-gray-100 typo-lg-medium md:h-delete-dashboard-desktop md:w-auto md:min-w-delete-dashboard md:typo-2lg-medium"
         onClick={() => setIsModalOpen(true)}
         disabled={isPending}
       >

@@ -32,7 +32,7 @@ export default function HeaderInviteButton({
       <AddIcon className="h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" />
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-full z-10 mt-1 -translate-x-1/2 whitespace-nowrap rounded-xl bg-gray-600 px-2 py-1 text-xs-medium text-white opacity-0 transition-opacity group-hover:opacity-100"
+        className="pointer-events-none absolute left-1/2 top-full z-10 mt-1 -translate-x-1/2 whitespace-nowrap rounded-xl bg-gray-600 px-2 py-1 typo-xs-medium text-white opacity-0 transition-opacity group-hover:opacity-100"
       >
         멤버 초대
       </span>

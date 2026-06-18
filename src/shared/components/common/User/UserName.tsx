@@ -16,13 +16,13 @@ import clsx from 'clsx';
 
 interface Props {
   profile: ProfileOwner;
-  /** @default 'text-lg-regular' */
+  /** @default 'typo-lg-regular' */
   fontSize?: string;
 }
 
 export default function UserName({
   profile,
-  fontSize = 'text-lg-regular',
+  fontSize = 'typo-lg-regular',
 }: Props) {
   const { nickname } = profile;
 

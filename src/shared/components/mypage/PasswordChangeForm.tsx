@@ -59,14 +59,14 @@ export default function PasswordChangeForm({
 }: PasswordChangeFormProps) {
   return (
     <section className="rounded-2xl bg-white px-4 py-5 md:p-6">
-      <h2 className="mb-6 text-lg-bold leading-none text-gray-700">
+      <h2 className="mb-6 typo-lg-bold leading-none text-gray-700">
         비밀번호 변경
       </h2>
 
       <div className="flex flex-col gap-4">
         <Input
           label="현재 비밀번호"
-          labelClassName="text-md-medium"
+          labelClassName="typo-md-medium"
           type={showCurrentPassword ? 'text' : 'password'}
           placeholder="비밀번호 입력"
           {...currentPasswordRegister}
@@ -74,7 +74,7 @@ export default function PasswordChangeForm({
           onBlur={onCurrentPasswordBlur}
           isError={!!currentPasswordErrorMessage}
           errorMessage={currentPasswordErrorMessage}
-          className="text-md-regular md:text-lg-regular"
+          className="typo-md-regular md:typo-lg-regular"
           rightIcon={renderPasswordToggleButton(
             showCurrentPassword,
             toggleShowCurrentPassword,
@@ -83,13 +83,13 @@ export default function PasswordChangeForm({
 
         <Input
           label="새 비밀번호"
-          labelClassName="text-md-medium"
+          labelClassName="typo-md-medium"
           type={showNewPassword ? 'text' : 'password'}
           placeholder="새 비밀번호 입력"
           {...registerPassword('newPassword')}
           isError={!!newPasswordErrorMessage}
           errorMessage={newPasswordErrorMessage}
-          className="text-md-regular md:text-lg-regular"
+          className="typo-md-regular md:typo-lg-regular"
           rightIcon={renderPasswordToggleButton(
             showNewPassword,
             toggleShowNewPassword,
@@ -99,13 +99,13 @@ export default function PasswordChangeForm({
         <div>
           <Input
             label="새 비밀번호 확인"
-            labelClassName="text-md-medium"
+            labelClassName="typo-md-medium"
             type={showConfirmPassword ? 'text' : 'password'}
             placeholder="새 비밀번호 입력"
             {...registerPassword('confirmPassword')}
             isError={!!confirmPasswordErrorMessage}
             errorMessage={confirmPasswordErrorMessage}
-            className="text-md-regular md:text-lg-regular"
+            className="typo-md-regular md:typo-lg-regular"
             rightIcon={renderPasswordToggleButton(
               showConfirmPassword,
               toggleShowConfirmPassword,

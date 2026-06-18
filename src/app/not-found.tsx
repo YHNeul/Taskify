@@ -10,7 +10,7 @@ export default function NotFound() {
       actions={
         <Link
           href="/"
-          className="inline-flex h-12 min-w-40 items-center justify-center rounded-full bg-brand-violet px-6 text-lg-medium text-white! transition-opacity hover:opacity-90"
+          className="inline-flex h-12 min-w-40 items-center justify-center rounded-full bg-brand-violet px-6 typo-lg-medium text-white! transition-opacity hover:opacity-90"
         >
           홈으로 이동
         </Link>

@@ -76,7 +76,7 @@ export default function LandingPointSection({
           style={{ transitionDelay: '0s' }}
         >
           {/* 태블릿: 22px / 데스크탑: clamp(16px,1.15vw,22px) */}
-          <p className="text-2lg-medium text-center text-gray-400 sm:text-left sm:text-xl-medium md:text-2lg-medium lg:text-xl-medium">
+          <p className="typo-2lg-medium text-center text-gray-400 sm:text-left sm:typo-xl-medium md:typo-2lg-medium lg:typo-xl-medium">
             {point}
           </p>
           {/*

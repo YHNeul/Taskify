@@ -246,7 +246,7 @@ const SideMenu = () => {
       >
         <span
           className={cn(
-            'text-xs-semibold text-gray-500',
+            'typo-xs-semibold text-gray-500',
             layout === null
               ? 'hidden md:block'
               : layout === SIDEBAR_LAYOUT.MOBILE
@@ -357,7 +357,7 @@ const SideMenu = () => {
             onPrev={() => setPage((p) => Math.max(1, p - 1))}
             onNext={() => setPage((p) => Math.min(totalPages, p + 1))}
           />
-          <span className="text-xs-regular text-gray-500">
+          <span className="typo-xs-regular text-gray-500">
             {page} / {totalPages}
           </span>
         </div>

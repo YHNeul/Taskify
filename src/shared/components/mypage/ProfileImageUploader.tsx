@@ -41,7 +41,7 @@ export default function ProfileImageUploader({
             />
           </div>
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-2xl-semibold text-brand-violet">
+          <div className="flex h-full w-full items-center justify-center typo-2xl-semibold text-brand-violet">
             +
           </div>
         )}

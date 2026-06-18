@@ -45,9 +45,9 @@ const buttonVariants = cva(
        * 공통 semantic 크기입니다.
        */
       size: {
-        sm: 'h-8 rounded-full px-3 text-md-medium',
-        md: 'h-10 rounded-full px-4 text-md-medium',
-        lg: 'h-12 rounded-full px-6 text-lg-medium',
+        sm: 'h-8 rounded-full px-3 typo-md-medium',
+        md: 'h-10 rounded-full px-4 typo-md-medium',
+        lg: 'h-12 rounded-full px-6 typo-lg-medium',
       },
     },
     defaultVariants: {

@@ -48,7 +48,7 @@ export default function Textarea({
       {label && (
         <label
           htmlFor={textareaId}
-          className="mb-2 block text-2lg-medium text-gray-700"
+          className="mb-2 block typo-2lg-medium text-gray-700"
         >
           {label}
           {required && <span className="text-brand-violet pl-0.5">*</span>}
@@ -68,7 +68,7 @@ export default function Textarea({
           name="content"
           {...props}
           className={clsx(
-            'w-full resize-none text-lg-regular outline-none flex-1',
+            'w-full resize-none typo-lg-regular outline-none flex-1',
             'placeholder:text-gray-400 ',
             'bg-transparent text-gray-900',
             className,

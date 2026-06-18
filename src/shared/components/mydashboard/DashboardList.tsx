@@ -77,7 +77,7 @@ export default function DashboardList() {
           <Button
             variant="secondary"
             size="lg"
-            className="h-58 w-full text-md-semibold md:h-68 md:text-lg-semibold lg:h-70"
+            className="h-58 w-full typo-md-semibold md:h-68 md:typo-lg-semibold lg:h-70"
             onClick={openModal}
           >
             <span className="text-gray-700">새로운 대시보드</span>
@@ -100,7 +100,7 @@ export default function DashboardList() {
 
       {!isPending && dashboards.length > 0 && (
         <div className="mt-2 flex justify-end items-center gap-4">
-          <span className="text-xs-regular text-gray-500 md:text-md-regular">
+          <span className="typo-xs-regular text-gray-500 md:typo-md-regular">
             {currentPage} / {totalPages}
           </span>
           <Pagination

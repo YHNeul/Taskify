@@ -52,7 +52,7 @@ export default function DashboardCard({ board }: DashboardCardProps) {
     <Button
       variant="secondary"
       size="lg"
-      className="h-58 w-full! justify-between overflow-hidden text-md-semibold md:h-68 md:text-lg-semibold lg:h-70"
+      className="h-58 w-full! justify-between overflow-hidden typo-md-semibold md:h-68 md:typo-lg-semibold lg:h-70"
       onClick={handleNavigate}
       onMouseEnter={handlePrefetchWithDelay}
       onMouseLeave={clearPrefetchTimeout}
