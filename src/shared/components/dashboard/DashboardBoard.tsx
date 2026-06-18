@@ -133,7 +133,9 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
         const nextCards = nextState.cards;
         if (prevCards.length !== nextCards.length) return false;
         return prevCards.every(
-          (card, index) => card.id === nextCards[index].id,
+          (card, index) =>
+            card.id === nextCards[index].id &&
+            card.updatedAt === nextCards[index].updatedAt,
         );
       });
 
