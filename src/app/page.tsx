@@ -5,11 +5,13 @@
  */
 
 import { Montserrat } from 'next/font/google';
+import { cookies } from 'next/headers';
 import LandingFeatureGrid from '@/shared/components/landing/LandingFeatureGrid';
 import LandingFooter from '@/shared/components/landing/LandingFooter';
 import LandingHeader from '@/shared/components/landing/LandingHeader';
 import LandingHero from '@/shared/components/landing/LandingHero';
 import LandingPointSection from '@/shared/components/landing/LandingPointSection';
+import { AUTH_COOKIE_KEY } from '@/shared/constants/auth';
 import clsx from 'clsx';
 
 const montserrat = Montserrat({
@@ -18,7 +20,10 @@ const montserrat = Montserrat({
   variable: '--font-landing-montserrat',
 });
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const isLoggedIn = Boolean(cookieStore.get(AUTH_COOKIE_KEY)?.value);
+
   return (
     <div
       className={clsx(
@@ -28,7 +33,11 @@ export default function Home() {
     >
       <LandingHeader />
       <main>
-        <LandingHero montserratClass="font-landing" />
+        <LandingHero
+          montserratClass="font-landing"
+          ctaHref={isLoggedIn ? '/mydashboard' : '/login'}
+          ctaLabel={isLoggedIn ? '내 대시보드로 이동' : '로그인하기'}
+        />
         <LandingPointSection
           point="Point 1"
           title="일의 우선순위를 관리하세요"
