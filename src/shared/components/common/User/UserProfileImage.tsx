@@ -60,7 +60,7 @@ export default function UserProfileImage({
           height: size,
           backgroundColor: CHIP_COLORS[index % CHIP_COLORS.length],
         }}
-        className="rounded-full border-white border-2 overflow-hidden flex items-center justify-center cursor-default select-none"
+        className="relative rounded-full border-white border-2 overflow-hidden flex items-center justify-center cursor-default select-none"
       >
         {hasImage ? (
           <OptimizedImageWithFallback
@@ -70,7 +70,7 @@ export default function UserProfileImage({
             isSkeletonVisible={false}
             isFallbackVisibleWhileLoading
             fallback={
-              <span className="text-white text-xs-semibold select-none cursor-default">
+              <span className="absolute inset-0 z-10 flex items-center justify-center text-white text-xs-semibold select-none cursor-default">
                 {initial}
               </span>
             }
