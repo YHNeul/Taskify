@@ -8,6 +8,7 @@ import type { Metadata } from 'next';
 import QueryProvider from '@/lib/QueryProvider';
 import '@/app/globals.css';
 import localFont from 'next/font/local';
+import { preconnect, prefetchDNS } from 'react-dom';
 
 const pretendard = localFont({
   src: [
@@ -57,14 +58,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  if (shouldPreconnectApi) {
+    preconnect(apiOrigin);
+    prefetchDNS(apiOrigin);
+  }
+
   return (
     <html lang="ko" className={pretendard.variable}>
-      <head>
-        {shouldPreconnectApi && <link rel="preconnect" href={apiOrigin} />}
-        {shouldPreconnectApi && (
-          <link rel="dns-prefetch" href={apiOrigin.replace(/^https?:/, '')} />
-        )}
-      </head>
       <body className="font-main">
         <QueryProvider>{children}</QueryProvider>
         <div id="modal-root" /> {/* 모달 */}
