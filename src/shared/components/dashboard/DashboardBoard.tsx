@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { useDashboardStore } from '@/shared/store/useDashboardStore';
@@ -68,6 +68,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   const [boardErrorMessage, setBoardErrorMessage] = useState<string | null>(
     null,
   );
+  const lastSyncedCardsVersionRef = useRef<string | null>(null);
 
   const setActiveDashboardId = useDashboardStore((s) => s.setActiveDashboardId);
   const { createColumn, updateColumn, deleteColumn } =
@@ -107,6 +108,9 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
 
   useEffect(() => {
     if (!columnCardsData) return;
+    if (lastSyncedCardsVersionRef.current === dataVersion) return;
+    lastSyncedCardsVersionRef.current = dataVersion;
+
     setColumnCards((prev) => {
       const ordered: Record<number, ColumnCardState> = {};
       for (const [colId, state] of Object.entries(columnCardsData)) {
