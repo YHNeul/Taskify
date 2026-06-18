@@ -50,6 +50,7 @@ export default function SortableDashboardItem({
   } | null>(null);
   const hasDraggedRef = useRef(false);
   const resetDragTimeoutRef = useRef<number | null>(null);
+  const prefetchTimeoutRef = useRef<number | null>(null);
   const prefetchDashboard = useDashboardPrefetch();
 
   const {
@@ -95,7 +96,23 @@ export default function SortableDashboardItem({
     router.push(targetUrl);
   };
 
-  const handlePrefetch = () => {
+  const clearPrefetchTimeout = () => {
+    if (prefetchTimeoutRef.current !== null) {
+      window.clearTimeout(prefetchTimeoutRef.current);
+      prefetchTimeoutRef.current = null;
+    }
+  };
+
+  const handlePrefetchWithDelay = () => {
+    clearPrefetchTimeout();
+    prefetchTimeoutRef.current = window.setTimeout(() => {
+      prefetchDashboard(dashboard.id);
+      prefetchTimeoutRef.current = null;
+    }, 150);
+  };
+
+  const handlePrefetchOnFocus = () => {
+    clearPrefetchTimeout();
     prefetchDashboard(dashboard.id);
   };
 
@@ -104,6 +121,7 @@ export default function SortableDashboardItem({
       if (resetDragTimeoutRef.current !== null) {
         window.clearTimeout(resetDragTimeoutRef.current);
       }
+      clearPrefetchTimeout();
     },
     [],
   );
@@ -135,8 +153,10 @@ export default function SortableDashboardItem({
       ref={setNodeRef}
       style={style}
       onClick={handleClick}
-      onMouseEnter={handlePrefetch}
-      onFocus={handlePrefetch}
+      onMouseEnter={handlePrefetchWithDelay}
+      onMouseLeave={clearPrefetchTimeout}
+      onFocus={handlePrefetchOnFocus}
+      onBlur={clearPrefetchTimeout}
       aria-label={dashboard.title}
       {...attributes}
       {...listeners}
