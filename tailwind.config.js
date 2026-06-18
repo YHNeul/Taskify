@@ -58,7 +58,7 @@ module.exports = {
         main: ['var(--font-pretendard)', 'sans-serif'],
         landing: ['var(--font-landing-montserrat)', 'sans-serif'],
       },
-      fontSize: {
+      typo: {
         '3xl-bold': ['32px', { lineHeight: '42px', fontWeight: '700' }],
         '3xl-semibold': ['32px', { lineHeight: '42px', fontWeight: '600' }],
         '2xl-bold': ['24px', { lineHeight: '32px', fontWeight: '700' }],
@@ -174,16 +174,9 @@ module.exports = {
   plugins: [
     function ({ addUtilities, theme }) {
       const typoUtilities = {};
-      const fontSizes = theme('fontSize');
+      const typos = theme('typo') || {};
 
-      Object.entries(fontSizes).forEach(([token, value]) => {
-        const isTypographyToken =
-          /^(3xl|2xl|xl|2lg|lg|md|sm|xs)-(bold|semibold|medium|regular)$/.test(
-            token,
-          );
-
-        if (!isTypographyToken) return;
-
+      Object.entries(typos).forEach(([token, value]) => {
         if (Array.isArray(value)) {
           const [fontSize, options] = value;
           typoUtilities[`.typo-${token}`] = {
