@@ -39,8 +39,9 @@ function StatefulImage({
   const [hasError, setHasError] = useState(false);
   const [shouldUseUnoptimized, setShouldUseUnoptimized] = useState(false);
   const isRemoteSource = /^https?:\/\//.test(src);
+  const isSrcInvalid = !src || src.trim() === '';
 
-  if (hasError) {
+  if (hasError || isSrcInvalid) {
     return <>{fallback}</>;
   }
 
