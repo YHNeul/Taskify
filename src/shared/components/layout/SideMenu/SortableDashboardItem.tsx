@@ -137,7 +137,6 @@ export default function SortableDashboardItem({
       onClick={handleClick}
       onMouseEnter={handlePrefetch}
       onFocus={handlePrefetch}
-      onTouchStart={handlePrefetch}
       aria-label={dashboard.title}
       {...attributes}
       {...listeners}
