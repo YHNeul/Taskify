@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { getDashboard, getColumns } from '@/shared/apis/dashboard';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 
-export function useDashboardPrefetch() {
+export const useDashboardPrefetch = () => {
   const queryClient = useQueryClient();
 
   return useCallback(
@@ -25,4 +25,4 @@ export function useDashboardPrefetch() {
     },
     [queryClient],
   );
-}
+};
