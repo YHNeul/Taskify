@@ -12,13 +12,13 @@
  * - isDragOverlay=true 이면 드래그 훅을 비활성화하여 오버레이에서 사용 가능
  */
 
-import Image from 'next/image';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { Card } from '@/shared/types/dashboard';
 import CalendarIcon from '@/shared/components/common/Icon/CalendarIcon';
 import TagChip from '@/shared/components/common/Chip/TagChip';
 import UserProfileImage from '@/shared/components/common/User/UserProfileImage';
+import OptimizedImageWithFallback from '@/shared/components/common/Image/OptimizedImageWithFallback';
 
 interface TaskCardProps {
   card: Card;
@@ -73,14 +73,21 @@ export default function TaskCard({
       {/* 썸네일 이미지 */}
       {imageUrl && (
         <div className="relative w-full h-40 rounded-md overflow-hidden mb-3">
-          <Image
+          <OptimizedImageWithFallback
             src={imageUrl}
             alt={title}
-            fill
-            priority={priority}
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 314px"
-            unoptimized
+            imageClassName="object-cover"
+            fallback={
+              <div className="flex h-full w-full items-center justify-center bg-gray-100 text-xs-medium text-gray-400">
+                이미지를 불러올 수 없습니다.
+              </div>
+            }
+            imageProps={{
+              fill: true,
+              priority,
+              sizes:
+                '(max-width: 767px) calc(100vw - 32px), (max-width: 1023px) calc(100vw - 40px), 314px',
+            }}
           />
         </div>
       )}

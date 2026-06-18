@@ -1,16 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { useDashboardStore } from '@/shared/store/useDashboardStore';
 import type { Column as ColumnType, Card } from '@/shared/types/dashboard';
 import Column from '@/shared/components/dashboard/Column';
 import TaskCard from '@/shared/components/dashboard/TaskCard';
 import Button from '@/shared/components/common/Button';
-import Cards from '@/shared/components/modal/Cards/Cards';
-import CreateCard from '@/shared/components/modal/Cards/CreateCard';
-import FormModal from '@/shared/components/modal/FormModal';
-import ConfirmModal from '@/shared/components/modal/ConfirmModal';
 import DashboardBoardSkeleton from '@/shared/components/dashboard/BoardSkeleton';
 import { useBoardDnd, type ColumnCardState } from '@/shared/hooks/useBoardDnd';
 import { applySavedOrder } from '@/shared/utils/cardOrder';
@@ -21,6 +18,15 @@ import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
 import { useDashboardColumnMutations } from '@/shared/hooks/useDashboardColumnMutations';
 import { useColumnCardsPagination } from '@/shared/hooks/useColumnCardsPagination';
 import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
+
+const Cards = dynamic(() => import('@/shared/components/modal/Cards/Cards'));
+const CreateCard = dynamic(
+  () => import('@/shared/components/modal/Cards/CreateCard'),
+);
+const FormModal = dynamic(() => import('@/shared/components/modal/FormModal'));
+const ConfirmModal = dynamic(
+  () => import('@/shared/components/modal/ConfirmModal'),
+);
 
 interface DashboardBoardProps {
   dashboardId: number;
@@ -62,6 +68,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   const [boardErrorMessage, setBoardErrorMessage] = useState<string | null>(
     null,
   );
+  const lastSyncedCardsVersionRef = useRef<string | null>(null);
 
   const setActiveDashboardId = useDashboardStore((s) => s.setActiveDashboardId);
   const { createColumn, updateColumn, deleteColumn } =
@@ -93,7 +100,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     useDashboardColumnsQuery(dashboardId);
 
   const columns = columnsData?.data ?? [];
-  const { data: columnCardsData } = useDashboardColumnCardsQuery({
+  const { data: columnCardsData, dataVersion } = useDashboardColumnCardsQuery({
     dashboardId,
     columns,
     size: 10,
@@ -101,13 +108,44 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
 
   useEffect(() => {
     if (!columnCardsData) return;
-    const ordered: Record<number, ColumnCardState> = {};
-    for (const [colId, state] of Object.entries(columnCardsData)) {
-      const id = Number(colId);
-      ordered[id] = { ...state, cards: applySavedOrder(id, state.cards) };
-    }
-    setColumnCards(ordered);
-  }, [columnCardsData]);
+    if (lastSyncedCardsVersionRef.current === dataVersion) return;
+    lastSyncedCardsVersionRef.current = dataVersion;
+
+    setColumnCards((prev) => {
+      const ordered: Record<number, ColumnCardState> = {};
+      for (const [colId, state] of Object.entries(columnCardsData)) {
+        const id = Number(colId);
+        ordered[id] = { ...state, cards: applySavedOrder(id, state.cards) };
+      }
+
+      const prevKeys = Object.keys(prev);
+      const nextKeys = Object.keys(ordered);
+      if (prevKeys.length !== nextKeys.length) return ordered;
+
+      const isSame = nextKeys.every((key) => {
+        const id = Number(key);
+        const prevState = prev[id];
+        const nextState = ordered[id];
+        if (!prevState) return false;
+        if (
+          prevState.totalCount !== nextState.totalCount ||
+          prevState.cursorId !== nextState.cursorId
+        ) {
+          return false;
+        }
+        const prevCards = prevState.cards;
+        const nextCards = nextState.cards;
+        if (prevCards.length !== nextCards.length) return false;
+        return prevCards.every(
+          (card, index) =>
+            card.id === nextCards[index].id &&
+            card.updatedAt === nextCards[index].updatedAt,
+        );
+      });
+
+      return isSame ? prev : ordered;
+    });
+  }, [columnCardsData, dataVersion]);
 
   const {
     sensors,
@@ -188,7 +226,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     }
   };
 
-  if (isDashboardLoading || isColumnsLoading) return <DashboardBoardSkeleton />;
+  if (isDashboardLoading) return <DashboardBoardSkeleton />;
 
   if (!dashboard) {
     return (
@@ -216,30 +254,41 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
           onDragEnd={handleDragEnd}
         >
           <div className="flex flex-col lg:flex-row h-full overflow-y-auto lg:overflow-y-hidden lg:overflow-x-auto">
-            {columns.map((column, index) => (
-              <Column
-                key={column.id}
-                column={column}
-                cards={columnCards[column.id]?.cards ?? []}
-                totalCount={columnCards[column.id]?.totalCount ?? 0}
-                cursorId={columnCards[column.id]?.cursorId}
-                colorIndex={index}
-                isFirstColumn={index === 0}
-                onAddCard={(columnId) => setCreateCardColumnId(columnId)}
-                onEditColumn={(col) =>
-                  setEditColumnModal({
-                    column: col,
-                    title: col.title,
-                    error: '',
-                  })
-                }
-                onCardClick={(card: Card) => {
-                  setSelectedCardId(card.id);
-                }}
-                onLoadMore={loadMoreCards}
-                isLoadingMore={loadingColumnIds.has(column.id)}
-              />
-            ))}
+            {isColumnsLoading
+              ? Array.from({ length: 3 }).map((_, index) => (
+                  <div
+                    key={`column-skeleton-${index}`}
+                    className="w-full lg:w-dashboard-column shrink-0 border-b lg:border-b-0 lg:border-r border-gray-200 px-4 md:px-5 py-4"
+                  >
+                    <div className="h-6 w-36 rounded bg-gray-200 animate-pulse mb-4" />
+                    <div className="h-10 w-full rounded-md bg-gray-200 animate-pulse mb-4" />
+                    <div className="h-32 w-full rounded-card-sm bg-gray-200 animate-pulse" />
+                  </div>
+                ))
+              : columns.map((column, index) => (
+                  <Column
+                    key={column.id}
+                    column={column}
+                    cards={columnCards[column.id]?.cards ?? []}
+                    totalCount={columnCards[column.id]?.totalCount ?? 0}
+                    cursorId={columnCards[column.id]?.cursorId}
+                    colorIndex={index}
+                    isFirstColumn={index === 0}
+                    onAddCard={(columnId) => setCreateCardColumnId(columnId)}
+                    onEditColumn={(col) =>
+                      setEditColumnModal({
+                        column: col,
+                        title: col.title,
+                        error: '',
+                      })
+                    }
+                    onCardClick={(card: Card) => {
+                      setSelectedCardId(card.id);
+                    }}
+                    onLoadMore={loadMoreCards}
+                    isLoadingMore={loadingColumnIds.has(column.id)}
+                  />
+                ))}
 
             <div className="flex items-start pt-4 lg:pt-space-26 px-4 md:px-5 pb-8 lg:pb-0 shrink-0">
               <Button

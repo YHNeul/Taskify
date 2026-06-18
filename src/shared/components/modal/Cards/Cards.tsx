@@ -29,12 +29,11 @@ import TagChip from '@/shared/components/common/Chip/TagChip';
 import KebabMenuIcon from '@/shared/components/common/Icon/KebabMenuIcon';
 import DropdownMenu from '@/shared/components/common/Dropdown/DropdownMenu';
 import { useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import type { Card } from '@/shared/types/dashboard';
 import AssigneeItem from '@/shared/components/modal/Cards/AssigneeItem';
 import ReplyItem from '@/shared/components/modal/Cards/ReplyItem';
-import Image from 'next/image';
 import ModalBase from '@/shared/components/common/ModalBase';
-import EditCard from '@/shared/components/modal/Cards/EditCard';
 import ModalOverlay from '@/shared/components/common/ModalBase/ModalOverlay';
 import { useDropdownClose } from '@/shared/hooks/useToggle';
 import CommentsForm from '@/shared/components/modal/Cards/CommentsForm';
@@ -43,7 +42,14 @@ import Button from '@/shared/components/common/Button';
 import { useComments } from '@/shared/hooks/useComments';
 import { useCardData } from '@/shared/hooks/useCardData';
 import CardSkeleton from '@/shared/components/modal/Cards/CardSkeleton';
-import ImageLightboxModal from '@/shared/components/modal/Cards/ImageLightboxModal';
+import OptimizedImageWithFallback from '@/shared/components/common/Image/OptimizedImageWithFallback';
+
+const EditCard = dynamic(
+  () => import('@/shared/components/modal/Cards/EditCard'),
+);
+const ImageLightboxModal = dynamic(
+  () => import('@/shared/components/modal/Cards/ImageLightboxModal'),
+);
 
 interface CardsProps {
   onModalClose: () => void;
@@ -278,13 +284,20 @@ export default function Cards({
                 className="relative mb-6 block w-full overflow-hidden rounded-md bg-gray-100 md:mb-4 aspect-video"
                 aria-label="이미지 상세 보기 열기"
               >
-                <Image
+                <OptimizedImageWithFallback
                   src={imageUrl}
                   alt="할 일 카드 이미지"
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) calc(100vw - 32px), 445px"
-                  unoptimized
+                  imageClassName="object-contain"
+                  fallback={
+                    <div className="flex h-full w-full items-center justify-center bg-gray-100 text-sm-medium text-gray-400">
+                      이미지를 불러올 수 없습니다.
+                    </div>
+                  }
+                  imageProps={{
+                    fill: true,
+                    loading: 'lazy',
+                    sizes: '(max-width: 768px) calc(100vw - 32px), 445px',
+                  }}
                 />
               </button>
             )}

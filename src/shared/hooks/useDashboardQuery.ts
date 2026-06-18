@@ -21,5 +21,7 @@ export const useDashboardQuery = <TData = DashboardQueryData>(
     queryKey: QUERY_KEYS.dashboard(dashboardId),
     queryFn: () => getDashboard(dashboardId),
     enabled: isDashboardIdValid && isQueryEnabled,
+    staleTime: queryOptions?.staleTime ?? 1000 * 60 * 3,
+    gcTime: queryOptions?.gcTime ?? 1000 * 60 * 30,
   });
 };

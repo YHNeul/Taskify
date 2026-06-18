@@ -2,7 +2,7 @@ import { getCards } from '@/shared/apis/dashboard';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import { Column } from '@/shared/types/dashboard';
 import { ColumnCardState } from '@/shared/hooks/useBoardDnd';
-import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import { useQueries, type UseQueryOptions } from '@tanstack/react-query';
 
 interface UseDashboardColumnCardsQueryParams {
   dashboardId: number;
@@ -11,61 +11,61 @@ interface UseDashboardColumnCardsQueryParams {
 }
 
 type DashboardColumnCardsQueryData = Record<number, ColumnCardState>;
-const getDashboardColumnCardsQueryKey = (
+const getColumnCardsQueryKey = (
   dashboardId: number,
   size: number,
-  columnIds: number[],
-) => [...QUERY_KEYS.columnCards(dashboardId), size, columnIds] as const;
-type DashboardColumnCardsQueryKey = ReturnType<
-  typeof getDashboardColumnCardsQueryKey
->;
-type UseDashboardColumnCardsQueryOptions<
-  TData = DashboardColumnCardsQueryData,
-> = Omit<
+  columnId: number,
+) => [...QUERY_KEYS.columnCards(dashboardId), size, columnId] as const;
+type UseDashboardColumnCardsQueryOptions = Omit<
   UseQueryOptions<
-    DashboardColumnCardsQueryData,
+    Awaited<ReturnType<typeof getCards>>,
     Error,
-    TData,
-    DashboardColumnCardsQueryKey
+    Awaited<ReturnType<typeof getCards>>
   >,
   'queryKey' | 'queryFn'
 >;
 
-export const useDashboardColumnCardsQuery = <
-  TData = DashboardColumnCardsQueryData,
->(
+export const useDashboardColumnCardsQuery = (
   { dashboardId, columns, size = 10 }: UseDashboardColumnCardsQueryParams,
-  queryOptions?: UseDashboardColumnCardsQueryOptions<TData>,
+  queryOptions?: UseDashboardColumnCardsQueryOptions,
 ) => {
   const isDashboardIdValid = Number.isFinite(dashboardId) && dashboardId > 0;
   const hasColumns = columns.length > 0;
-  const isQueryEnabled = queryOptions?.enabled ?? true;
-  const columnIds = columns.map((column) => column.id);
+  const isQueryEnabled = queryOptions?.enabled !== false;
+  const columnIdsKey = columns.map((column) => column.id).join('|');
 
-  return useQuery<
-    DashboardColumnCardsQueryData,
-    Error,
-    TData,
-    DashboardColumnCardsQueryKey
-  >({
-    ...queryOptions,
-    queryKey: getDashboardColumnCardsQueryKey(dashboardId, size, columnIds),
-    queryFn: async () => {
-      const results = await Promise.all(
-        columns.map((col) => getCards(col.id, size)),
-      );
-      const map: Record<number, ColumnCardState> = {};
+  return useQueries({
+    queries: columns.map((column) => ({
+      ...queryOptions,
+      queryKey: getColumnCardsQueryKey(dashboardId, size, column.id),
+      queryFn: () => getCards(column.id, size),
+      enabled: isDashboardIdValid && hasColumns && isQueryEnabled,
+      staleTime: queryOptions?.staleTime ?? 1000 * 30,
+      gcTime: queryOptions?.gcTime ?? 1000 * 60 * 10,
+    })),
+    combine: (results) => {
+      const dataMap: DashboardColumnCardsQueryData = {};
+      const dataUpdatedAtList: number[] = [];
 
-      columns.forEach((col, i) => {
-        map[col.id] = {
-          cards: results[i].cards,
-          totalCount: results[i].totalCount,
-          cursorId: results[i].cursorId,
+      results.forEach((result, index) => {
+        dataUpdatedAtList.push(result.dataUpdatedAt);
+        const columnId = columns[index]?.id;
+        if (!columnId || !result.data) return;
+
+        dataMap[columnId] = {
+          cards: result.data.cards,
+          totalCount: result.data.totalCount,
+          cursorId: result.data.cursorId,
         };
       });
 
-      return map;
+      return {
+        data: Object.keys(dataMap).length > 0 ? dataMap : undefined,
+        dataVersion: `${columnIdsKey}:${dataUpdatedAtList.join('|')}`,
+        isLoading: results.some((result) => result.isLoading),
+        isFetching: results.some((result) => result.isFetching),
+        isError: results.some((result) => result.isError),
+      };
     },
-    enabled: isDashboardIdValid && hasColumns && isQueryEnabled,
   });
 };

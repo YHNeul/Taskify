@@ -8,6 +8,7 @@ import type { Metadata } from 'next';
 import QueryProvider from '@/lib/QueryProvider';
 import '@/app/globals.css';
 import localFont from 'next/font/local';
+import { preconnect, prefetchDNS } from 'react-dom';
 
 const pretendard = localFont({
   src: [
@@ -39,11 +40,29 @@ export const metadata: Metadata = {
   description: '새로운 일정관리, Taskify',
 };
 
+const shouldPreconnectApi =
+  process.env.NEXT_PUBLIC_API_URL?.startsWith('https://') ?? true;
+const apiOrigin = (() => {
+  try {
+    return new URL(
+      process.env.NEXT_PUBLIC_API_URL ??
+        'https://sp-taskify-api.vercel.app/22-2/',
+    ).origin;
+  } catch {
+    return 'https://sp-taskify-api.vercel.app';
+  }
+})();
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  if (shouldPreconnectApi) {
+    preconnect(apiOrigin);
+    prefetchDNS(apiOrigin);
+  }
+
   return (
     <html lang="ko" className={pretendard.variable}>
       <body className="font-main">

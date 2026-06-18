@@ -11,7 +11,7 @@
  */
 
 import { ProfileOwner } from '@/shared/types/user';
-import Image from 'next/image';
+import OptimizedImageWithFallback from '@/shared/components/common/Image/OptimizedImageWithFallback';
 
 /** 프로필 이미지 없을 때 순서에 따라 순환하는 배경색 */
 export const CHIP_COLORS = [
@@ -60,16 +60,26 @@ export default function UserProfileImage({
           height: size,
           backgroundColor: CHIP_COLORS[index % CHIP_COLORS.length],
         }}
-        className="rounded-full border-white border-2 overflow-hidden flex items-center justify-center cursor-default select-none"
+        className="relative rounded-full border-white border-2 overflow-hidden flex items-center justify-center cursor-default select-none"
       >
         {hasImage ? (
-          <Image
+          <OptimizedImageWithFallback
             src={profileImageUrl}
             alt="담당자 프로필"
-            width={size}
-            height={size}
-            className="object-cover"
-            unoptimized
+            imageClassName="object-cover"
+            isSkeletonVisible={false}
+            isFallbackVisibleWhileLoading
+            fallback={
+              <span className="absolute inset-0 z-10 flex items-center justify-center text-white text-xs-semibold select-none cursor-default">
+                {initial}
+              </span>
+            }
+            imageProps={{
+              width: size,
+              height: size,
+              sizes: `${size}px`,
+              loading: 'lazy',
+            }}
           />
         ) : (
           <span className="text-white text-xs-semibold select-none cursor-default">

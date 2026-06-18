@@ -10,25 +10,76 @@
  */
 
 import { Suspense } from 'react';
+import {
+  QueryClient,
+  dehydrate,
+  HydrationBoundary,
+} from '@tanstack/react-query';
 import DashboardBoard from '@/shared/components/dashboard/DashboardBoard';
+import { QUERY_KEYS } from '@/shared/constants/queryKeys';
+import {
+  fetchDashboard,
+  fetchColumns,
+  fetchCards,
+} from '@/shared/apis/dashboard.fetch';
+import type { ColumnsResponse } from '@/shared/types/dashboard';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-/**
- * NOTE: 서버 컴포넌트에서 인증된 API를 호출하려면 토큰을 쿠키에 저장해야 합니다.
- * 현재 토큰이 localStorage에만 저장되어 있어 서버에서 읽을 수 없습니다.
- * 로그인 구현 시 쿠키 저장 방식이 확정되면 서버 사이드 fetch를 다시 활성화할 수 있습니다.
- * 지금은 초기 데이터 없이 클라이언트에서 전부 로드하는 방식으로 동작합니다.
- */
 export default async function DashboardPage({ params }: PageProps) {
   const { id } = await params;
   const dashboardId = Number(id);
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 60 * 3,
+        gcTime: 1000 * 60 * 30,
+      },
+    },
+  });
+
+  if (Number.isFinite(dashboardId) && dashboardId > 0) {
+    await Promise.all([
+      queryClient.prefetchQuery({
+        queryKey: QUERY_KEYS.dashboard(dashboardId),
+        queryFn: () => fetchDashboard(dashboardId),
+      }),
+      queryClient.prefetchQuery({
+        queryKey: QUERY_KEYS.columns(dashboardId),
+        queryFn: () => fetchColumns(dashboardId),
+      }),
+    ]);
+
+    const columnsData = queryClient.getQueryData<{ data: { id: number }[] }>(
+      QUERY_KEYS.columns(dashboardId),
+    ) as ColumnsResponse | undefined;
+    const columnIds = columnsData?.data?.map((column) => column.id) ?? [];
+
+    if (columnIds.length > 0) {
+      await Promise.all(
+        columnIds.map((columnId) =>
+          queryClient.prefetchQuery({
+            queryKey: [...QUERY_KEYS.columnCards(dashboardId), 10, columnId],
+            queryFn: () => fetchCards(columnId, 10),
+            staleTime: 1000 * 30,
+            gcTime: 1000 * 60 * 10,
+          }),
+        ),
+      );
+    }
+  }
+
+  const dehydratedState = dehydrate(queryClient);
 
   return (
-    <Suspense fallback={<div className="min-h-screen-without-header bg-gray-100" />}>
-      <DashboardBoard dashboardId={dashboardId} />
+    <Suspense
+      fallback={<div className="min-h-screen-without-header bg-gray-100" />}
+    >
+      <HydrationBoundary state={dehydratedState}>
+        <DashboardBoard dashboardId={dashboardId} />
+      </HydrationBoundary>
     </Suspense>
   );
 }

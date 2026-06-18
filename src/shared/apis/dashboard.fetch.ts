@@ -16,15 +16,21 @@ import type {
   MembersResponse,
 } from '@/shared/types/dashboard';
 import { API_BASE_URL } from '@/shared/constants/api';
+import { AUTH_COOKIE_KEY } from '@/shared/constants/auth';
+import { cookies } from 'next/headers';
 
 const BASE_URL = API_BASE_URL;
 
 /** Authorization 헤더 포함 기본 헤더 빌더 (서버 환경용) */
-const getHeaders = () => ({
-  'Content-Type': 'application/json',
-  // NOTE: 서버 컴포넌트에서는 쿠키나 서버 토큰으로 인증합니다.
-  // TODO: [하늘] 서버 사이드 인증 토큰 처리 방식 확정 후 반영
-});
+const getHeaders = async () => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(AUTH_COOKIE_KEY)?.value;
+
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+};
 
 /**
  * 대시보드 단건 조회 (서버 컴포넌트용)
@@ -34,9 +40,8 @@ export const fetchDashboard = async (
   dashboardId: number,
 ): Promise<Dashboard> => {
   const res = await fetch(`${BASE_URL}/dashboards/${dashboardId}`, {
-    headers: getHeaders(),
-    // 대시보드 정보는 자주 바뀌지 않으므로 60초 캐싱
-    next: { revalidate: 60 },
+    headers: await getHeaders(),
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error(`대시보드 조회 실패: ${res.status}`);
   return res.json();
@@ -50,8 +55,8 @@ export const fetchColumns = async (
   dashboardId: number,
 ): Promise<ColumnsResponse> => {
   const res = await fetch(`${BASE_URL}/columns?dashboardId=${dashboardId}`, {
-    headers: getHeaders(),
-    next: { revalidate: 30 },
+    headers: await getHeaders(),
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error(`칼럼 목록 조회 실패: ${res.status}`);
   return res.json();
@@ -69,7 +74,7 @@ export const fetchCards = async (
   const res = await fetch(
     `${BASE_URL}/cards?columnId=${columnId}&size=${size}`,
     {
-      headers: getHeaders(),
+      headers: await getHeaders(),
       // 카드는 자주 바뀌므로 캐시 없이 항상 최신 데이터 사용
       cache: 'no-store',
     },
@@ -88,8 +93,8 @@ export const fetchMembers = async (
   const res = await fetch(
     `${BASE_URL}/members?dashboardId=${dashboardId}&page=1&size=20`,
     {
-      headers: getHeaders(),
-      next: { revalidate: 60 },
+      headers: await getHeaders(),
+      cache: 'no-store',
     },
   );
   if (!res.ok) throw new Error(`멤버 목록 조회 실패: ${res.status}`);

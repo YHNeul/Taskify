@@ -24,6 +24,7 @@ import { cn } from '@/lib/utils';
 import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 import type { Dashboard } from '@/shared/types/dashboard';
 import { SIDEBAR_LAYOUT, type LayoutType } from '@/shared/utils/sidebarLayout';
+import { useDashboardPrefetch } from '@/shared/hooks/useDashboardPrefetch';
 
 interface SortableDashboardItemProps {
   /** 표시할 대시보드 데이터 */
@@ -49,6 +50,8 @@ export default function SortableDashboardItem({
   } | null>(null);
   const hasDraggedRef = useRef(false);
   const resetDragTimeoutRef = useRef<number | null>(null);
+  const prefetchTimeoutRef = useRef<number | null>(null);
+  const prefetchDashboard = useDashboardPrefetch();
 
   const {
     attributes,
@@ -93,11 +96,32 @@ export default function SortableDashboardItem({
     router.push(targetUrl);
   };
 
+  const clearPrefetchTimeout = () => {
+    if (prefetchTimeoutRef.current !== null) {
+      window.clearTimeout(prefetchTimeoutRef.current);
+      prefetchTimeoutRef.current = null;
+    }
+  };
+
+  const handlePrefetchWithDelay = () => {
+    clearPrefetchTimeout();
+    prefetchTimeoutRef.current = window.setTimeout(() => {
+      prefetchDashboard(dashboard.id);
+      prefetchTimeoutRef.current = null;
+    }, 150);
+  };
+
+  const handlePrefetchOnFocus = () => {
+    clearPrefetchTimeout();
+    prefetchDashboard(dashboard.id);
+  };
+
   useEffect(
     () => () => {
       if (resetDragTimeoutRef.current !== null) {
         window.clearTimeout(resetDragTimeoutRef.current);
       }
+      clearPrefetchTimeout();
     },
     [],
   );
@@ -129,6 +153,10 @@ export default function SortableDashboardItem({
       ref={setNodeRef}
       style={style}
       onClick={handleClick}
+      onMouseEnter={handlePrefetchWithDelay}
+      onMouseLeave={clearPrefetchTimeout}
+      onFocus={handlePrefetchOnFocus}
+      onBlur={clearPrefetchTimeout}
       aria-label={dashboard.title}
       {...attributes}
       {...listeners}
