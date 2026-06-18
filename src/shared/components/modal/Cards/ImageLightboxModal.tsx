@@ -128,7 +128,7 @@ export default function ImageLightboxModal({
               src={imageUrl}
               alt={alt}
               imageClassName={clsx(
-                'max-h-full max-w-full rounded-lg object-contain transition-all',
+                'h-auto w-auto max-h-full max-w-full rounded-lg object-contain transition-all',
                 scale > 1 && (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
               )}
               skeletonClassName="rounded-lg"
@@ -139,7 +139,8 @@ export default function ImageLightboxModal({
               }
               isFadeEnabled
               imageProps={{
-                fill: true,
+                width: 1200,
+                height: 800,
                 priority: true,
                 sizes:
                   '(max-width: 768px) 100vw, (max-width: 1280px) 80vw, 1200px',
