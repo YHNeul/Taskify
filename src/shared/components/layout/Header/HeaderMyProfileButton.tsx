@@ -38,7 +38,7 @@ export default function HeaderMyProfileButton({
       className="ml-2 md:ml-4 lg:ml-6 flex items-center gap-2 md:gap-3 border-l border-gray-300 pl-2 md:pl-4 lg:pl-6 hover:opacity-80 transition-opacity shrink-0 cursor-pointer"
     >
       <div
-        className="flex h-profile-desktop w-profile-desktop items-center justify-center rounded-full overflow-hidden text-lg-medium text-white shrink-0"
+        className="flex h-profile-desktop w-profile-desktop items-center justify-center rounded-full overflow-hidden typo-lg-medium text-white shrink-0"
         style={{ backgroundColor: myChipColor }}
       >
         {profileImageUrl ? (
@@ -55,7 +55,7 @@ export default function HeaderMyProfileButton({
           fallbackInitial
         )}
       </div>
-      <span className="hidden lg:inline text-lg-medium text-gray-700">
+      <span className="hidden lg:inline typo-lg-medium text-gray-700">
         {nickname}
       </span>
     </button>

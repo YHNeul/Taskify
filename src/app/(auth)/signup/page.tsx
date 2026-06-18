@@ -69,7 +69,7 @@ function SignupPageContent() {
                 />
               </div>
 
-              <h1 className="text-center text-base text-gray-700 sm:text-xl-medium">
+              <h1 className="text-center text-base text-gray-700 sm:typo-xl-medium">
                 첫 방문을 환영합니다!
               </h1>
             </div>

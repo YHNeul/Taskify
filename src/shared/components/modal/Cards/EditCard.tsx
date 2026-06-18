@@ -286,13 +286,13 @@ export default function EditCard({
 
   if (isMembersLoading) return <EditCardSkeleton onModalClose={onModalClose} />;
 
-  const baseFontStyle = 'text-2lg-medium mb-2';
+  const baseFontStyle = 'typo-2lg-medium mb-2';
 
   return (
     <ModalOverlay onClose={handleRequestClose}>
       <ModalBase className="px-4 mobile:px-8 max-h-screen-minus-160 overflow-y-auto w-modal-card h-auto rounded-2xl text-gray-700 p-8 flex flex-col gap-8">
         <header>
-          <h2 className="text-2xl-bold wrap-break-word">할 일 수정</h2>
+          <h2 className="typo-2xl-bold wrap-break-word">할 일 수정</h2>
         </header>
 
         <form className="contents" onSubmit={handleSubmit(onSubmit)} noValidate>

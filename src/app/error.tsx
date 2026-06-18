@@ -28,7 +28,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
           </Button>
           <Link
             href="/"
-            className="inline-flex h-12 min-w-40 items-center justify-center rounded-full border border-gray-300 bg-white px-6 text-lg-medium text-gray-700 transition-colors hover:bg-brand-violet-light"
+            className="inline-flex h-12 min-w-40 items-center justify-center rounded-full border border-gray-300 bg-white px-6 typo-lg-medium text-gray-700 transition-colors hover:bg-brand-violet-light"
           >
             홈으로 이동
           </Link>

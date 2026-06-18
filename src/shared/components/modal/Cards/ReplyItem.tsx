@@ -54,10 +54,10 @@ export default function ReplyItem({ comment, onDeleteClick }: Props) {
         <div className="flex flex-col gap-1.5 flex-1 pr-5">
           {/* 작성자 이름, 작성 날짜 */}
           <div className="flex items-center gap-2">
-            <span className="text-md-semibold leading-4">
+            <span className="typo-md-semibold leading-4">
               {author.nickname}
             </span>
-            <p className="text-gray-400 text-xs-regular">{formatted}</p>
+            <p className="text-gray-400 typo-xs-regular">{formatted}</p>
           </div>
           {/* 댓글 내용 or 수정 input */}
           {isEditing ? (
@@ -65,11 +65,11 @@ export default function ReplyItem({ comment, onDeleteClick }: Props) {
               type="text"
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
-              className="w-full text-md-regular border border-gray-300 rounded px-2 py-1 outline-none bg-transparent"
+              className="w-full typo-md-regular border border-gray-300 rounded px-2 py-1 outline-none bg-transparent"
               autoFocus
             />
           ) : (
-            <div className="text-md-regular leading-4">{displayContent}</div>
+            <div className="typo-md-regular leading-4">{displayContent}</div>
           )}
 
           {/* 댓글 수정, 삭제 버튼 - 작성자만 표시 */}

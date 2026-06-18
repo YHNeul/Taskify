@@ -29,7 +29,7 @@ export default function GlobalErrorPage({
               <button
                 type="button"
                 onClick={reset}
-                className="inline-flex h-12 min-w-40 items-center justify-center rounded-full bg-brand-violet px-6 text-lg-medium text-white! transition-opacity hover:opacity-90"
+                className="inline-flex h-12 min-w-40 items-center justify-center rounded-full bg-brand-violet px-6 typo-lg-medium text-white! transition-opacity hover:opacity-90"
               >
                 다시 시도
               </button>
@@ -37,7 +37,7 @@ export default function GlobalErrorPage({
               {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
               <a
                 href="/"
-                className="inline-flex h-12 min-w-40 items-center justify-center rounded-full border border-gray-300 bg-white px-6 text-lg-medium text-gray-700 transition-colors hover:bg-brand-violet-light"
+                className="inline-flex h-12 min-w-40 items-center justify-center rounded-full border border-gray-300 bg-white px-6 typo-lg-medium text-gray-700 transition-colors hover:bg-brand-violet-light"
               >
                 홈으로 이동
               </a>

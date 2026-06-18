@@ -180,12 +180,12 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
   return (
     <div className="relative pt-space-22 md:pt-space-26">
       <div className="flex items-center justify-between">
-        <span className="pl-4 text-xl-bold text-gray-700 md:pl-7 md:text-2xl-bold">
+        <span className="pl-4 typo-xl-bold text-gray-700 md:pl-7 md:typo-2xl-bold">
           초대 내역
         </span>
 
         <div className="pr-4 flex items-center gap-3 md:pr-7 md:gap-4">
-          <span className="text-xs-regular text-gray-500 md:text-md-regular">
+          <span className="typo-xs-regular text-gray-500 md:typo-md-regular">
             {currentPage} / {totalPages}
           </span>
 
@@ -201,8 +201,8 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
             variant="primary"
             onClick={() => setIsInviteModalOpen(true)}
             className="absolute right-4 top-invite-button-top
-            px-0 w-invite-button-mobile h-invite-button-mobile justify-center text-white text-xs-medium gap-1.5
-            md:static md:w-invite-button-desktop md:h-8 md:text-md-medium md:gap-2"
+            px-0 w-invite-button-mobile h-invite-button-mobile justify-center text-white typo-xs-medium gap-1.5
+            md:static md:w-invite-button-desktop md:h-8 md:typo-md-medium md:gap-2"
           >
             <AddBoxIcon className="w-3.5 h-3.5 md:w-4 md:h-4 brightness-0 invert" />
             초대하기
@@ -210,9 +210,9 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
         </div>
       </div>
 
-      <table className="table-fixed mt-5 w-full text-lg-regular text-gray-500 md:mt-7">
+      <table className="table-fixed mt-5 w-full typo-lg-regular text-gray-500 md:mt-7">
         <thead>
-          <tr className="text-left text-gray-400 text-md-regular md:text-lg-regular">
+          <tr className="text-left text-gray-400 typo-md-regular md:typo-lg-regular">
             <th className="w-3/5 pl-5 pb-6 font-normal md:pl-7 md:pb-px md:w-2/3">
               이메일
             </th>
@@ -239,8 +239,8 @@ export default function ManageInvitations({ dashboardId }: EmailTableProps) {
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="px-3.5 py-2 w-action-button-mobile h-8 text-xs-medium
-                            md:px-5 md:py-1 md:w-action-button-desktop md:h-8 md:text-md-medium"
+                    className="px-3.5 py-2 w-action-button-mobile h-8 typo-xs-medium
+                            md:px-5 md:py-1 md:w-action-button-desktop md:h-8 md:typo-md-medium"
                     onClick={() => setSelectedInviterEmail(item.id)}
                   >
                     취소

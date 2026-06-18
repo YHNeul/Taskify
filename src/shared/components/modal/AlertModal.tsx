@@ -34,7 +34,7 @@ export default function AlertModal({
 }: AlertModalProps) {
   return (
     <ModalBase className="w-full max-w-sm rounded-2xl px-4 py-6 sm:px-8 sm:py-8 md:px-16 md:py-10">
-      <p className="mb-3.5 text-center text-2lg-medium text-gray-700">
+      <p className="mb-3.5 text-center typo-2lg-medium text-gray-700">
         {message}
       </p>
 

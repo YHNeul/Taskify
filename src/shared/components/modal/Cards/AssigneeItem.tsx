@@ -23,8 +23,9 @@ interface Props {
 }
 
 export default function AssigneeItem({ assignee, dueDate }: Props) {
-  const sectionClass = 'flex flex-col gap-1.5 w-full md:pb-4 md:border-b md:border-gray-200 last:md:pb-0 last:md:border-b-0';
-  const titleClass = 'text-xs-semibold text-gray-700';
+  const sectionClass =
+    'flex flex-col gap-1.5 w-full md:pb-4 md:border-b md:border-gray-200 last:md:pb-0 last:md:border-b-0';
+  const titleClass = 'typo-xs-semibold text-gray-700';
 
   return (
     <div className="flex md:flex-col flex-row flex-wrap mobile:flex-nowrap items-center md:items-start md:gap-4 gap-1 md:w-full px-4 py-3.5 md:px-0 md:py-0">
@@ -32,10 +33,7 @@ export default function AssigneeItem({ assignee, dueDate }: Props) {
         <p className={titleClass}>담당자</p>
         <div>
           {assignee ? (
-            <UserName
-              profile={assignee}
-              fontSize={'text-md-regular'}
-            />
+            <UserName profile={assignee} fontSize={'typo-md-regular'} />
           ) : (
             <span className="md:h-5 h-4 text-gray-500">-</span>
           )}
@@ -44,8 +42,12 @@ export default function AssigneeItem({ assignee, dueDate }: Props) {
       <div className={sectionClass}>
         <p className={titleClass}>마감일</p>
         <div>
-          <p className="text-gray-700 text-md-regular">
-            {dueDate ? dueDate : <span className="md:h-5 h-4 text-gray-500">-</span>}
+          <p className="text-gray-700 typo-md-regular">
+            {dueDate ? (
+              dueDate
+            ) : (
+              <span className="md:h-5 h-4 text-gray-500">-</span>
+            )}
           </p>
         </div>
       </div>

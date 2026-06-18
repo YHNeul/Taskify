@@ -93,7 +93,7 @@ function LoginPageContent() {
         return;
       }
 
-      window.location.href = nextPath;
+      router.replace(nextPath);
     } catch {
       setAlertMessage('서버 오류가 발생했습니다.');
       setIsAlertOpen(true);
@@ -120,7 +120,7 @@ function LoginPageContent() {
                 height={55}
                 className="h-auto w-auto"
               />
-              <p className="text-lg-medium text-gray-900">
+              <p className="typo-lg-medium text-gray-900">
                 오늘도 만나서 반가워요!
               </p>
             </div>
@@ -137,7 +137,7 @@ function LoginPageContent() {
               floatingLabel
               showErrorStyle={false}
               {...emailRegistration}
-              onFocus={(event) => {
+              onFocus={() => {
                 setIsEmailFocused(true);
                 setIsEmailBlurred(false);
               }}
@@ -153,7 +153,9 @@ function LoginPageContent() {
                 emailRegistration.onChange(event);
               }}
               isError={shouldShowEmailError}
-              errorMessage={shouldShowEmailError ? errors.email?.message : undefined}
+              errorMessage={
+                shouldShowEmailError ? errors.email?.message : undefined
+              }
             />
 
             <Input

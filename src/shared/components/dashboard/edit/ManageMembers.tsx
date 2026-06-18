@@ -94,11 +94,11 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
   return (
     <div className="pt-space-22 md:pt-space-26">
       <div className="flex items-center justify-between">
-        <span className="pl-4 text-xl-bold text-gray-700 md:pl-7 md:text-2xl-bold">
+        <span className="pl-4 typo-xl-bold text-gray-700 md:pl-7 md:typo-2xl-bold">
           구성원
         </span>
         <div className="pr-4 flex justify-end items-center gap-4 md:pr-7">
-          <span className="text-xs-regular text-gray-500 md:text-md-regular">
+          <span className="typo-xs-regular text-gray-500 md:typo-md-regular">
             {currentPage} / {totalPages}
           </span>
           <Pagination
@@ -111,8 +111,8 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
         </div>
       </div>
       <div className="mt-5 px-4 md:mt-7 md:px-7">
-        <table className="w-full table-fixed text-lg-regular text-gray-500">
-          <thead className="text-lg-regular text-gray-400">
+        <table className="w-full table-fixed typo-lg-regular text-gray-500">
+          <thead className="typo-lg-regular text-gray-400">
             <tr>
               <th className="w-2/3 font-normal text-left">이름</th>
               <th className="w-1/3"></th>
@@ -134,8 +134,8 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
                 >
                   <td
                     className="flex items-center gap-2 py-3 
-                    font-normal text-left text-md-regular text-gray-700 
-                    md:py-4 md:gap-3 md:text-lg-regular"
+                    font-normal text-left typo-md-regular text-gray-700 
+                    md:py-4 md:gap-3 md:typo-lg-regular"
                   >
                     <div className="shrink-0 relative w-profile-mobile h-profile-mobile md:w-profile-desktop md:h-profile-desktop rounded-full overflow-hidden">
                       {item.profileImageUrl && !isImageError ? (
@@ -162,8 +162,8 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
                       <Button
                         variant="secondary"
                         size="sm"
-                        className="px-3.5 py-2 w-action-button-mobile h-8 text-xs-medium
-                                md:px-5 md:py-1 md:w-action-button-desktop md:h-8 md:text-md-medium"
+                        className="px-3.5 py-2 w-action-button-mobile h-8 typo-xs-medium
+                                md:px-5 md:py-1 md:w-action-button-desktop md:h-8 md:typo-md-medium"
                         onClick={() => setSelectedMemberId(item.id)}
                       >
                         삭제
@@ -190,7 +190,7 @@ export default function ManageMembers({ dashboardId }: MembersTableProps) {
       )}
 
       {toastMessage && (
-        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-gray-700 px-4 py-3 text-sm-medium text-white shadow-lg md:bottom-auto md:top-6">
+        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-gray-700 px-4 py-3 typo-sm-medium text-white shadow-lg md:bottom-auto md:top-6">
           {toastMessage}
         </div>
       )}

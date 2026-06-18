@@ -16,7 +16,7 @@ export default function StatusChip({ status }: StatusTagProps) {
   return (
     <div className="max-w-36 w-max mobile:min-w-16 mobile:min-h-7 inline-flex items-center gap-2 bg-brand-violet-light px-3 py-1 rounded-2xl">
       <span className="w-2 h-2 rounded-full bg-brand-violet shrink-0"></span>
-      <p className="text-brand-violet text-md-regular truncate">
+      <p className="text-brand-violet typo-md-regular truncate">
         {status ? label : '-'}
       </p>
     </div>

@@ -106,7 +106,7 @@ export default function Column({
             className="w-2 h-2 rounded-full shrink-0"
             style={{ backgroundColor: dotColor }}
           />
-          <span className="text-lg-bold md:text-2lg-bold text-gray-700">
+          <span className="typo-lg-bold md:typo-2lg-bold text-gray-700">
             {column.title}
           </span>
           <CountCardChip count={totalCount} />
@@ -128,10 +128,10 @@ export default function Column({
           variant="secondary"
           size="sm"
           onClick={() => onAddCard(column.id)}
-          className="h-8 w-full text-md-medium md:h-10 md:w-full lg:w-dashboard-column-inner"
+          className="h-8 w-full typo-md-medium md:h-10 md:w-full lg:w-dashboard-column-inner"
           aria-label="할 일 추가"
         >
-          <span className="w-4 h-4 flex items-center justify-center rounded bg-brand-violet-light text-brand-violet text-lg-bold leading-none">
+          <span className="w-4 h-4 flex items-center justify-center rounded bg-brand-violet-light text-brand-violet typo-lg-bold leading-none">
             +
           </span>
         </Button>
@@ -164,7 +164,7 @@ export default function Column({
           {hasMore && <div ref={sentinelRef} className="h-1 shrink-0" />}
 
           {isLoadingMore && (
-            <p className="text-center text-xs-regular text-gray-400 py-2">
+            <p className="text-center typo-xs-regular text-gray-400 py-2">
               불러오는 중...
             </p>
           )}

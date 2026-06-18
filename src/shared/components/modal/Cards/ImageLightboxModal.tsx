@@ -133,7 +133,7 @@ export default function ImageLightboxModal({
               )}
               skeletonClassName="rounded-lg"
               fallback={
-                <div className="flex h-full w-full items-center justify-center rounded-lg bg-gray-100 text-md-medium text-gray-500">
+                <div className="flex h-full w-full items-center justify-center rounded-lg bg-gray-100 typo-md-medium text-gray-500">
                   이미지를 불러오지 못했습니다.
                 </div>
               }

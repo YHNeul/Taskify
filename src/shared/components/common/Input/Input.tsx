@@ -18,11 +18,7 @@
  * />
  */
 
-import {
-  InputHTMLAttributes,
-  ReactNode,
-  useId,
-} from 'react';
+import { InputHTMLAttributes, ReactNode, useId } from 'react';
 import clsx from 'clsx';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -59,7 +55,10 @@ export default function Input({
       {label && !floatingLabel && (
         <label
           htmlFor={inputId}
-          className={clsx('mb-2 block text-2lg-medium text-gray-700', labelClassName)}
+          className={clsx(
+            'mb-2 block typo-2lg-medium text-gray-700',
+            labelClassName,
+          )}
         >
           {label}
           {required && <span className="text-brand-violet pl-0.5">*</span>}
@@ -74,8 +73,8 @@ export default function Input({
             'peer w-full rounded-2xl border outline-none transition',
             floatingLabel ? 'h-13' : 'h-12',
             floatingLabel
-              ? 'px-4 pb-2 pt-6 text-lg-regular placeholder:text-transparent'
-              : 'px-4 py-2.5 text-lg-regular placeholder:text-gray-400',
+              ? 'px-4 pb-2 pt-6 typo-lg-regular placeholder:text-transparent'
+              : 'px-4 py-2.5 typo-lg-regular placeholder:text-gray-400',
             'bg-white',
             'text-gray-800',
             rightIcon && 'pr-10',

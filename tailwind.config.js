@@ -1,8 +1,8 @@
 /**
  * @description Taskify 타이포그래피 및 컬러 시스템 활용 가이드
  * * ### 1. 텍스트 스타일 (Font Size & Weight)
- * Tailwind의 `text-{key}` 규칙을 사용하여 적용
- * - **Usage:** `<p className="text-3xl-bold">...</p>`
+ * Tailwind의 `typo-{key}` 규칙을 사용하여 적용
+ * - **Usage:** `<p className="typo-3xl-bold">...</p>`
  * * | Size Key | 실제 수치 (Size / LineHeight / Weight) |
  * |:---|:---|
  * | `3xl-bold` | 32px / 42px / 700 |
@@ -16,7 +16,7 @@
  * - **테두리 색상:** `border-{color}-{level}` (예: `border-gray-300`)
  * * @example
  * // 예시: 회색 배경에 큰 볼드체 텍스트
- * <div className="bg-gray-600 text-3xl-bold text-white">
+ * <div className="bg-gray-600 typo-3xl-bold text-white">
  * 대시보드 관리
  * </div>
  */
@@ -58,7 +58,7 @@ module.exports = {
         main: ['var(--font-pretendard)', 'sans-serif'],
         landing: ['var(--font-landing-montserrat)', 'sans-serif'],
       },
-      fontSize: {
+      typo: {
         '3xl-bold': ['32px', { lineHeight: '42px', fontWeight: '700' }],
         '3xl-semibold': ['32px', { lineHeight: '42px', fontWeight: '600' }],
         '2xl-bold': ['24px', { lineHeight: '32px', fontWeight: '700' }],
@@ -171,5 +171,25 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities, theme }) {
+      const typoUtilities = {};
+      const typos = theme('typo') || {};
+
+      Object.entries(typos).forEach(([token, value]) => {
+        if (Array.isArray(value)) {
+          const [fontSize, options] = value;
+          typoUtilities[`.typo-${token}`] = {
+            fontSize,
+            ...(options ?? {}),
+          };
+          return;
+        }
+
+        typoUtilities[`.typo-${token}`] = { fontSize: value };
+      });
+
+      addUtilities(typoUtilities);
+    },
+  ],
 };

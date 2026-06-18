@@ -70,7 +70,7 @@ function DeleteConfirmModal({
 }: ConfirmModalProps) {
   return (
     <ModalBase className="w-screen mobile:w-full mobile:max-w-sm rounded-2xl p-6">
-      <p className="mb-6 text-center text-lg-medium text-gray-700">{message}</p>
+      <p className="mb-6 text-center typo-lg-medium text-gray-700">{message}</p>
 
       <div className="flex gap-3.5 flex-col mobile:flex-row">
         <Button
@@ -243,7 +243,7 @@ export default function Cards({
           <div className="order-2 md:order-1 flex flex-col md:w-content-450 md:shrink-0 md:pr-4">
             {/* 제목 */}
             <header className="mb-2 md:mb-6">
-              <h2 className="text-2xl-bold wrap-break-word">{title}</h2>
+              <h2 className="typo-2xl-bold wrap-break-word">{title}</h2>
             </header>
 
             {/* 담당자 컴포넌트 - 모바일용 */}
@@ -272,7 +272,7 @@ export default function Cards({
             </div>
 
             {/* 설명 */}
-            <p className="box-content min-h-24 p-2.5 mb-8 md:mb-2 text-md-regular">
+            <p className="box-content min-h-24 p-2.5 mb-8 md:mb-2 typo-md-regular">
               {description}
             </p>
 
@@ -289,7 +289,7 @@ export default function Cards({
                   alt="할 일 카드 이미지"
                   imageClassName="object-contain"
                   fallback={
-                    <div className="flex h-full w-full items-center justify-center bg-gray-100 text-sm-medium text-gray-400">
+                    <div className="flex h-full w-full items-center justify-center bg-gray-100 typo-sm-medium text-gray-400">
                       이미지를 불러올 수 없습니다.
                     </div>
                   }
@@ -335,20 +335,20 @@ export default function Cards({
 
                     {/* 추가 로딩 인디케이터 */}
                     {isFetchingMore && (
-                      <p className="text-md-medium text-gray-400 text-center py-2">
+                      <p className="typo-md-medium text-gray-400 text-center py-2">
                         불러오는 중...
                       </p>
                     )}
 
                     {/* 마지막 페이지 안내 (10개 이상일 때만 노출) */}
                     {!hasMore && commentsList.length >= COMMENTS_SIZE && (
-                      <p className="text-md-medium text-gray-400 text-center py-2">
+                      <p className="typo-md-medium text-gray-400 text-center py-2">
                         모든 댓글을 불러왔습니다.
                       </p>
                     )}
                   </>
                 ) : (
-                  <div className="text-md-medium text-gray-400 text-center py-2">
+                  <div className="typo-md-medium text-gray-400 text-center py-2">
                     댓글이 없습니다.
                   </div>
                 )}

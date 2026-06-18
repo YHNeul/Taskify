@@ -213,7 +213,7 @@ export default function SortableDashboardItem({
             <span className="flex items-center gap-1.5 flex-1 min-w-0">
               <span
                 className={cn(
-                  'truncate text-lg-medium',
+                  'truncate typo-lg-medium',
                   isActive ? 'text-gray-700' : 'text-gray-500',
                 )}
               >
@@ -239,7 +239,7 @@ export default function SortableDashboardItem({
             <span className="flex items-center gap-1.5 flex-1 min-w-0">
               <span
                 className={cn(
-                  'truncate text-2lg-medium',
+                  'truncate typo-2lg-medium',
                   isActive ? 'text-gray-700' : 'text-gray-500',
                 )}
               >
@@ -269,7 +269,7 @@ export default function SortableDashboardItem({
           <span className="flex items-center gap-1.5 flex-1 min-w-0">
             <span
               className={cn(
-                'truncate text-lg-medium',
+                'truncate typo-lg-medium',
                 isActive ? 'text-gray-700' : 'text-gray-500',
               )}
             >
@@ -298,7 +298,7 @@ export default function SortableDashboardItem({
           <span className="flex items-center gap-1.5 flex-1 min-w-0">
             <span
               className={cn(
-                'truncate text-2lg-medium',
+                'truncate typo-2lg-medium',
                 isActive ? 'text-gray-700' : 'text-gray-500',
               )}
             >
@@ -313,7 +313,7 @@ export default function SortableDashboardItem({
 
       {tooltipOpen && tooltipPos && (
         <span
-          className="pointer-events-none fixed z-9999 whitespace-nowrap rounded-md bg-gray-700 px-2 py-1 text-xs-medium text-white"
+          className="pointer-events-none fixed z-9999 whitespace-nowrap rounded-md bg-gray-700 px-2 py-1 typo-xs-medium text-white"
           style={{
             top: tooltipPos.top,
             left: tooltipPos.left,

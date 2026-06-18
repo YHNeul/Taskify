@@ -64,7 +64,7 @@ export default function LandingHero({
 
         <Link
           href={ctaHref}
-          className="mt-24 inline-flex h-12 min-w-56 items-center justify-center rounded-lg bg-brand-violet text-lg-medium text-white transition-opacity hover:opacity-90 sm:mt-8 md:h-14 md:min-w-72 lg:mt-20"
+          className="mt-24 inline-flex h-12 min-w-56 items-center justify-center rounded-lg bg-brand-violet typo-lg-medium text-white transition-opacity hover:opacity-90 sm:mt-8 md:h-14 md:min-w-72 lg:mt-20"
           style={{ animation: 'fadeInUp 0.8s ease-out 0.6s both' }}
         >
           {ctaLabel}

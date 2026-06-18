@@ -231,7 +231,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   if (!dashboard) {
     return (
       <div className="flex items-center justify-center flex-1 h-full min-h-screen-without-header">
-        <p className="text-gray-400 text-lg-regular">
+        <p className="text-gray-400 typo-lg-regular">
           대시보드를 찾을 수 없습니다.
         </p>
       </div>
@@ -241,7 +241,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   return (
     <div className="flex flex-col h-full">
       <div className="lg:hidden border-b border-gray-200 bg-white px-4 py-3 md:px-5">
-        <h1 className="truncate text-2lg-bold text-gray-700">
+        <h1 className="truncate typo-2lg-bold text-gray-700">
           {dashboard.title}
         </h1>
       </div>
@@ -297,10 +297,10 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                 onClick={() =>
                   setAddColumnModal({ isOpen: true, title: '', error: '' })
                 }
-                className="h-dashboard-add-mobile w-full text-lg-bold md:h-dashboard-add-desktop md:w-full md:text-2lg-bold lg:w-dashboard-column"
+                className="h-dashboard-add-mobile w-full typo-lg-bold md:h-dashboard-add-desktop md:w-full md:typo-2lg-bold lg:w-dashboard-column"
               >
                 새로운 컬럼 추가하기
-                <span className="w-5 h-5 flex items-center justify-center rounded bg-brand-violet-light text-brand-violet text-lg-bold leading-none">
+                <span className="w-5 h-5 flex items-center justify-center rounded bg-brand-violet-light text-brand-violet typo-lg-bold leading-none">
                   +
                 </span>
               </Button>
@@ -438,7 +438,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
         <div
           role="alert"
           aria-live="assertive"
-          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-gray-700 px-4 py-3 text-sm-medium text-white shadow-lg md:bottom-auto md:top-6"
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-gray-700 px-4 py-3 typo-sm-medium text-white shadow-lg md:bottom-auto md:top-6"
         >
           {boardErrorMessage}
         </div>

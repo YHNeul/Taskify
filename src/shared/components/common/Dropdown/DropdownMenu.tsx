@@ -37,7 +37,7 @@ export default function DropdownMenu({ onEdit, onDelete }: DropdownMenuProps) {
           <button
             type="button"
             onClick={() => handleClick(menu.action)}
-            className="w-full rounded px-4 py-2 text-left text-md-regular text-gray-700 hover:bg-brand-violet-light hover:text-brand-violet transition-colors"
+            className="w-full rounded px-4 py-2 text-left typo-md-regular text-gray-700 hover:bg-brand-violet-light hover:text-brand-violet transition-colors"
           >
             {menu.label}
           </button>

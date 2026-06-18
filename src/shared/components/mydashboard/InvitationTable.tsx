@@ -80,7 +80,7 @@ export default function InvitationTable({
   return (
     <div className="py-6 bg-white rounded-card-sm md:py-4.5 md:rounded-card-md lg:py-8 lg:rounded-card-lg">
       <div>
-        <h2 className="px-5 text-gray-700 text-md-bold md:px-10 md:text-lg-bold lg:text-xl-bold">
+        <h2 className="px-5 text-gray-700 typo-md-bold md:px-10 md:typo-lg-bold lg:typo-xl-bold">
           초대받은 대시보드
         </h2>
       </div>
@@ -114,15 +114,15 @@ export default function InvitationTable({
             >
               <div className="flex flex-col gap-1 mb-3.5">
                 <div className="flex items-center">
-                  <span className="w-15 shrink-0 text-md-regular text-gray-400">
+                  <span className="w-15 shrink-0 typo-md-regular text-gray-400">
                     이름
                   </span>
-                  <span className="text-md-regular text-gray-700 truncate">
+                  <span className="typo-md-regular text-gray-700 truncate">
                     {item.dashboard.title}
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <span className="w-15 shrink-0 text-md-regular text-gray-400">
+                  <span className="w-15 shrink-0 typo-md-regular text-gray-400">
                     초대자
                   </span>
                   <div className="flex min-w-0 items-center gap-1">
@@ -133,7 +133,7 @@ export default function InvitationTable({
                         index={item.inviter.id}
                       />
                     </div>
-                    <span className="text-md-regular text-gray-700 truncate">
+                    <span className="typo-md-regular text-gray-700 truncate">
                       {item.inviter.nickname}
                     </span>
                   </div>
@@ -152,8 +152,8 @@ export default function InvitationTable({
         </div>
         {/** --- 2. pc 테이블 레이아웃 (768px 이상) --- */}
         <div className="hidden md:block md:px-7 lg:px-10">
-          <table className="w-full table-fixed text-lg-regular text-gray-500">
-            <thead className="sticky top-0 bg-white z-10 text-lg-regular text-gray-400">
+          <table className="w-full table-fixed typo-lg-regular text-gray-500">
+            <thead className="sticky top-0 bg-white z-10 typo-lg-regular text-gray-400">
               <tr>
                 <th className="pl-0 w-2/5 text-left font-normal">이름</th>
                 <th className="pl-12 font-normal text-left w-1/4">초대자</th>

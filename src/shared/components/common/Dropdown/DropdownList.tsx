@@ -52,7 +52,7 @@ export default function DropdownList<T extends object>({
         </button>
       )}
       {items.length === 0 ? (
-        <p className="pl-5 py-2 text-md-regular text-gray-400">
+        <p className="pl-5 py-2 typo-md-regular text-gray-400">
           검색 결과가 없습니다.
         </p>
       ) : (
