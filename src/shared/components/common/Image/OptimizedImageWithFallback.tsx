@@ -2,7 +2,7 @@
 
 import Image, { type ImageProps } from 'next/image';
 import { type ReactNode, useState } from 'react';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 interface OptimizedImageWithFallbackProps {
   src: string;
@@ -50,7 +50,7 @@ function StatefulImage({
       {isSkeletonVisible && isLoading && (
         <div
           aria-hidden="true"
-          className={clsx(
+          className={cn(
             'absolute inset-0 animate-pulse bg-gray-200',
             skeletonClassName,
           )}
@@ -61,7 +61,7 @@ function StatefulImage({
         src={src}
         alt={alt}
         unoptimized={imageProps?.unoptimized ?? shouldUseUnoptimized}
-        className={clsx(
+        className={cn(
           imageClassName,
           isLoading ? 'opacity-0' : 'opacity-100',
           isFadeEnabled && 'transition-opacity',
