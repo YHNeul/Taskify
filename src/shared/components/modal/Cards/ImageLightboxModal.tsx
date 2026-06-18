@@ -128,7 +128,7 @@ export default function ImageLightboxModal({
               src={imageUrl}
               alt={alt}
               imageClassName={clsx(
-                'h-auto w-auto max-h-full max-w-full rounded-lg object-contain transition-all',
+                'h-auto w-auto max-h-full max-w-full rounded-lg object-contain transition-transform',
                 scale > 1 && (isDragging ? 'cursor-grabbing' : 'cursor-grab'),
               )}
               skeletonClassName="rounded-lg"
