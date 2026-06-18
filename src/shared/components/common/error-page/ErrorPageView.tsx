@@ -1,6 +1,6 @@
 /**
  * @file ErrorPageView.tsx
- * @description 404/500 등 공통 에러 페이지 레이아웃 컴포넌트입니다.
+ * @description 404/500 등 공통 에러 페이지 레이아웃 컴포넌트
  */
 
 import type { ReactNode } from 'react';

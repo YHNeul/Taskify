@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import ErrorPageView from '@/shared/components/common/ErrorPage/ErrorPageView';
+import ErrorPageView from '@/shared/components/common/error-page/ErrorPageView';
 
 export default function NotFound() {
   return (

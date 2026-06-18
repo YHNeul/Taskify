@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect } from 'react';
-import ErrorPageView from '@/shared/components/common/ErrorPage/ErrorPageView';
+import ErrorPageView from '@/shared/components/common/error-page/ErrorPageView';
 import Button from '@/shared/components/common/Button/Button';
 import { reportRuntimeError } from '@/shared/utils/errorReporter';
 
