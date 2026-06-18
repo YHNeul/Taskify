@@ -12,9 +12,15 @@ import clsx from 'clsx';
 
 type LandingHeroProps = {
   montserratClass: string;
+  ctaHref: string;
+  ctaLabel: string;
 };
 
-export default function LandingHero({ montserratClass }: LandingHeroProps) {
+export default function LandingHero({
+  montserratClass,
+  ctaHref,
+  ctaLabel,
+}: LandingHeroProps) {
   return (
     <section className="bg-gray-900">
       {/* 일러스트 — 페이지 로드 시 위에서 내려오며 등장 */}
@@ -57,11 +63,11 @@ export default function LandingHero({ montserratClass }: LandingHeroProps) {
         </h1>
 
         <Link
-          href="/login"
+          href={ctaHref}
           className="mt-24 inline-flex h-12 min-w-56 items-center justify-center rounded-lg bg-brand-violet text-lg-medium text-white transition-opacity hover:opacity-90 sm:mt-8 md:h-14 md:min-w-72 lg:mt-20"
           style={{ animation: 'fadeInUp 0.8s ease-out 0.6s both' }}
         >
-          로그인하기
+          {ctaLabel}
         </Link>
       </div>
     </section>
