@@ -58,25 +58,15 @@ export default async function DashboardPage({ params }: PageProps) {
     const columnIds = columnsData?.data?.map((column) => column.id) ?? [];
 
     if (columnIds.length > 0) {
-      const cardsResults = await Promise.all(
-        columnIds.map(
-          async (columnId) =>
-            [columnId, await fetchCards(columnId, 10)] as const,
+      await Promise.all(
+        columnIds.map((columnId) =>
+          queryClient.prefetchQuery({
+            queryKey: [...QUERY_KEYS.columnCards(dashboardId), 10, columnId],
+            queryFn: () => fetchCards(columnId, 10),
+            staleTime: 1000 * 30,
+            gcTime: 1000 * 60 * 10,
+          }),
         ),
-      );
-      const map = Object.fromEntries(
-        cardsResults.map(([columnId, result]) => [
-          columnId,
-          {
-            cards: result.cards,
-            totalCount: result.totalCount,
-            cursorId: result.cursorId,
-          },
-        ]),
-      );
-      queryClient.setQueryData(
-        [...QUERY_KEYS.columnCards(dashboardId), 10, columnIds],
-        map,
       );
     }
   }

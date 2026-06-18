@@ -99,7 +99,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     useDashboardColumnsQuery(dashboardId);
 
   const columns = columnsData?.data ?? [];
-  const { data: columnCardsData } = useDashboardColumnCardsQuery({
+  const { data: columnCardsData, dataVersion } = useDashboardColumnCardsQuery({
     dashboardId,
     columns,
     size: 10,
@@ -107,13 +107,39 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
 
   useEffect(() => {
     if (!columnCardsData) return;
-    const ordered: Record<number, ColumnCardState> = {};
-    for (const [colId, state] of Object.entries(columnCardsData)) {
-      const id = Number(colId);
-      ordered[id] = { ...state, cards: applySavedOrder(id, state.cards) };
-    }
-    setColumnCards(ordered);
-  }, [columnCardsData]);
+    setColumnCards((prev) => {
+      const ordered: Record<number, ColumnCardState> = {};
+      for (const [colId, state] of Object.entries(columnCardsData)) {
+        const id = Number(colId);
+        ordered[id] = { ...state, cards: applySavedOrder(id, state.cards) };
+      }
+
+      const prevKeys = Object.keys(prev);
+      const nextKeys = Object.keys(ordered);
+      if (prevKeys.length !== nextKeys.length) return ordered;
+
+      const isSame = nextKeys.every((key) => {
+        const id = Number(key);
+        const prevState = prev[id];
+        const nextState = ordered[id];
+        if (!prevState) return false;
+        if (
+          prevState.totalCount !== nextState.totalCount ||
+          prevState.cursorId !== nextState.cursorId
+        ) {
+          return false;
+        }
+        const prevCards = prevState.cards;
+        const nextCards = nextState.cards;
+        if (prevCards.length !== nextCards.length) return false;
+        return prevCards.every(
+          (card, index) => card.id === nextCards[index].id,
+        );
+      });
+
+      return isSame ? prev : ordered;
+    });
+  }, [columnCardsData, dataVersion]);
 
   const {
     sensors,
