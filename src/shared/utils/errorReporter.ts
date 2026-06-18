@@ -39,10 +39,10 @@ const buildPayload = ({
  * 런타임 에러를 서버 라우트로 전달하는 공통 리포터입니다.
  * 추후 Sentry/Datadog 연동 시 이 함수 내부만 교체하면 됩니다.
  */
-export async function reportRuntimeError({
+export const reportRuntimeError = async ({
   error,
   source,
-}: ReportRuntimeErrorParams) {
+}: ReportRuntimeErrorParams) => {
   const payload = buildPayload({ error, source });
 
   try {
@@ -63,4 +63,4 @@ export async function reportRuntimeError({
   if (process.env.NODE_ENV !== 'production') {
     console.error('[ErrorReporter] 런타임 에러', payload);
   }
-}
+};
