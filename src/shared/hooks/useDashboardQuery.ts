@@ -23,5 +23,7 @@ export const useDashboardQuery = <TData = DashboardQueryData>(
     enabled: isDashboardIdValid && isQueryEnabled,
     staleTime: queryOptions?.staleTime ?? 1000 * 60 * 3,
     gcTime: queryOptions?.gcTime ?? 1000 * 60 * 30,
+    refetchOnWindowFocus: queryOptions?.refetchOnWindowFocus ?? false,
+    refetchOnReconnect: queryOptions?.refetchOnReconnect ?? false,
   });
 };

@@ -70,8 +70,24 @@ export const useBoardDnd = ({
    * handleDragOver / handleDragEnd 내부에서 stale closure 없이 읽기 위해 사용.
    */
   const columnCardsRef = useRef(columnCards);
+  const cardToColumnRef = useRef<Map<number, number>>(new Map());
+
+  const buildCardToColumnMap = (
+    state: Record<number, ColumnCardState>,
+  ): Map<number, number> => {
+    const map = new Map<number, number>();
+    for (const [colId, columnState] of Object.entries(state)) {
+      const columnId = Number(colId);
+      columnState.cards.forEach((card) => {
+        map.set(card.id, columnId);
+      });
+    }
+    return map;
+  };
+
   useEffect(() => {
     columnCardsRef.current = columnCards;
+    cardToColumnRef.current = buildCardToColumnMap(columnCards);
   }, [columnCards]);
 
   /**
@@ -87,10 +103,7 @@ export const useBoardDnd = ({
    * @returns 컬럼 ID, 없으면 `null`
    */
   const findColumnId = (cardId: number): number | null => {
-    for (const [colId, state] of Object.entries(columnCardsRef.current)) {
-      if (state.cards.some((c) => c.id === cardId)) return Number(colId);
-    }
-    return null;
+    return cardToColumnRef.current.get(cardId) ?? null;
   };
 
   /**
@@ -111,7 +124,7 @@ export const useBoardDnd = ({
   const handleDragStart = (event: DragStartEvent) => {
     const data = event.active.data.current as { card: Card; columnId: number };
     setActiveCard({ card: data.card, columnId: data.columnId });
-    clonedCardsRef.current = JSON.parse(JSON.stringify(columnCardsRef.current));
+    clonedCardsRef.current = structuredClone(columnCardsRef.current);
   };
 
   /**
