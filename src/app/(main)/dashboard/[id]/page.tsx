@@ -24,6 +24,8 @@ import {
 } from '@/shared/apis/dashboard.fetch';
 import type { ColumnsResponse } from '@/shared/types/dashboard';
 
+const INITIAL_COLUMN_CARDS_PREFETCH_LIMIT = 3;
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -58,8 +60,14 @@ export default async function DashboardPage({ params }: PageProps) {
     const columnIds = columnsData?.data?.map((column) => column.id) ?? [];
 
     if (columnIds.length > 0) {
+      // 초기 응답 지연을 줄이기 위해 상단 일부 컬럼 카드만 서버에서 미리 채운다.
+      const prefetchColumnIds = columnIds.slice(
+        0,
+        INITIAL_COLUMN_CARDS_PREFETCH_LIMIT,
+      );
+
       await Promise.all(
-        columnIds.map((columnId) =>
+        prefetchColumnIds.map((columnId) =>
           queryClient.prefetchQuery({
             queryKey: [...QUERY_KEYS.columnCards(dashboardId), 10, columnId],
             queryFn: () => fetchCards(columnId, 10),

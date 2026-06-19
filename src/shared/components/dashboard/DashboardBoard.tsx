@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { useDashboardStore } from '@/shared/store/useDashboardStore';
@@ -173,6 +173,29 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     };
   }, [boardErrorMessage]);
 
+  const handleOpenCreateCard = useCallback((columnId: number) => {
+    setCreateCardColumnId(columnId);
+  }, []);
+
+  const handleOpenEditColumn = useCallback((column: ColumnType) => {
+    setEditColumnModal({
+      column,
+      title: column.title,
+      error: '',
+    });
+  }, []);
+
+  const handleCardClick = useCallback(
+    (card: Card) => {
+      setSelectedCardId(card.id);
+    },
+    [setSelectedCardId],
+  );
+
+  const handleOpenAddColumnModal = useCallback(() => {
+    setAddColumnModal({ isOpen: true, title: '', error: '' });
+  }, []);
+
   const handleEditColumnConfirm = async () => {
     const { column, title } = editColumnModal;
     if (!column) return;
@@ -274,17 +297,9 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                     cursorId={columnCards[column.id]?.cursorId}
                     colorIndex={index}
                     isFirstColumn={index === 0}
-                    onAddCard={(columnId) => setCreateCardColumnId(columnId)}
-                    onEditColumn={(col) =>
-                      setEditColumnModal({
-                        column: col,
-                        title: col.title,
-                        error: '',
-                      })
-                    }
-                    onCardClick={(card: Card) => {
-                      setSelectedCardId(card.id);
-                    }}
+                    onAddCard={handleOpenCreateCard}
+                    onEditColumn={handleOpenEditColumn}
+                    onCardClick={handleCardClick}
                     onLoadMore={loadMoreCards}
                     isLoadingMore={loadingColumnIds.has(column.id)}
                   />
@@ -294,9 +309,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
               <Button
                 variant="secondary"
                 size="lg"
-                onClick={() =>
-                  setAddColumnModal({ isOpen: true, title: '', error: '' })
-                }
+                onClick={handleOpenAddColumnModal}
                 className="h-dashboard-add-mobile w-full typo-lg-bold md:h-dashboard-add-desktop md:w-full md:typo-2lg-bold lg:w-dashboard-column"
               >
                 새로운 컬럼 추가하기

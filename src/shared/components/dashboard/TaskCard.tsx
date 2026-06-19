@@ -14,6 +14,7 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { memo } from 'react';
 import type { Card } from '@/shared/types/dashboard';
 import CalendarIcon from '@/shared/components/common/Icon/CalendarIcon';
 import TagChip from '@/shared/components/common/Chip/TagChip';
@@ -31,7 +32,7 @@ interface TaskCardProps {
   priority?: boolean;
 }
 
-export default function TaskCard({
+function TaskCard({
   card,
   columnId,
   onClick,
@@ -126,3 +127,5 @@ export default function TaskCard({
     </button>
   );
 }
+
+export default memo(TaskCard);
