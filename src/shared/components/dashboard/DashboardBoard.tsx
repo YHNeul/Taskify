@@ -27,6 +27,7 @@ const FormModal = dynamic(() => import('@/shared/components/modal/FormModal'));
 const ConfirmModal = dynamic(
   () => import('@/shared/components/modal/ConfirmModal'),
 );
+const EMPTY_CARDS: Card[] = [];
 
 interface DashboardBoardProps {
   dashboardId: number;
@@ -70,6 +71,10 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   );
   const lastSyncedCardsVersionRef = useRef<string | null>(null);
 
+  const handleLoadMoreError = useCallback(() => {
+    setBoardErrorMessage('카드를 더 불러오지 못했습니다. 다시 시도해 주세요.');
+  }, []);
+
   const setActiveDashboardId = useDashboardStore((s) => s.setActiveDashboardId);
   const { createColumn, updateColumn, deleteColumn } =
     useDashboardColumnMutations({
@@ -82,11 +87,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     });
   const { loadingColumnIds, loadMoreCards } = useColumnCardsPagination({
     setColumnCards,
-    onLoadMoreError: () => {
-      setBoardErrorMessage(
-        '카드를 더 불러오지 못했습니다. 다시 시도해 주세요.',
-      );
-    },
+    onLoadMoreError: handleLoadMoreError,
   });
 
   useEffect(() => {
@@ -292,7 +293,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                   <Column
                     key={column.id}
                     column={column}
-                    cards={columnCards[column.id]?.cards ?? []}
+                    cards={columnCards[column.id]?.cards ?? EMPTY_CARDS}
                     totalCount={columnCards[column.id]?.totalCount ?? 0}
                     cursorId={columnCards[column.id]?.cursorId}
                     colorIndex={index}
