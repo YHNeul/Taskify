@@ -86,12 +86,16 @@ function TaskCard({
 
   const schedulePrefetchCardDetail = useCallback(() => {
     if (hasPrefetchedDetailRef.current) return;
+    if (queryClient.getQueryData(QUERY_KEYS.card(card.id))) {
+      hasPrefetchedDetailRef.current = true;
+      return;
+    }
     clearPrefetchTimeout();
     prefetchTimeoutRef.current = window.setTimeout(() => {
       prefetchCardDetail();
       prefetchTimeoutRef.current = null;
     }, 120);
-  }, [clearPrefetchTimeout, prefetchCardDetail]);
+  }, [clearPrefetchTimeout, prefetchCardDetail, card.id, queryClient]);
 
   useEffect(
     () => () => {
