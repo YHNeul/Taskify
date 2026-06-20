@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { useDashboardStore } from '@/shared/store/useDashboardStore';
 import type { Column as ColumnType, Card } from '@/shared/types/dashboard';
@@ -14,7 +15,6 @@ import { applySavedOrder } from '@/shared/utils/cardOrder';
 import { useDashboardQuery } from '@/shared/hooks/useDashboardQuery';
 import { useDashboardColumnsQuery } from '@/shared/hooks/useDashboardColumnsQuery';
 import { useDashboardColumnCardsQuery } from '@/shared/hooks/useDashboardColumnCardsQuery';
-import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
 import { useDashboardColumnMutations } from '@/shared/hooks/useDashboardColumnMutations';
 import { useColumnCardsPagination } from '@/shared/hooks/useColumnCardsPagination';
 import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
@@ -29,6 +29,12 @@ const ConfirmModal = dynamic(
 );
 const EMPTY_CARDS: Card[] = [];
 
+const parseCardIdParam = (rawValue: string | null): number | null => {
+  if (!rawValue) return null;
+  const parsed = Number(rawValue);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : null;
+};
+
 interface DashboardBoardProps {
   dashboardId: number;
 }
@@ -37,21 +43,8 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   const [columnCards, setColumnCards] = useState<
     Record<number, ColumnCardState>
   >({});
-
-  const [selectedCardId, setSelectedCardId] = useQueryParamState<number | null>(
-    {
-      key: QUERY_PARAM_KEYS.CARD_ID,
-      defaultValue: null,
-      parse: (rawValue) => {
-        if (!rawValue) return null;
-        const parsed = Number(rawValue);
-        return Number.isFinite(parsed) && parsed > 0
-          ? Math.floor(parsed)
-          : null;
-      },
-      serialize: (value) => (value ? String(value) : null),
-    },
-  );
+  const searchParams = useSearchParams();
+  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
   const [createCardColumnId, setCreateCardColumnId] = useState<number | null>(
     null,
   );
@@ -70,6 +63,20 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     null,
   );
   const lastSyncedCardsVersionRef = useRef<string | null>(null);
+  const hasInitializedCardParamRef = useRef(false);
+
+  const updateCardQueryParam = useCallback((cardId: number | null) => {
+    const url = new URL(window.location.href);
+
+    if (cardId === null) {
+      url.searchParams.delete(QUERY_PARAM_KEYS.CARD_ID);
+    } else {
+      url.searchParams.set(QUERY_PARAM_KEYS.CARD_ID, String(cardId));
+    }
+
+    const nextPath = `${url.pathname}${url.search}${url.hash}`;
+    window.history.replaceState(window.history.state, '', nextPath);
+  }, []);
 
   const handleLoadMoreError = useCallback(() => {
     setBoardErrorMessage('카드를 더 불러오지 못했습니다. 다시 시도해 주세요.');
@@ -93,6 +100,31 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   useEffect(() => {
     setActiveDashboardId(dashboardId);
   }, [dashboardId, setActiveDashboardId]);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      void import('@/shared/components/modal/Cards/Cards');
+      void import('@/shared/components/modal/Cards/CreateCard');
+    }, 350);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
+  useEffect(() => {
+    const nextCardId = parseCardIdParam(
+      searchParams.get(QUERY_PARAM_KEYS.CARD_ID),
+    );
+
+    if (!hasInitializedCardParamRef.current) {
+      setSelectedCardId(nextCardId);
+      hasInitializedCardParamRef.current = true;
+      return;
+    }
+
+    setSelectedCardId((prev) => (prev === nextCardId ? prev : nextCardId));
+  }, [searchParams]);
 
   const { data: dashboard, isLoading: isDashboardLoading } =
     useDashboardQuery(dashboardId);
@@ -189,13 +221,19 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   const handleCardClick = useCallback(
     (card: Card) => {
       setSelectedCardId(card.id);
+      updateCardQueryParam(card.id);
     },
-    [setSelectedCardId],
+    [updateCardQueryParam],
   );
 
   const handleOpenAddColumnModal = useCallback(() => {
     setAddColumnModal({ isOpen: true, title: '', error: '' });
   }, []);
+
+  const handleCloseCardModal = useCallback(() => {
+    setSelectedCardId(null);
+    updateCardQueryParam(null);
+  }, [updateCardQueryParam]);
 
   const handleEditColumnConfirm = async () => {
     const { column, title } = editColumnModal;
@@ -338,9 +376,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
 
       {selectedCardId !== null && (
         <Cards
-          onModalClose={() => {
-            setSelectedCardId(null);
-          }}
+          onModalClose={handleCloseCardModal}
           cardId={selectedCardId!}
           dashboardId={dashboardId}
         />
