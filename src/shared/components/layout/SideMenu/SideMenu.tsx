@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   DndContext,
@@ -69,6 +69,7 @@ function applyStoredOrder(items: Dashboard[], key: string): Dashboard[] {
 }
 
 const SideMenu = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const queryClient = useQueryClient();
   const [page, setPage] = useQueryParamState<number>({
@@ -110,6 +111,7 @@ const SideMenu = () => {
   });
 
   const bottomRef = useRef<HTMLDivElement>(null);
+  const prefetchedRouteSetRef = useRef<Set<string>>(new Set());
   useEffect(() => {
     if (!isMobileLayout || !bottomRef.current) return;
     const el = bottomRef.current;
@@ -151,6 +153,32 @@ const SideMenu = () => {
       (item, index, self) => index === self.findIndex((t) => t.id === item.id),
     );
   }, [infiniteData, localOrderMap]);
+
+  useEffect(() => {
+    const sourceDashboards = isMobileLayout
+      ? orderedInfiniteDashboards
+      : orderedDashboards;
+    const prefetchTargets = sourceDashboards
+      .filter(
+        (dashboard) =>
+          pathname !== `/dashboard/${dashboard.id}` &&
+          !pathname.startsWith(`/dashboard/${dashboard.id}/`),
+      )
+      .slice(0, 8)
+      .map((dashboard) => `/dashboard/${dashboard.id}`);
+
+    prefetchTargets.forEach((targetRoute) => {
+      if (prefetchedRouteSetRef.current.has(targetRoute)) return;
+      prefetchedRouteSetRef.current.add(targetRoute);
+      router.prefetch(targetRoute);
+    });
+  }, [
+    isMobileLayout,
+    orderedDashboards,
+    orderedInfiniteDashboards,
+    pathname,
+    router,
+  ]);
 
   const saveOrder = (key: string, ids: number[]) => {
     setLocalOrderMap((prev) => ({ ...prev, [key]: ids }));

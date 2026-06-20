@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { flushSync } from 'react-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { useDashboardStore } from '@/shared/store/useDashboardStore';
 import type { Column as ColumnType, Card } from '@/shared/types/dashboard';
@@ -19,6 +20,8 @@ import { useDashboardColumnCardsQuery } from '@/shared/hooks/useDashboardColumnC
 import { useDashboardColumnMutations } from '@/shared/hooks/useDashboardColumnMutations';
 import { useColumnCardsPagination } from '@/shared/hooks/useColumnCardsPagination';
 import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
+import { QUERY_KEYS } from '@/shared/constants/queryKeys';
+import { readCard } from '@/shared/apis/dashboard';
 
 const Cards = dynamic(() => import('@/shared/components/modal/Cards/Cards'));
 const CreateCard = dynamic(
@@ -42,6 +45,7 @@ interface DashboardBoardProps {
 }
 
 export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
+  const queryClient = useQueryClient();
   const [columnCards, setColumnCards] = useState<
     Record<number, ColumnCardState>
   >({});
@@ -66,6 +70,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   );
   const lastSyncedCardsVersionRef = useRef<string | null>(null);
   const hasInitializedCardParamRef = useRef(false);
+  const prefetchedCardIdsRef = useRef<Set<number>>(new Set());
 
   const updateCardQueryParam = useCallback((cardId: number | null) => {
     const url = new URL(window.location.href);
@@ -104,14 +109,21 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   }, [dashboardId, setActiveDashboardId]);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
+    const preloadModalChunks = () => {
       void import('@/shared/components/modal/Cards/Cards');
       void import('@/shared/components/modal/Cards/CreateCard');
-    }, 350);
-
-    return () => {
-      window.clearTimeout(timeoutId);
+      void import('@/shared/components/modal/Cards/EditCard');
     };
+
+    if (typeof window.requestIdleCallback === 'function') {
+      const idleId = window.requestIdleCallback(preloadModalChunks);
+      return () => {
+        window.cancelIdleCallback(idleId);
+      };
+    }
+
+    const timeoutId = window.setTimeout(preloadModalChunks, 0);
+    return () => window.clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
@@ -127,6 +139,10 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
 
     setSelectedCardId((prev) => (prev === nextCardId ? prev : nextCardId));
   }, [searchParams]);
+
+  useEffect(() => {
+    prefetchedCardIdsRef.current.clear();
+  }, [dashboardId]);
 
   const { data: dashboard, isLoading: isDashboardLoading } =
     useDashboardQuery(dashboardId);
@@ -184,6 +200,23 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
       return isSame ? prev : ordered;
     });
   }, [columnCardsData, dataVersion]);
+
+  useEffect(() => {
+    const candidateCards = Object.values(columnCards)
+      .flatMap((state) => state.cards.slice(0, 2))
+      .slice(0, 6);
+
+    candidateCards.forEach((card) => {
+      if (prefetchedCardIdsRef.current.has(card.id)) return;
+      prefetchedCardIdsRef.current.add(card.id);
+
+      void queryClient.prefetchQuery({
+        queryKey: QUERY_KEYS.card(card.id),
+        queryFn: () => readCard(card.id),
+        staleTime: 1000 * 60 * 2,
+      });
+    });
+  }, [columnCards, queryClient]);
 
   const {
     sensors,
