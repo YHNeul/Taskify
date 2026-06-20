@@ -95,12 +95,14 @@ export default function SortableDashboardItem({
 
   const handleClick = () => {
     if (hasDraggedRef.current) return;
-    if (!hasPreloadedAssetsRef.current) {
-      hasPreloadedAssetsRef.current = true;
-      void import('@/shared/components/dashboard/DashboardBoard');
-      void import('@/shared/components/modal/Cards/Cards');
-    }
     router.push(getTargetUrl());
+  };
+
+  const preloadAssets = () => {
+    if (hasPreloadedAssetsRef.current) return;
+    hasPreloadedAssetsRef.current = true;
+    void import('@/shared/components/dashboard/DashboardBoard');
+    void import('@/shared/components/modal/Cards/Cards');
   };
 
   const clearPrefetchTimeout = () => {
@@ -115,11 +117,7 @@ export default function SortableDashboardItem({
     prefetchTimeoutRef.current = window.setTimeout(() => {
       prefetchDashboard(dashboard.id);
       router.prefetch(getTargetUrl());
-      if (!hasPreloadedAssetsRef.current) {
-        hasPreloadedAssetsRef.current = true;
-        void import('@/shared/components/dashboard/DashboardBoard');
-        void import('@/shared/components/modal/Cards/Cards');
-      }
+      preloadAssets();
       prefetchTimeoutRef.current = null;
     }, 150);
   };
@@ -128,11 +126,13 @@ export default function SortableDashboardItem({
     clearPrefetchTimeout();
     prefetchDashboard(dashboard.id);
     router.prefetch(getTargetUrl());
-    if (!hasPreloadedAssetsRef.current) {
-      hasPreloadedAssetsRef.current = true;
-      void import('@/shared/components/dashboard/DashboardBoard');
-      void import('@/shared/components/modal/Cards/Cards');
-    }
+    preloadAssets();
+  };
+
+  const handlePrefetchOnPointerDown = () => {
+    prefetchDashboard(dashboard.id);
+    router.prefetch(getTargetUrl());
+    preloadAssets();
   };
 
   useEffect(
@@ -176,6 +176,7 @@ export default function SortableDashboardItem({
       onMouseLeave={clearPrefetchTimeout}
       onFocus={handlePrefetchOnFocus}
       onBlur={clearPrefetchTimeout}
+      onPointerDown={handlePrefetchOnPointerDown}
       aria-label={dashboard.title}
       {...attributes}
       {...listeners}

@@ -15,7 +15,7 @@ export const useCardData = (cardId: number, dashboardId: number) => {
 
   const { data: card, isLoading, isError } = useCardQuery(cardId);
   const { data: columnsData, isError: isColumnsError } =
-    useDashboardColumnsQuery(card?.dashboardId ?? 0);
+    useDashboardColumnsQuery(dashboardId);
   const columns = useMemo(() => columnsData?.data ?? [], [columnsData]);
   const resolvedErrorMessage =
     errorMessage ??

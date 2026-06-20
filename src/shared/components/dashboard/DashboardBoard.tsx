@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
+import { flushSync } from 'react-dom';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { useDashboardStore } from '@/shared/store/useDashboardStore';
 import type { Column as ColumnType, Card } from '@/shared/types/dashboard';
@@ -220,8 +221,12 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
 
   const handleCardClick = useCallback(
     (card: Card) => {
-      setSelectedCardId(card.id);
-      updateCardQueryParam(card.id);
+      flushSync(() => {
+        setSelectedCardId(card.id);
+      });
+      window.requestAnimationFrame(() => {
+        updateCardQueryParam(card.id);
+      });
     },
     [updateCardQueryParam],
   );
@@ -231,8 +236,12 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   }, []);
 
   const handleCloseCardModal = useCallback(() => {
-    setSelectedCardId(null);
-    updateCardQueryParam(null);
+    flushSync(() => {
+      setSelectedCardId(null);
+    });
+    window.requestAnimationFrame(() => {
+      updateCardQueryParam(null);
+    });
   }, [updateCardQueryParam]);
 
   const handleEditColumnConfirm = async () => {
