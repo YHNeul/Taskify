@@ -37,6 +37,7 @@ import {
 } from '@/shared/hooks/useQueryParamState';
 import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
 import { SIDEBAR_LAYOUT } from '@/shared/utils/sidebarLayout';
+import { useDashboardPrefetch } from '@/shared/hooks/useDashboardPrefetch';
 
 const PAGE_SIZE = 15;
 
@@ -72,6 +73,7 @@ const SideMenu = () => {
   const router = useRouter();
   const pathname = usePathname();
   const queryClient = useQueryClient();
+  const prefetchDashboard = useDashboardPrefetch();
   const [page, setPage] = useQueryParamState<number>({
     key: QUERY_PARAM_KEYS.SIDE_PAGE,
     defaultValue: 1,
@@ -112,6 +114,7 @@ const SideMenu = () => {
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const prefetchedRouteSetRef = useRef<Set<string>>(new Set());
+  const prefetchTimerIdsRef = useRef<number[]>([]);
   useEffect(() => {
     if (!isMobileLayout || !bottomRef.current) return;
     const el = bottomRef.current;
@@ -164,7 +167,7 @@ const SideMenu = () => {
           pathname !== `/dashboard/${dashboard.id}` &&
           !pathname.startsWith(`/dashboard/${dashboard.id}/`),
       )
-      .slice(0, 8)
+      .slice(0, 15)
       .map((dashboard) => `/dashboard/${dashboard.id}`);
 
     prefetchTargets.forEach((targetRoute) => {
@@ -178,6 +181,45 @@ const SideMenu = () => {
     orderedInfiniteDashboards,
     pathname,
     router,
+  ]);
+
+  useEffect(() => {
+    const sourceDashboards = isMobileLayout
+      ? orderedInfiniteDashboards
+      : orderedDashboards;
+    const prefetchTargets = sourceDashboards
+      .filter(
+        (dashboard) =>
+          pathname !== `/dashboard/${dashboard.id}` &&
+          !pathname.startsWith(`/dashboard/${dashboard.id}/`),
+      )
+      .slice(0, 8)
+      .map((dashboard) => dashboard.id);
+
+    prefetchTimerIdsRef.current.forEach((timerId) => {
+      window.clearTimeout(timerId);
+    });
+    prefetchTimerIdsRef.current = [];
+
+    prefetchTargets.forEach((dashboardId, index) => {
+      const timerId = window.setTimeout(() => {
+        prefetchDashboard(dashboardId);
+      }, index * 120);
+      prefetchTimerIdsRef.current.push(timerId);
+    });
+
+    return () => {
+      prefetchTimerIdsRef.current.forEach((timerId) => {
+        window.clearTimeout(timerId);
+      });
+      prefetchTimerIdsRef.current = [];
+    };
+  }, [
+    isMobileLayout,
+    orderedDashboards,
+    orderedInfiniteDashboards,
+    pathname,
+    prefetchDashboard,
   ]);
 
   const saveOrder = (key: string, ids: number[]) => {
