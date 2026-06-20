@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { flushSync } from 'react-dom';
@@ -29,6 +29,7 @@ const ConfirmModal = dynamic(
   () => import('@/shared/components/modal/ConfirmModal'),
 );
 const EMPTY_CARDS: Card[] = [];
+const EMPTY_COLUMNS: ColumnType[] = [];
 
 const parseCardIdParam = (rawValue: string | null): number | null => {
   if (!rawValue) return null;
@@ -133,7 +134,10 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   const { data: columnsData, isLoading: isColumnsLoading } =
     useDashboardColumnsQuery(dashboardId);
 
-  const columns = columnsData?.data ?? [];
+  const columns = useMemo(
+    () => columnsData?.data ?? EMPTY_COLUMNS,
+    [columnsData],
+  );
   const { data: columnCardsData, dataVersion } = useDashboardColumnCardsQuery({
     dashboardId,
     columns,
@@ -297,25 +301,8 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     }
   };
 
-  if (isDashboardLoading) return <DashboardBoardSkeleton />;
-
-  if (!dashboard) {
-    return (
-      <div className="flex items-center justify-center flex-1 h-full min-h-screen-without-header">
-        <p className="text-gray-400 typo-lg-regular">
-          대시보드를 찾을 수 없습니다.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="lg:hidden border-b border-gray-200 bg-white px-4 py-3 md:px-5">
-        <h1 className="truncate typo-2lg-bold text-gray-700">
-          {dashboard.title}
-        </h1>
-      </div>
+  const boardContent = useMemo(
+    () => (
       <div className="flex-1 overflow-hidden bg-gray-100">
         <DndContext
           sensors={sensors}
@@ -382,6 +369,45 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
           </DragOverlay>
         </DndContext>
       </div>
+    ),
+    [
+      sensors,
+      handleDragStart,
+      handleDragOver,
+      handleDragEnd,
+      isColumnsLoading,
+      columns,
+      columnCards,
+      handleOpenCreateCard,
+      handleOpenEditColumn,
+      handleCardClick,
+      loadMoreCards,
+      loadingColumnIds,
+      handleOpenAddColumnModal,
+      activeCard,
+    ],
+  );
+
+  if (isDashboardLoading) return <DashboardBoardSkeleton />;
+
+  if (!dashboard) {
+    return (
+      <div className="flex items-center justify-center flex-1 h-full min-h-screen-without-header">
+        <p className="text-gray-400 typo-lg-regular">
+          대시보드를 찾을 수 없습니다.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="lg:hidden border-b border-gray-200 bg-white px-4 py-3 md:px-5">
+        <h1 className="truncate typo-2lg-bold text-gray-700">
+          {dashboard.title}
+        </h1>
+      </div>
+      {boardContent}
 
       {selectedCardId !== null && (
         <Cards
