@@ -51,6 +51,7 @@ export default function SortableDashboardItem({
   const hasDraggedRef = useRef(false);
   const resetDragTimeoutRef = useRef<number | null>(null);
   const prefetchTimeoutRef = useRef<number | null>(null);
+  const hasPreloadedAssetsRef = useRef(false);
   const prefetchDashboard = useDashboardPrefetch();
   const getTargetUrl = () => {
     const params = new URLSearchParams(searchParamsString);
@@ -94,6 +95,11 @@ export default function SortableDashboardItem({
 
   const handleClick = () => {
     if (hasDraggedRef.current) return;
+    if (!hasPreloadedAssetsRef.current) {
+      hasPreloadedAssetsRef.current = true;
+      void import('@/shared/components/dashboard/DashboardBoard');
+      void import('@/shared/components/modal/Cards/Cards');
+    }
     router.push(getTargetUrl());
   };
 
@@ -109,6 +115,11 @@ export default function SortableDashboardItem({
     prefetchTimeoutRef.current = window.setTimeout(() => {
       prefetchDashboard(dashboard.id);
       router.prefetch(getTargetUrl());
+      if (!hasPreloadedAssetsRef.current) {
+        hasPreloadedAssetsRef.current = true;
+        void import('@/shared/components/dashboard/DashboardBoard');
+        void import('@/shared/components/modal/Cards/Cards');
+      }
       prefetchTimeoutRef.current = null;
     }, 150);
   };
@@ -117,6 +128,11 @@ export default function SortableDashboardItem({
     clearPrefetchTimeout();
     prefetchDashboard(dashboard.id);
     router.prefetch(getTargetUrl());
+    if (!hasPreloadedAssetsRef.current) {
+      hasPreloadedAssetsRef.current = true;
+      void import('@/shared/components/dashboard/DashboardBoard');
+      void import('@/shared/components/modal/Cards/Cards');
+    }
   };
 
   useEffect(

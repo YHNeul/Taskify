@@ -14,12 +14,15 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { memo } from 'react';
+import { memo, useCallback, useEffect, useRef } from 'react';
 import type { Card } from '@/shared/types/dashboard';
+import { useQueryClient } from '@tanstack/react-query';
 import CalendarIcon from '@/shared/components/common/Icon/CalendarIcon';
 import TagChip from '@/shared/components/common/Chip/TagChip';
 import UserProfileImage from '@/shared/components/common/User/UserProfileImage';
 import OptimizedImageWithFallback from '@/shared/components/common/Image/OptimizedImageWithFallback';
+import { QUERY_KEYS } from '@/shared/constants/queryKeys';
+import { readCard } from '@/shared/apis/dashboard';
 
 interface TaskCardProps {
   card: Card;
@@ -39,6 +42,9 @@ function TaskCard({
   isDragOverlay = false,
   priority,
 }: TaskCardProps) {
+  const queryClient = useQueryClient();
+  const prefetchTimeoutRef = useRef<number | null>(null);
+  const hasPrefetchedDetailRef = useRef(false);
   const { title, tags, dueDate, assignee, imageUrl } = card;
 
   const {
@@ -61,12 +67,49 @@ function TaskCard({
     touchAction: 'pan-y',
   };
 
+  const clearPrefetchTimeout = useCallback(() => {
+    if (prefetchTimeoutRef.current !== null) {
+      window.clearTimeout(prefetchTimeoutRef.current);
+      prefetchTimeoutRef.current = null;
+    }
+  }, []);
+
+  const prefetchCardDetail = useCallback(() => {
+    if (hasPrefetchedDetailRef.current) return;
+    hasPrefetchedDetailRef.current = true;
+    void queryClient.prefetchQuery({
+      queryKey: QUERY_KEYS.card(card.id),
+      queryFn: () => readCard(card.id),
+      staleTime: 1000 * 60 * 2,
+    });
+  }, [card.id, queryClient]);
+
+  const schedulePrefetchCardDetail = useCallback(() => {
+    if (hasPrefetchedDetailRef.current) return;
+    clearPrefetchTimeout();
+    prefetchTimeoutRef.current = window.setTimeout(() => {
+      prefetchCardDetail();
+      prefetchTimeoutRef.current = null;
+    }, 120);
+  }, [clearPrefetchTimeout, prefetchCardDetail]);
+
+  useEffect(
+    () => () => {
+      clearPrefetchTimeout();
+    },
+    [clearPrefetchTimeout],
+  );
+
   return (
     <button
       ref={setNodeRef}
       type="button"
       style={style}
       onClick={() => onClick(card)}
+      onMouseEnter={schedulePrefetchCardDetail}
+      onMouseLeave={clearPrefetchTimeout}
+      onFocus={schedulePrefetchCardDetail}
+      onBlur={clearPrefetchTimeout}
       className="w-full text-left bg-white rounded-card-sm border border-gray-300 p-4 hover:border-brand-violet transition-colors group cursor-grab active:cursor-grabbing"
       {...attributes}
       {...listeners}

@@ -16,7 +16,7 @@
 
 'use client';
 
-import { ReactNode, useRef } from 'react';
+import { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ModalOverlayProps {
@@ -25,10 +25,8 @@ interface ModalOverlayProps {
 }
 
 export default function ModalOverlay({ children, onClose }: ModalOverlayProps) {
-  const overlayRef = useRef<HTMLDivElement>(null);
-
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === overlayRef.current) {
+  const handleOverlayPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
       onClose();
     }
   };
@@ -37,9 +35,8 @@ export default function ModalOverlay({ children, onClose }: ModalOverlayProps) {
 
   return createPortal(
     <div
-      ref={overlayRef}
       className="fixed inset-0 z-50 flex items-center justify-center px-5 mobile:px-8 bg-black/70"
-      onMouseDown={handleOverlayClick}
+      onPointerDown={handleOverlayPointerDown}
     >
       {children}
     </div>,
