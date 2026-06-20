@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import MemberAvatars from '@/shared/components/layout/Header/MemberAvatars';
 import HeaderTitle from '@/shared/components/layout/Header/HeaderTitle';
@@ -30,6 +31,15 @@ export default function Header() {
 
   const invite = useInviteMember(effectiveDashboardId);
   const showOwnerControls = Boolean(dashboardId && dashboard?.createdByMe);
+
+  useEffect(() => {
+    router.prefetch('/mypage');
+  }, [router]);
+
+  useEffect(() => {
+    if (!dashboardId || !dashboard?.createdByMe) return;
+    router.prefetch(`/dashboard/${dashboardId}/edit`);
+  }, [dashboard?.createdByMe, dashboardId, router]);
 
   return (
     <>

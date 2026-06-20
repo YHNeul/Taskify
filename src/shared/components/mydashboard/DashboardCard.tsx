@@ -32,6 +32,7 @@ export default function DashboardCard({ board }: DashboardCardProps) {
     clearPrefetchTimeout();
     prefetchTimeoutRef.current = window.setTimeout(() => {
       prefetchDashboard(board.id);
+      router.prefetch(`/dashboard/${board.id}`);
       prefetchTimeoutRef.current = null;
     }, 150);
   };
@@ -39,6 +40,7 @@ export default function DashboardCard({ board }: DashboardCardProps) {
   const handlePrefetchOnFocus = () => {
     clearPrefetchTimeout();
     prefetchDashboard(board.id);
+    router.prefetch(`/dashboard/${board.id}`);
   };
 
   useEffect(

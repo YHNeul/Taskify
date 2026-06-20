@@ -52,6 +52,17 @@ export default function SortableDashboardItem({
   const resetDragTimeoutRef = useRef<number | null>(null);
   const prefetchTimeoutRef = useRef<number | null>(null);
   const prefetchDashboard = useDashboardPrefetch();
+  const getTargetUrl = () => {
+    const params = new URLSearchParams(searchParamsString);
+    const sidePage = params.get(QUERY_PARAM_KEYS.SIDE_PAGE);
+    const query = sidePage
+      ? `${QUERY_PARAM_KEYS.SIDE_PAGE}=${encodeURIComponent(sidePage)}`
+      : '';
+
+    return query
+      ? `/dashboard/${dashboard.id}?${query}`
+      : `/dashboard/${dashboard.id}`;
+  };
 
   const {
     attributes,
@@ -83,17 +94,7 @@ export default function SortableDashboardItem({
 
   const handleClick = () => {
     if (hasDraggedRef.current) return;
-
-    const params = new URLSearchParams(searchParamsString);
-    const sidePage = params.get(QUERY_PARAM_KEYS.SIDE_PAGE);
-    const query = sidePage
-      ? `${QUERY_PARAM_KEYS.SIDE_PAGE}=${encodeURIComponent(sidePage)}`
-      : '';
-    const targetUrl = query
-      ? `/dashboard/${dashboard.id}?${query}`
-      : `/dashboard/${dashboard.id}`;
-
-    router.push(targetUrl);
+    router.push(getTargetUrl());
   };
 
   const clearPrefetchTimeout = () => {
@@ -107,6 +108,7 @@ export default function SortableDashboardItem({
     clearPrefetchTimeout();
     prefetchTimeoutRef.current = window.setTimeout(() => {
       prefetchDashboard(dashboard.id);
+      router.prefetch(getTargetUrl());
       prefetchTimeoutRef.current = null;
     }, 150);
   };
@@ -114,6 +116,7 @@ export default function SortableDashboardItem({
   const handlePrefetchOnFocus = () => {
     clearPrefetchTimeout();
     prefetchDashboard(dashboard.id);
+    router.prefetch(getTargetUrl());
   };
 
   useEffect(
