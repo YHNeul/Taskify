@@ -33,8 +33,28 @@ const ConfirmModal = dynamic(
 );
 const EMPTY_CARDS: Card[] = [];
 const EMPTY_COLUMNS: ColumnType[] = [];
-const PREFETCH_CARD_DETAIL_PER_COLUMN = 3;
-const PREFETCH_CARD_DETAIL_TOTAL_LIMIT = 20;
+const PREFETCH_CARD_DETAIL_PER_COLUMN = 1;
+const PREFETCH_CARD_DETAIL_TOTAL_LIMIT = 6;
+const SLOW_NETWORK_TYPES = new Set(['slow-2g', '2g']);
+
+const shouldPrefetchCardDetails = () => {
+  if (typeof window === 'undefined') return true;
+
+  const connection = (
+    navigator as Navigator & {
+      connection?: {
+        saveData?: boolean;
+        effectiveType?: string;
+      };
+    }
+  ).connection;
+
+  if (!connection) return true;
+  if (connection.saveData) return false;
+
+  const effectiveType = connection.effectiveType ?? '';
+  return !SLOW_NETWORK_TYPES.has(effectiveType);
+};
 
 const parseCardIdParam = (rawValue: string | null): number | null => {
   if (!rawValue) return null;
@@ -204,20 +224,38 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   }, [columnCardsData, dataVersion]);
 
   useEffect(() => {
-    const candidateCards = Object.values(columnCards)
-      .flatMap((state) => state.cards.slice(0, PREFETCH_CARD_DETAIL_PER_COLUMN))
-      .slice(0, PREFETCH_CARD_DETAIL_TOTAL_LIMIT);
+    if (!shouldPrefetchCardDetails()) return;
 
-    candidateCards.forEach((card) => {
-      if (prefetchedCardIdsRef.current.has(card.id)) return;
-      prefetchedCardIdsRef.current.add(card.id);
+    const runPrefetch = () => {
+      const candidateCards = Object.values(columnCards)
+        .flatMap((state) =>
+          state.cards.slice(0, PREFETCH_CARD_DETAIL_PER_COLUMN),
+        )
+        .slice(0, PREFETCH_CARD_DETAIL_TOTAL_LIMIT);
 
-      void queryClient.prefetchQuery({
-        queryKey: QUERY_KEYS.card(card.id),
-        queryFn: () => readCard(card.id),
-        staleTime: 1000 * 60 * 2,
+      candidateCards.forEach((card) => {
+        if (prefetchedCardIdsRef.current.has(card.id)) return;
+        prefetchedCardIdsRef.current.add(card.id);
+
+        void queryClient.prefetchQuery({
+          queryKey: QUERY_KEYS.card(card.id),
+          queryFn: () => readCard(card.id),
+          staleTime: 1000 * 60 * 2,
+        });
       });
-    });
+    };
+
+    if (typeof window.requestIdleCallback === 'function') {
+      const idleId = window.requestIdleCallback(runPrefetch, { timeout: 1200 });
+      return () => {
+        window.cancelIdleCallback(idleId);
+      };
+    }
+
+    const timeoutId = window.setTimeout(runPrefetch, 300);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
   }, [columnCards, queryClient]);
 
   const {
