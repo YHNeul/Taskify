@@ -4,7 +4,7 @@ import { getDashboard, getColumns, getCards } from '@/shared/apis/dashboard';
 import { QUERY_KEYS } from '@/shared/constants/queryKeys';
 import type { ColumnsResponse } from '@/shared/types/dashboard';
 
-const PREFETCH_COLUMN_CARDS_LIMIT = 5;
+const PREFETCH_COLUMN_CARDS_LIMIT = 10;
 const PREFETCH_COLUMN_CARDS_SIZE = 10;
 
 export const useDashboardPrefetch = () => {

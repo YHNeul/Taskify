@@ -33,6 +33,8 @@ const ConfirmModal = dynamic(
 );
 const EMPTY_CARDS: Card[] = [];
 const EMPTY_COLUMNS: ColumnType[] = [];
+const PREFETCH_CARD_DETAIL_PER_COLUMN = 3;
+const PREFETCH_CARD_DETAIL_TOTAL_LIMIT = 20;
 
 const parseCardIdParam = (rawValue: string | null): number | null => {
   if (!rawValue) return null;
@@ -203,8 +205,8 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
 
   useEffect(() => {
     const candidateCards = Object.values(columnCards)
-      .flatMap((state) => state.cards.slice(0, 2))
-      .slice(0, 6);
+      .flatMap((state) => state.cards.slice(0, PREFETCH_CARD_DETAIL_PER_COLUMN))
+      .slice(0, PREFETCH_CARD_DETAIL_TOTAL_LIMIT);
 
     candidateCards.forEach((card) => {
       if (prefetchedCardIdsRef.current.has(card.id)) return;

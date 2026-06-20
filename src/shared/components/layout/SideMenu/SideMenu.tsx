@@ -40,6 +40,9 @@ import { SIDEBAR_LAYOUT } from '@/shared/utils/sidebarLayout';
 import { useDashboardPrefetch } from '@/shared/hooks/useDashboardPrefetch';
 
 const PAGE_SIZE = 15;
+const ROUTE_PREFETCH_LIMIT = 30;
+const DATA_PREFETCH_LIMIT = 20;
+const DATA_PREFETCH_STAGGER_MS = 60;
 
 /** 페이지별 대시보드 순서를 로컬 ID 배열로 정렬 */
 function applyOrder(items: Dashboard[], ids: number[]): Dashboard[] {
@@ -167,7 +170,7 @@ const SideMenu = () => {
           pathname !== `/dashboard/${dashboard.id}` &&
           !pathname.startsWith(`/dashboard/${dashboard.id}/`),
       )
-      .slice(0, 15)
+      .slice(0, ROUTE_PREFETCH_LIMIT)
       .map((dashboard) => `/dashboard/${dashboard.id}`);
 
     prefetchTargets.forEach((targetRoute) => {
@@ -193,7 +196,7 @@ const SideMenu = () => {
           pathname !== `/dashboard/${dashboard.id}` &&
           !pathname.startsWith(`/dashboard/${dashboard.id}/`),
       )
-      .slice(0, 8)
+      .slice(0, DATA_PREFETCH_LIMIT)
       .map((dashboard) => dashboard.id);
 
     prefetchTimerIdsRef.current.forEach((timerId) => {
@@ -204,7 +207,7 @@ const SideMenu = () => {
     prefetchTargets.forEach((dashboardId, index) => {
       const timerId = window.setTimeout(() => {
         prefetchDashboard(dashboardId);
-      }, index * 120);
+      }, index * DATA_PREFETCH_STAGGER_MS);
       prefetchTimerIdsRef.current.push(timerId);
     });
 
