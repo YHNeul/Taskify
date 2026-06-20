@@ -104,7 +104,10 @@ export default function SortableDashboardItem({
     void import('@/shared/components/modal/Cards/Cards');
   };
 
-  const handlePrefetchOnPointerDown = () => {
+  const handlePrefetchOnPointerDown = (
+    e: React.PointerEvent<HTMLLIElement>,
+  ) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
     prefetchDashboard(dashboard.id);
     router.prefetch(getTargetUrl());
     preloadAssets();
