@@ -26,6 +26,7 @@ interface ModalOverlayProps {
 
 export default function ModalOverlay({ children, onClose }: ModalOverlayProps) {
   const handleOverlayPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
     if (e.target === e.currentTarget) {
       onClose();
     }
