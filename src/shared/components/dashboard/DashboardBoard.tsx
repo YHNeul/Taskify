@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
 import { useDashboardStore } from '@/shared/store/useDashboardStore';
 import type { Column as ColumnType, Card } from '@/shared/types/dashboard';
@@ -14,10 +16,11 @@ import { applySavedOrder } from '@/shared/utils/cardOrder';
 import { useDashboardQuery } from '@/shared/hooks/useDashboardQuery';
 import { useDashboardColumnsQuery } from '@/shared/hooks/useDashboardColumnsQuery';
 import { useDashboardColumnCardsQuery } from '@/shared/hooks/useDashboardColumnCardsQuery';
-import { useQueryParamState } from '@/shared/hooks/useQueryParamState';
 import { useDashboardColumnMutations } from '@/shared/hooks/useDashboardColumnMutations';
 import { useColumnCardsPagination } from '@/shared/hooks/useColumnCardsPagination';
 import { QUERY_PARAM_KEYS } from '@/shared/constants/queryParams.constants';
+import { QUERY_KEYS } from '@/shared/constants/queryKeys';
+import { readCard } from '@/shared/apis/dashboard';
 
 const Cards = dynamic(() => import('@/shared/components/modal/Cards/Cards'));
 const CreateCard = dynamic(
@@ -27,30 +30,48 @@ const FormModal = dynamic(() => import('@/shared/components/modal/FormModal'));
 const ConfirmModal = dynamic(
   () => import('@/shared/components/modal/ConfirmModal'),
 );
+const EMPTY_CARDS: Card[] = [];
+const EMPTY_COLUMNS: ColumnType[] = [];
+const PREFETCH_CARD_DETAIL_PER_COLUMN = 1;
+const PREFETCH_CARD_DETAIL_TOTAL_LIMIT = 6;
+const SLOW_NETWORK_TYPES = new Set(['slow-2g', '2g']);
+
+const shouldPrefetchCardDetails = () => {
+  if (typeof window === 'undefined') return true;
+
+  const connection = (
+    navigator as Navigator & {
+      connection?: {
+        saveData?: boolean;
+        effectiveType?: string;
+      };
+    }
+  ).connection;
+
+  if (!connection) return true;
+  if (connection.saveData) return false;
+
+  const effectiveType = connection.effectiveType ?? '';
+  return !SLOW_NETWORK_TYPES.has(effectiveType);
+};
+
+const parseCardIdParam = (rawValue: string | null): number | null => {
+  if (!rawValue) return null;
+  const parsed = Number(rawValue);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : null;
+};
 
 interface DashboardBoardProps {
   dashboardId: number;
 }
 
 export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
+  const queryClient = useQueryClient();
   const [columnCards, setColumnCards] = useState<
     Record<number, ColumnCardState>
   >({});
-
-  const [selectedCardId, setSelectedCardId] = useQueryParamState<number | null>(
-    {
-      key: QUERY_PARAM_KEYS.CARD_ID,
-      defaultValue: null,
-      parse: (rawValue) => {
-        if (!rawValue) return null;
-        const parsed = Number(rawValue);
-        return Number.isFinite(parsed) && parsed > 0
-          ? Math.floor(parsed)
-          : null;
-      },
-      serialize: (value) => (value ? String(value) : null),
-    },
-  );
+  const searchParams = useSearchParams();
+  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
   const [createCardColumnId, setCreateCardColumnId] = useState<number | null>(
     null,
   );
@@ -69,6 +90,25 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     null,
   );
   const lastSyncedCardsVersionRef = useRef<string | null>(null);
+  const hasInitializedCardParamRef = useRef(false);
+  const prefetchedCardIdsRef = useRef<Set<number>>(new Set());
+
+  const updateCardQueryParam = useCallback((cardId: number | null) => {
+    const url = new URL(window.location.href);
+
+    if (cardId === null) {
+      url.searchParams.delete(QUERY_PARAM_KEYS.CARD_ID);
+    } else {
+      url.searchParams.set(QUERY_PARAM_KEYS.CARD_ID, String(cardId));
+    }
+
+    const nextPath = `${url.pathname}${url.search}${url.hash}`;
+    window.history.replaceState(window.history.state, '', nextPath);
+  }, []);
+
+  const handleLoadMoreError = useCallback(() => {
+    setBoardErrorMessage('카드를 더 불러오지 못했습니다. 다시 시도해 주세요.');
+  }, []);
 
   const setActiveDashboardId = useDashboardStore((s) => s.setActiveDashboardId);
   const { createColumn, updateColumn, deleteColumn } =
@@ -82,16 +122,48 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     });
   const { loadingColumnIds, loadMoreCards } = useColumnCardsPagination({
     setColumnCards,
-    onLoadMoreError: () => {
-      setBoardErrorMessage(
-        '카드를 더 불러오지 못했습니다. 다시 시도해 주세요.',
-      );
-    },
+    onLoadMoreError: handleLoadMoreError,
   });
 
   useEffect(() => {
     setActiveDashboardId(dashboardId);
   }, [dashboardId, setActiveDashboardId]);
+
+  useEffect(() => {
+    const preloadModalChunks = () => {
+      void import('@/shared/components/modal/Cards/Cards');
+      void import('@/shared/components/modal/Cards/CreateCard');
+      void import('@/shared/components/modal/Cards/EditCard');
+    };
+
+    if (typeof window.requestIdleCallback === 'function') {
+      const idleId = window.requestIdleCallback(preloadModalChunks);
+      return () => {
+        window.cancelIdleCallback(idleId);
+      };
+    }
+
+    const timeoutId = window.setTimeout(preloadModalChunks, 0);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
+    const nextCardId = parseCardIdParam(
+      searchParams.get(QUERY_PARAM_KEYS.CARD_ID),
+    );
+
+    if (!hasInitializedCardParamRef.current) {
+      setSelectedCardId(nextCardId);
+      hasInitializedCardParamRef.current = true;
+      return;
+    }
+
+    setSelectedCardId((prev) => (prev === nextCardId ? prev : nextCardId));
+  }, [searchParams]);
+
+  useEffect(() => {
+    prefetchedCardIdsRef.current.clear();
+  }, [dashboardId]);
 
   const { data: dashboard, isLoading: isDashboardLoading } =
     useDashboardQuery(dashboardId);
@@ -99,7 +171,10 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
   const { data: columnsData, isLoading: isColumnsLoading } =
     useDashboardColumnsQuery(dashboardId);
 
-  const columns = columnsData?.data ?? [];
+  const columns = useMemo(
+    () => columnsData?.data ?? EMPTY_COLUMNS,
+    [columnsData],
+  );
   const { data: columnCardsData, dataVersion } = useDashboardColumnCardsQuery({
     dashboardId,
     columns,
@@ -147,6 +222,41 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     });
   }, [columnCardsData, dataVersion]);
 
+  useEffect(() => {
+    if (!shouldPrefetchCardDetails()) return;
+
+    const runPrefetch = () => {
+      const candidateCards = Object.values(columnCards)
+        .flatMap((state) =>
+          state.cards.slice(0, PREFETCH_CARD_DETAIL_PER_COLUMN),
+        )
+        .slice(0, PREFETCH_CARD_DETAIL_TOTAL_LIMIT);
+
+      candidateCards.forEach((card) => {
+        if (prefetchedCardIdsRef.current.has(card.id)) return;
+        prefetchedCardIdsRef.current.add(card.id);
+
+        void queryClient.prefetchQuery({
+          queryKey: QUERY_KEYS.card(card.id),
+          queryFn: () => readCard(card.id),
+          staleTime: 1000 * 60 * 2,
+        });
+      });
+    };
+
+    if (typeof window.requestIdleCallback === 'function') {
+      const idleId = window.requestIdleCallback(runPrefetch, { timeout: 1200 });
+      return () => {
+        window.cancelIdleCallback(idleId);
+      };
+    }
+
+    const timeoutId = window.setTimeout(runPrefetch, 300);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [columnCards, queryClient]);
+
   const {
     sensors,
     activeCard,
@@ -172,6 +282,35 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
       window.clearTimeout(timerId);
     };
   }, [boardErrorMessage]);
+
+  const handleOpenCreateCard = useCallback((columnId: number) => {
+    setCreateCardColumnId(columnId);
+  }, []);
+
+  const handleOpenEditColumn = useCallback((column: ColumnType) => {
+    setEditColumnModal({
+      column,
+      title: column.title,
+      error: '',
+    });
+  }, []);
+
+  const handleCardClick = useCallback(
+    (card: Card) => {
+      setSelectedCardId(card.id);
+      updateCardQueryParam(card.id);
+    },
+    [updateCardQueryParam],
+  );
+
+  const handleOpenAddColumnModal = useCallback(() => {
+    setAddColumnModal({ isOpen: true, title: '', error: '' });
+  }, []);
+
+  const handleCloseCardModal = useCallback(() => {
+    setSelectedCardId(null);
+    updateCardQueryParam(null);
+  }, [updateCardQueryParam]);
 
   const handleEditColumnConfirm = async () => {
     const { column, title } = editColumnModal;
@@ -226,25 +365,8 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
     }
   };
 
-  if (isDashboardLoading) return <DashboardBoardSkeleton />;
-
-  if (!dashboard) {
-    return (
-      <div className="flex items-center justify-center flex-1 h-full min-h-screen-without-header">
-        <p className="text-gray-400 typo-lg-regular">
-          대시보드를 찾을 수 없습니다.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col h-full">
-      <div className="lg:hidden border-b border-gray-200 bg-white px-4 py-3 md:px-5">
-        <h1 className="truncate typo-2lg-bold text-gray-700">
-          {dashboard.title}
-        </h1>
-      </div>
+  const boardContent = useMemo(
+    () => (
       <div className="flex-1 overflow-hidden bg-gray-100">
         <DndContext
           sensors={sensors}
@@ -269,22 +391,14 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
                   <Column
                     key={column.id}
                     column={column}
-                    cards={columnCards[column.id]?.cards ?? []}
+                    cards={columnCards[column.id]?.cards ?? EMPTY_CARDS}
                     totalCount={columnCards[column.id]?.totalCount ?? 0}
                     cursorId={columnCards[column.id]?.cursorId}
                     colorIndex={index}
                     isFirstColumn={index === 0}
-                    onAddCard={(columnId) => setCreateCardColumnId(columnId)}
-                    onEditColumn={(col) =>
-                      setEditColumnModal({
-                        column: col,
-                        title: col.title,
-                        error: '',
-                      })
-                    }
-                    onCardClick={(card: Card) => {
-                      setSelectedCardId(card.id);
-                    }}
+                    onAddCard={handleOpenCreateCard}
+                    onEditColumn={handleOpenEditColumn}
+                    onCardClick={handleCardClick}
                     onLoadMore={loadMoreCards}
                     isLoadingMore={loadingColumnIds.has(column.id)}
                   />
@@ -294,9 +408,7 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
               <Button
                 variant="secondary"
                 size="lg"
-                onClick={() =>
-                  setAddColumnModal({ isOpen: true, title: '', error: '' })
-                }
+                onClick={handleOpenAddColumnModal}
                 className="h-dashboard-add-mobile w-full typo-lg-bold md:h-dashboard-add-desktop md:w-full md:typo-2lg-bold lg:w-dashboard-column"
               >
                 새로운 컬럼 추가하기
@@ -321,12 +433,49 @@ export default function DashboardBoard({ dashboardId }: DashboardBoardProps) {
           </DragOverlay>
         </DndContext>
       </div>
+    ),
+    [
+      sensors,
+      handleDragStart,
+      handleDragOver,
+      handleDragEnd,
+      isColumnsLoading,
+      columns,
+      columnCards,
+      handleOpenCreateCard,
+      handleOpenEditColumn,
+      handleCardClick,
+      loadMoreCards,
+      loadingColumnIds,
+      handleOpenAddColumnModal,
+      activeCard,
+    ],
+  );
+
+  if (isDashboardLoading) return <DashboardBoardSkeleton />;
+
+  if (!dashboard) {
+    return (
+      <div className="flex items-center justify-center flex-1 h-full min-h-screen-without-header">
+        <p className="text-gray-400 typo-lg-regular">
+          대시보드를 찾을 수 없습니다.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="lg:hidden border-b border-gray-200 bg-white px-4 py-3 md:px-5">
+        <h1 className="truncate typo-2lg-bold text-gray-700">
+          {dashboard.title}
+        </h1>
+      </div>
+      {boardContent}
 
       {selectedCardId !== null && (
         <Cards
-          onModalClose={() => {
-            setSelectedCardId(null);
-          }}
+          onModalClose={handleCloseCardModal}
           cardId={selectedCardId!}
           dashboardId={dashboardId}
         />

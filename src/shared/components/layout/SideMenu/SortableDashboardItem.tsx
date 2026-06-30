@@ -50,8 +50,19 @@ export default function SortableDashboardItem({
   } | null>(null);
   const hasDraggedRef = useRef(false);
   const resetDragTimeoutRef = useRef<number | null>(null);
-  const prefetchTimeoutRef = useRef<number | null>(null);
+  const hasPreloadedAssetsRef = useRef(false);
   const prefetchDashboard = useDashboardPrefetch();
+  const getTargetUrl = () => {
+    const params = new URLSearchParams(searchParamsString);
+    const sidePage = params.get(QUERY_PARAM_KEYS.SIDE_PAGE);
+    const query = sidePage
+      ? `${QUERY_PARAM_KEYS.SIDE_PAGE}=${encodeURIComponent(sidePage)}`
+      : '';
+
+    return query
+      ? `/dashboard/${dashboard.id}?${query}`
+      : `/dashboard/${dashboard.id}`;
+  };
 
   const {
     attributes,
@@ -83,37 +94,23 @@ export default function SortableDashboardItem({
 
   const handleClick = () => {
     if (hasDraggedRef.current) return;
-
-    const params = new URLSearchParams(searchParamsString);
-    const sidePage = params.get(QUERY_PARAM_KEYS.SIDE_PAGE);
-    const query = sidePage
-      ? `${QUERY_PARAM_KEYS.SIDE_PAGE}=${encodeURIComponent(sidePage)}`
-      : '';
-    const targetUrl = query
-      ? `/dashboard/${dashboard.id}?${query}`
-      : `/dashboard/${dashboard.id}`;
-
-    router.push(targetUrl);
+    router.push(getTargetUrl());
   };
 
-  const clearPrefetchTimeout = () => {
-    if (prefetchTimeoutRef.current !== null) {
-      window.clearTimeout(prefetchTimeoutRef.current);
-      prefetchTimeoutRef.current = null;
-    }
+  const preloadAssets = () => {
+    if (hasPreloadedAssetsRef.current) return;
+    hasPreloadedAssetsRef.current = true;
+    void import('@/shared/components/dashboard/DashboardBoard');
+    void import('@/shared/components/modal/Cards/Cards');
   };
 
-  const handlePrefetchWithDelay = () => {
-    clearPrefetchTimeout();
-    prefetchTimeoutRef.current = window.setTimeout(() => {
-      prefetchDashboard(dashboard.id);
-      prefetchTimeoutRef.current = null;
-    }, 150);
-  };
-
-  const handlePrefetchOnFocus = () => {
-    clearPrefetchTimeout();
+  const handlePrefetchOnPointerDown = (
+    e: React.PointerEvent<HTMLLIElement>,
+  ) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
     prefetchDashboard(dashboard.id);
+    router.prefetch(getTargetUrl());
+    preloadAssets();
   };
 
   useEffect(
@@ -121,7 +118,6 @@ export default function SortableDashboardItem({
       if (resetDragTimeoutRef.current !== null) {
         window.clearTimeout(resetDragTimeoutRef.current);
       }
-      clearPrefetchTimeout();
     },
     [],
   );
@@ -153,10 +149,7 @@ export default function SortableDashboardItem({
       ref={setNodeRef}
       style={style}
       onClick={handleClick}
-      onMouseEnter={handlePrefetchWithDelay}
-      onMouseLeave={clearPrefetchTimeout}
-      onFocus={handlePrefetchOnFocus}
-      onBlur={clearPrefetchTimeout}
+      onPointerDown={handlePrefetchOnPointerDown}
       aria-label={dashboard.title}
       {...attributes}
       {...listeners}

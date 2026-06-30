@@ -10,7 +10,7 @@
  * @notes
  * - `columnCardsRef`로 stale closure 없이 최신 state를 참조
  * - `clonedCardsRef`에 드래그 시작 시점의 스냅샷을 저장해 API 실패 시 롤백
- * - `findColumnId`는 ref를 직접 읽으므로 `useCallback` deps에서 제외
+ * - `findColumnId`는 ref 기반 `useCallback`으로 참조 정체성을 유지
  * - 카드 순서는 드래그 완료 시 `saveColumnOrder`를 통해 localStorage에 저장됨
  */
 
@@ -70,8 +70,24 @@ export const useBoardDnd = ({
    * handleDragOver / handleDragEnd 내부에서 stale closure 없이 읽기 위해 사용.
    */
   const columnCardsRef = useRef(columnCards);
+  const cardToColumnRef = useRef<Map<number, number>>(new Map());
+
+  const buildCardToColumnMap = (
+    state: Record<number, ColumnCardState>,
+  ): Map<number, number> => {
+    const map = new Map<number, number>();
+    for (const [colId, columnState] of Object.entries(state)) {
+      const columnId = Number(colId);
+      columnState.cards.forEach((card) => {
+        map.set(card.id, columnId);
+      });
+    }
+    return map;
+  };
+
   useEffect(() => {
     columnCardsRef.current = columnCards;
+    cardToColumnRef.current = buildCardToColumnMap(columnCards);
   }, [columnCards]);
 
   /**
@@ -86,12 +102,9 @@ export const useBoardDnd = ({
    * @param cardId - 찾을 카드의 ID
    * @returns 컬럼 ID, 없으면 `null`
    */
-  const findColumnId = (cardId: number): number | null => {
-    for (const [colId, state] of Object.entries(columnCardsRef.current)) {
-      if (state.cards.some((c) => c.id === cardId)) return Number(colId);
-    }
-    return null;
-  };
+  const findColumnId = useCallback((cardId: number): number | null => {
+    return cardToColumnRef.current.get(cardId) ?? null;
+  }, []);
 
   /**
    * 마우스: 6px 이동 후 활성화
@@ -111,7 +124,7 @@ export const useBoardDnd = ({
   const handleDragStart = (event: DragStartEvent) => {
     const data = event.active.data.current as { card: Card; columnId: number };
     setActiveCard({ card: data.card, columnId: data.columnId });
-    clonedCardsRef.current = JSON.parse(JSON.stringify(columnCardsRef.current));
+    clonedCardsRef.current = structuredClone(columnCardsRef.current);
   };
 
   /**
@@ -184,9 +197,7 @@ export const useBoardDnd = ({
         };
       });
     },
-    // findColumnId는 ref 기반이므로 deps 불필요
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [findColumnId, setColumnCards],
   );
 
   /**

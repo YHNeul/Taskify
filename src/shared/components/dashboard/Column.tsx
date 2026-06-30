@@ -15,7 +15,7 @@
  * - useDroppable id는 `col-{id}` 문자열 — 카드 ID(숫자)와 충돌 방지
  */
 
-import { useRef, useEffect } from 'react';
+import { memo, useRef, useEffect } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -43,7 +43,7 @@ interface ColumnProps {
   isFirstColumn?: boolean;
 }
 
-export default function Column({
+function Column({
   column,
   cards,
   totalCount,
@@ -173,3 +173,5 @@ export default function Column({
     </div>
   );
 }
+
+export default memo(Column);

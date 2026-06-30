@@ -40,8 +40,10 @@ export const useDashboardColumnCardsQuery = (
       queryKey: getColumnCardsQueryKey(dashboardId, size, column.id),
       queryFn: () => getCards(column.id, size),
       enabled: isDashboardIdValid && hasColumns && isQueryEnabled,
-      staleTime: queryOptions?.staleTime ?? 1000 * 30,
+      staleTime: queryOptions?.staleTime ?? 1000 * 60 * 2,
       gcTime: queryOptions?.gcTime ?? 1000 * 60 * 10,
+      refetchOnWindowFocus: queryOptions?.refetchOnWindowFocus ?? false,
+      refetchOnReconnect: queryOptions?.refetchOnReconnect ?? false,
     })),
     combine: (results) => {
       const dataMap: DashboardColumnCardsQueryData = {};

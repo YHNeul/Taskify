@@ -26,17 +26,25 @@ export const useHeader = () => {
 
   const staticTitle = PAGE_TITLES[pathname] ?? null;
   const dashboardId = params?.id ? Number(params.id) : null;
-  const effectiveDashboardId = dashboardId ?? activeDashboardId;
+  const effectiveDashboardId = staticTitle
+    ? null
+    : (dashboardId ?? activeDashboardId);
+  const isDashboardContext =
+    Number.isFinite(effectiveDashboardId) && (effectiveDashboardId ?? 0) > 0;
   const shouldPrioritizeMyAvatar = Boolean(dashboardId);
 
   const { data: dashboard, isLoading: isDashboardLoading } = useDashboardQuery(
     effectiveDashboardId ?? 0,
+    { enabled: isDashboardContext },
   );
 
   const { data: membersData, isLoading: isMembersLoading } =
-    useDashboardMembersQuery({
-      dashboardId: effectiveDashboardId ?? 0,
-    });
+    useDashboardMembersQuery(
+      {
+        dashboardId: effectiveDashboardId ?? 0,
+      },
+      { enabled: isDashboardContext },
+    );
 
   const { data: me, isLoading: isMeLoading } = useMeQuery();
 
