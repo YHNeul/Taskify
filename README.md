@@ -110,7 +110,16 @@ npm run dev
 - `npm run build`: 프로덕션 빌드
 - `npm run start`: 프로덕션 서버 실행
 - `npm run lint`: ESLint 검사
+- `npm run test`: Vitest 단위 테스트 실행
+- `npm run test:watch`: Vitest watch 모드
 - `npm run check:button-size-usage`: 레거시 버튼 사이즈 사용 검사
+
+## 테스트 범위
+
+- 인증 Route Handler: 로그인 성공/실패 및 HttpOnly 쿠키 저장
+- BFF Proxy Route: 쿠키 토큰의 Authorization 헤더 변환, 업스트림 에러(401/403/500) 전달, 네트워크 실패(502) 처리
+- 라우팅 가드(`proxy.ts`): 보호 라우트 리다이렉트, 인증 페이지 역가드
+- 핵심 훅: `useQueryParamState`, `useMeQuery` 상태 전이 및 분기 동작
 
 ## 코드 품질/협업 규칙
 
