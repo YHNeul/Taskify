@@ -87,6 +87,28 @@ describe('useQueryParamState', () => {
     });
   });
 
+  it('다른 쿼리 매개변수가 있을 때 특정 매개변수만 제거해도 기존 값은 유지한다', () => {
+    currentPathname = '/dashboard';
+    currentSearchParams = new URLSearchParams('page=1&tag=frontend');
+
+    const { result } = renderHook(() =>
+      useQueryParamState<string | null>({
+        key: 'tag',
+        defaultValue: null,
+        serialize: (value) => value,
+      }),
+    );
+
+    act(() => {
+      const [, setTag] = result.current;
+      setTag(null);
+    });
+
+    expect(routerReplaceMock).toHaveBeenCalledWith('/dashboard?page=1', {
+      scroll: false,
+    });
+  });
+
   it('history가 push면 push를 사용한다', () => {
     currentPathname = '/dashboard';
     currentSearchParams = new URLSearchParams('page=1');
