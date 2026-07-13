@@ -24,6 +24,8 @@ describe('useQueryParamState', () => {
   beforeEach(() => {
     routerReplaceMock.mockClear();
     routerPushMock.mockClear();
+    currentPathname = '/dashboard';
+    currentSearchParams = new URLSearchParams('');
   });
 
   it('parse 함수로 쿼리 값을 읽는다', () => {
