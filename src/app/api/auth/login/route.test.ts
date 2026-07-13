@@ -22,7 +22,9 @@ describe('auth login route', () => {
   });
 
   it('필수 값이 없으면 400을 반환한다', async () => {
-    const fetchMock = vi.spyOn(globalThis, 'fetch');
+    const fetchMock = vi
+      .spyOn(globalThis, 'fetch')
+      .mockRejectedValue(new Error('fetch should not be called'));
     const request = new Request('https://taskify.test/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email: '' }),
